@@ -5,14 +5,18 @@ abstract class AppClock {
 }
 
 class SystemAppClock implements AppClock {
-  const SystemAppClock();
+  SystemAppClock()
+    : _wallAnchor = DateTime.now(),
+      _stopwatch = Stopwatch()..start();
+
+  final DateTime _wallAnchor;
+  final Stopwatch _stopwatch;
 
   @override
-  DateTime now() => DateTime.now();
+  DateTime now() => _wallAnchor.add(_stopwatch.elapsed);
 
   @override
-  Duration get elapsedSinceEpoch =>
-      Duration(milliseconds: DateTime.now().millisecondsSinceEpoch);
+  Duration get elapsedSinceEpoch => _stopwatch.elapsed;
 }
 
 /// Deterministic clock for unit tests. Advance manually — never waits.
