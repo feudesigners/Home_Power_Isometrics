@@ -29,6 +29,9 @@ class ContentSeedService {
       final exercisesRaw = await rootBundle.loadString(
         '$assetPrefix/exercises_v1.json',
       );
+      final mediaRaw = await rootBundle.loadString(
+        '$assetPrefix/media_manifest.json',
+      );
       final programsRaw = await rootBundle.loadString(
         '$assetPrefix/programs_v1.json',
       );
@@ -39,7 +42,10 @@ class ContentSeedService {
         '$assetPrefix/avatars_v1.json',
       );
 
-      await _seedExercises(jsonDecode(exercisesRaw) as Map<String, dynamic>);
+      await _seedExercises(
+        jsonDecode(exercisesRaw) as Map<String, dynamic>,
+        jsonDecode(mediaRaw) as Map<String, dynamic>,
+      );
       await _seedPrograms(jsonDecode(programsRaw) as Map<String, dynamic>);
       await _seedAchievements(
         jsonDecode(achievementsRaw) as Map<String, dynamic>,
@@ -74,7 +80,10 @@ class ContentSeedService {
     }
   }
 
-  Future<void> _seedExercises(Map<String, dynamic> data) async {
+  Future<void> _seedExercises(
+    Map<String, dynamic> data,
+    Map<String, dynamic> mediaManifest,
+  ) async {
     for (final c in (data['categories'] as List).cast<Map<String, dynamic>>()) {
       await db
           .into(db.exerciseCategories)
@@ -155,7 +164,8 @@ class ContentSeedService {
             ),
           );
     }
-    for (final m in (data['media'] as List).cast<Map<String, dynamic>>()) {
+    for (final m
+        in (mediaManifest['media'] as List).cast<Map<String, dynamic>>()) {
       await db
           .into(db.exerciseMedia)
           .insertOnConflictUpdate(
