@@ -32,6 +32,7 @@ class WorkoutController extends ChangeNotifier {
   bool _tickInFlight = false;
   bool _sessionFinalized = false;
   DateTime? _holdStartedAt;
+  Duration _pausedAtHoldStart = Duration.zero;
 
   WorkoutStateMachine get machine => _machine;
   WorkoutPhase get phase => _machine.phase;
@@ -68,6 +69,7 @@ class WorkoutController extends ChangeNotifier {
     skippedHolds = 0;
     _sessionFinalized = false;
     _holdStartedAt = null;
+    _pausedAtHoldStart = Duration.zero;
     _machine.loadPlan(plan);
     final plannedMs = plannedWorkoutDurationMs(plan);
     sessionId = await _ref
@@ -105,6 +107,7 @@ class WorkoutController extends ChangeNotifier {
       if (before != WorkoutPhase.holding &&
           result.phase == WorkoutPhase.holding) {
         _holdStartedAt = _ref.read(appClockProvider).now();
+        _pausedAtHoldStart = _machine.pausedAccumulated;
       }
 
       if (_machine.phase == WorkoutPhase.holding) {
@@ -170,7 +173,9 @@ class WorkoutController extends ChangeNotifier {
           completedMs: completed,
           preparationMs: item.setupDuration.inMilliseconds,
           restMs: item.restDuration.inMilliseconds,
-          pauseMs: _machine.pausedAccumulated.inMilliseconds,
+          pauseMs:
+              (_machine.pausedAccumulated - _pausedAtHoldStart)
+                  .inMilliseconds,
           result: result,
           painFlag: painDuringSession,
           startedAt: _holdStartedAt,
@@ -183,6 +188,7 @@ class WorkoutController extends ChangeNotifier {
     'programId': programId,
     'sessionStartedAt': sessionStartedAt?.toIso8601String(),
     'holdStartedAt': _holdStartedAt?.toIso8601String(),
+    'pausedAtHoldStartMs': _pausedAtHoldStart.inMilliseconds,
     'phase': _machine.phase.name,
     'phaseBeforePause': _machine.phaseBeforePause?.name,
     'phaseStartedAt': _machine.phaseStartedAt?.toIso8601String(),
@@ -425,6 +431,9 @@ class WorkoutController extends ChangeNotifier {
     _holdStartedAt = map['holdStartedAt'] != null
         ? DateTime.parse(map['holdStartedAt'] as String)
         : null;
+    _pausedAtHoldStart = Duration(
+      milliseconds: map['pausedAtHoldStartMs'] as int? ?? 0,
+    );
     completedHolds = map['completedHolds'] as int? ?? 0;
     skippedHolds = map['skippedHolds'] as int? ?? 0;
     painDuringSession = map['painDuringSession'] as bool? ?? false;
