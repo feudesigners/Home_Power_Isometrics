@@ -31,6 +31,7 @@ class WorkoutController extends ChangeNotifier {
   int? _lastCountdownCue;
   bool _tickInFlight = false;
   bool _sessionFinalized = false;
+  DateTime? _holdStartedAt;
 
   WorkoutStateMachine get machine => _machine;
   WorkoutPhase get phase => _machine.phase;
@@ -66,6 +67,7 @@ class WorkoutController extends ChangeNotifier {
     completedHolds = 0;
     skippedHolds = 0;
     _sessionFinalized = false;
+    _holdStartedAt = null;
     _machine.loadPlan(plan);
     final plannedMs = plannedWorkoutDurationMs(plan);
     sessionId = await _ref
@@ -100,6 +102,10 @@ class WorkoutController extends ChangeNotifier {
       final before = _machine.phase;
       final result = _machine.evaluate();
       lastRemaining = result.remaining;
+      if (before != WorkoutPhase.holding &&
+          result.phase == WorkoutPhase.holding) {
+        _holdStartedAt = _ref.read(appClockProvider).now();
+      }
 
       if (_machine.phase == WorkoutPhase.holding) {
         final seconds =
@@ -167,6 +173,7 @@ class WorkoutController extends ChangeNotifier {
           pauseMs: _machine.pausedAccumulated.inMilliseconds,
           result: result,
           painFlag: painDuringSession,
+          startedAt: _holdStartedAt,
         );
   }
 
@@ -175,6 +182,7 @@ class WorkoutController extends ChangeNotifier {
     'templateId': templateId,
     'programId': programId,
     'sessionStartedAt': sessionStartedAt?.toIso8601String(),
+    'holdStartedAt': _holdStartedAt?.toIso8601String(),
     'phase': _machine.phase.name,
     'phaseBeforePause': _machine.phaseBeforePause?.name,
     'phaseStartedAt': _machine.phaseStartedAt?.toIso8601String(),
@@ -393,6 +401,9 @@ class WorkoutController extends ChangeNotifier {
         ? DateTime.parse(map['sessionStartedAt'] as String)
         : session.startedAt;
     _sessionFinalized = false;
+    _holdStartedAt = map['holdStartedAt'] != null
+        ? DateTime.parse(map['holdStartedAt'] as String)
+        : null;
     completedHolds = map['completedHolds'] as int? ?? 0;
     skippedHolds = map['skippedHolds'] as int? ?? 0;
     painDuringSession = map['painDuringSession'] as bool? ?? false;
