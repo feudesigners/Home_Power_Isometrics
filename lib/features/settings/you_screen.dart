@@ -272,7 +272,9 @@ class YouScreen extends ConsumerWidget {
                         await ref
                             .read(repositoriesProvider)
                             .deleteAllUserData();
+                        await ref.read(reminderSchedulerProvider).cancelAll();
                         ref.invalidate(profileProvider);
+                        ref.invalidate(preferencesProvider);
                         if (context.mounted) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
