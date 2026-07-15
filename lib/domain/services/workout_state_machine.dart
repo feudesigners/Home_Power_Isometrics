@@ -272,18 +272,19 @@ class WorkoutStateMachine {
     _enterPhase(WorkoutPhase.preparing, replacement.setupDuration);
   }
 
-  void skipCurrent() {
+  bool skipCurrent() {
     final item = currentItem;
-    if (item == null) return;
+    if (item == null) return false;
     if (currentItemIndex + 1 >= items.length) {
       _completeOnce();
-      return;
+      return true;
     }
     currentItemIndex += 1;
     currentSet = 1;
     final next = items[currentItemIndex];
     currentSide = _initialSide(next);
     _enterPhase(WorkoutPhase.preparing, next.setupDuration);
+    return false;
   }
 
   void stop() {
