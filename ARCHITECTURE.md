@@ -18,7 +18,7 @@ Riverpod providers in `lib/app/bootstrap/providers.dart`. Workout runtime state 
 
 ## Database
 
-Drift schema version **1** (`AppDatabase.schemaVersion`). Migrations enabled from day one. Content seed version stored in `meta_entries.content_version` and does **not** wipe user history tables.
+Drift schema version **2** (`AppDatabase.schemaVersion`). Migrations enabled from day one. Content seed version stored in `meta_entries.content_version` and does **not** wipe user history tables.
 
 Key dependency justification:
 
@@ -32,6 +32,7 @@ Key dependency justification:
 | audioplayers | Bundled cue hooks (optional) |
 | share_plus / path_provider | Local export without accounts |
 | permission_handler | POST_NOTIFICATIONS on Android 13+ |
+| flutter_timezone / timezone | Device-local recurring reminder scheduling |
 
 ## Timer design
 
@@ -41,11 +42,11 @@ Current and next exercise posture assets are pre-cached. Missing media and audio
 
 ## Content seeding
 
-Versioned JSON in `assets/content/` imported transactionally by `ContentSeedService`. Future content updates bump `content_version` and upsert content tables only.
+Versioned JSON in `assets/content/` is imported transactionally by `ContentSeedService`. Content updates bump `content_version`, replace seeded definitions and media indexes, and preserve user history. `media_manifest.json` is the authoritative media-path index.
 
 ## Extension points
 
 - Custom workout builder (Train tab stub)
 - Rive `AvatarAnimator` (placeholder animator shipped)
 - Health Connect / cloud backup / Wear OS / social / camera pose (see ROADMAP — intentionally absent from MVP)
-- Production signing config (not committed)
+- Play upload keystore and private signing credentials (template and fail-fast release guard included)
