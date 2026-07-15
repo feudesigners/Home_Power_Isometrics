@@ -4,13 +4,7 @@ import '../../core/errors/app_exception.dart';
 
 class ExportImportService {
   static const schemaVersion = 1;
-  static const _sessionStatuses = {
-    'active',
-    'paused',
-    'interrupted',
-    'completed',
-    'abandoned',
-  };
+  static const _sessionStatuses = {'completed', 'abandoned'};
   static const _holdResults = {
     'completed',
     'partial',
