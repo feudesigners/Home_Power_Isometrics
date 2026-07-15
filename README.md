@@ -44,18 +44,22 @@ The integration suite requires an Android device or AVD; this repository only de
 
 ```bash
 flutter build apk --debug
-flutter build appbundle --release   # uses debug signing locally — production keystore is an external gate
+cp android/key.properties.example android/key.properties
+# Edit key.properties to reference your upload keystore.
+flutter build appbundle --release
 ```
 
 ## Verification status
 
-Source implementation is complete for the MVP scope. Final test, Android build, emulator/manual accessibility, lifecycle, notification, and import/reset checks are deferred and must be rerun before release. Production exercise review, anatomical media/audio, and Play signing remain external gates.
+The end-to-end source implementation includes atomic workout completion, optional idempotent feedback, lifecycle recovery, real safer-variant switching, accepted progressions, 40 scheduled program sessions, schema-v2 integrity, validated data portability, device-timezone reminders, static/animated media selection, and secure release-signing safeguards.
+
+This branch has received static diff, JSON, content-reference, and repository-consistency checks only. Flutter formatting, analysis, unit/widget/integration tests, Android builds, emulator/device accessibility, lifecycle, notification, import/reset, and release-signing checks must still be run before merge or release. Production exercise review and final anatomical media/audio remain external gates.
 
 ## Assets
 
 - Seed content: `assets/content/*.json`
 - Fonts (OFL): `assets/fonts/` — see `FONT_LICENSES.txt`
-- Exercise media: placeholders only — see [`ASSET_GUIDE.md`](ASSET_GUIDE.md)
+- Exercise media: authoritative index in `assets/content/media_manifest.json`; current files remain release placeholders — see [`ASSET_GUIDE.md`](ASSET_GUIDE.md)
 
 ## Documentation
 
