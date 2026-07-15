@@ -189,6 +189,7 @@ class WorkoutController extends ChangeNotifier {
     'deadlineAt': _machine.deadlineAt?.toIso8601String(),
     'remainingWhenPausedMs': _machine.remainingWhenPaused.inMilliseconds,
     'pausedAccumulatedMs': _machine.pausedAccumulated.inMilliseconds,
+    'pauseStartedAt': _machine.pauseStartedAt?.toIso8601String(),
     'currentItemIndex': _machine.currentItemIndex,
     'currentSet': _machine.currentSet,
     'currentSide': _machine.currentSide.name,
@@ -442,6 +443,9 @@ class WorkoutController extends ChangeNotifier {
       pausedAccumulated: Duration(
         milliseconds: map['pausedAccumulatedMs'] as int? ?? 0,
       ),
+      pauseStartedAt: map['pauseStartedAt'] != null
+          ? DateTime.parse(map['pauseStartedAt'] as String)
+          : session.startedAt,
       currentItemIndex: map['currentItemIndex'] as int? ?? 0,
       currentSet: map['currentSet'] as int? ?? 1,
       currentSide: holdSideFromString(map['currentSide'] as String? ?? 'none'),
