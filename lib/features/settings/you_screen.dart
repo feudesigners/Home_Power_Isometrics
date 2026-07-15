@@ -291,16 +291,26 @@ class YouScreen extends ConsumerWidget {
                       'IsometriX MVP · Offline-first · No analytics SDK · No ads',
                     ),
                   ),
-                  const ListTile(
-                    title: Text('Privacy'),
-                    subtitle: Text(
-                      'All user data stays on this device unless you export it. See PRIVACY.md.',
+                  ListTile(
+                    title: const Text('Privacy'),
+                    subtitle: const Text(
+                      'Read the complete offline-first privacy summary.',
+                    ),
+                    onTap: () => _showInfo(
+                      context,
+                      'Privacy',
+                      'IsometriX requires no account and stores your profile, preferences, reminders, workout history, feedback, XP, and progress in SQLite on this device. The app includes no analytics, advertising, or tracking SDK. Reminder notifications are scheduled locally. Data leaves the device only when you explicitly export or share it. Reset deletes local user history and progress; Android cloud backup is disabled.',
                     ),
                   ),
-                  const ListTile(
-                    title: Text('Licences'),
-                    subtitle: Text(
-                      'Fonts: OFL (Bebas Neue, DM Sans, JetBrains Mono). See assets/fonts/FONT_LICENSES.txt',
+                  ListTile(
+                    title: const Text('Licences'),
+                    subtitle: const Text(
+                      'View bundled font licence information.',
+                    ),
+                    onTap: () => _showInfo(
+                      context,
+                      'Open Font Licences',
+                      'Bebas Neue, DM Sans, and JetBrains Mono are bundled under the SIL Open Font License 1.1. Copyright notices and licence text are included in assets/fonts/FONT_LICENSES.txt. Flutter and package licences are available through the platform licence registry.',
                     ),
                   ),
                 ],
@@ -439,4 +449,24 @@ Future<void> _configureReminders(
       ),
     );
   }
+}
+
+Future<void> _showInfo(
+  BuildContext context,
+  String title,
+  String body,
+) {
+  return showDialog<void>(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: Text(title),
+      content: SingleChildScrollView(child: Text(body)),
+      actions: [
+        FilledButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('Close'),
+        ),
+      ],
+    ),
+  );
 }
