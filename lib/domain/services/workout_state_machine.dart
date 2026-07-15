@@ -52,7 +52,8 @@ class WorkoutStateMachine {
 
   Duration remaining(DateTime? at) {
     final now = at ?? _clock.now();
-    if (phase == WorkoutPhase.paused) {
+    if (phase == WorkoutPhase.paused ||
+        phase == WorkoutPhase.interrupted) {
       return remainingWhenPaused;
     }
     if (deadlineAt == null) return Duration.zero;
@@ -63,7 +64,11 @@ class WorkoutStateMachine {
   double progressFraction(DateTime? at) {
     final item = currentItem;
     if (item == null) return 0;
-    final total = _durationForPhase(phase, item);
+    final effectivePhase =
+        phase == WorkoutPhase.paused || phase == WorkoutPhase.interrupted
+        ? (_phaseBeforePause ?? phase)
+        : phase;
+    final total = _durationForPhase(effectivePhase, item);
     if (total.inMilliseconds <= 0) return 1;
     final rem = remaining(at);
     final done = total - rem;
@@ -131,7 +136,7 @@ class WorkoutStateMachine {
 
   WorkoutTickResult _onHoldFinished(WorkoutPlanItem item) {
     final finishedSide = currentSide;
-    if (item.unilateralMode == UnilateralMode.leftRight &&
+    if (item.unilateralMode != UnilateralMode.none &&
         currentSide == HoldSide.left) {
       currentSide = HoldSide.right;
       _enterPhase(WorkoutPhase.switchingSide, item.sideSwitchDuration);
@@ -145,8 +150,6 @@ class WorkoutStateMachine {
     }
 
     if (currentSet < item.sets) {
-      currentSet += 1;
-      currentSide = _initialSide(item);
       _enterPhase(WorkoutPhase.resting, item.restDuration);
       return WorkoutTickResult(
         phase: phase,
@@ -176,6 +179,18 @@ class WorkoutStateMachine {
   }
 
   WorkoutTickResult _moveToNextItem() {
+    final item = currentItem;
+    if (item != null && currentSet < item.sets) {
+      currentSet += 1;
+      currentSide = _initialSide(item);
+      _enterPhase(WorkoutPhase.preparing, item.setupDuration);
+      return WorkoutTickResult(
+        phase: phase,
+        remaining: remaining(_clock.now()),
+        phaseCompleted: WorkoutPhase.resting,
+      );
+    }
+
     if (currentItemIndex + 1 >= items.length) {
       return _completeOnce();
     }
@@ -234,7 +249,10 @@ class WorkoutStateMachine {
 
   /// Resume after explicit user confirmation (required after backgrounding).
   void resume() {
-    if (phase != WorkoutPhase.paused) return;
+    if (phase != WorkoutPhase.paused &&
+        phase != WorkoutPhase.interrupted) {
+      return;
+    }
     final restore = _phaseBeforePause ?? WorkoutPhase.holding;
     if (pauseStartedAt != null) {
       pausedAccumulated += _clock.now().difference(pauseStartedAt!);
