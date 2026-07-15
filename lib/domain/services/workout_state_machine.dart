@@ -263,6 +263,15 @@ class WorkoutStateMachine {
     deadlineAt = phaseStartedAt!.add(remainingWhenPaused);
   }
 
+  void replaceCurrentItem(WorkoutPlanItem replacement) {
+    if (currentItem == null) return;
+    final mutable = items.toList();
+    mutable[currentItemIndex] = replacement;
+    items = List.unmodifiable(mutable);
+    currentSide = _initialSide(replacement);
+    _enterPhase(WorkoutPhase.preparing, replacement.setupDuration);
+  }
+
   void skipCurrent() {
     final item = currentItem;
     if (item == null) return;
@@ -386,7 +395,11 @@ class WorkoutPlanItem {
     this.breathingCue = '',
     this.kind = WorkoutItemKind.hold,
     this.staticAssetPath,
+    this.animatedAssetPath,
     this.mediaAccessibilityLabel,
+    this.animatedMediaAccessibilityLabel,
+    this.easierVariantId,
+    this.harderVariantId,
   });
 
   final String variantId;
@@ -402,12 +415,38 @@ class WorkoutPlanItem {
   final String breathingCue;
   final WorkoutItemKind kind;
   final String? staticAssetPath;
+  final String? animatedAssetPath;
   final String? mediaAccessibilityLabel;
+  final String? animatedMediaAccessibilityLabel;
+  final String? easierVariantId;
+  final String? harderVariantId;
 
   bool get isHold => kind == WorkoutItemKind.hold;
+  int get sideCount =>
+      unilateralMode == UnilateralMode.none ? 1 : 2;
 }
 
 enum WorkoutItemKind { hold, warmup, cooldown }
+
+int plannedWorkoutDurationMs(List<WorkoutPlanItem> items) {
+  var total = 0;
+  for (var index = 0; index < items.length; index++) {
+    final item = items[index];
+    if (!item.isHold) {
+      total += item.holdDuration.inMilliseconds;
+      continue;
+    }
+    final perSet =
+        item.setupDuration.inMilliseconds +
+        item.holdDuration.inMilliseconds * item.sideCount +
+        (item.sideCount > 1 ? item.sideSwitchDuration.inMilliseconds : 0);
+    total += perSet * item.sets;
+    if (index < items.length - 1 || item.sets > 1) {
+      total += item.restDuration.inMilliseconds * item.sets;
+    }
+  }
+  return total;
+}
 
 class WorkoutTickResult {
   const WorkoutTickResult({
