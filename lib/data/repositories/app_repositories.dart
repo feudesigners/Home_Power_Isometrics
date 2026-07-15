@@ -219,6 +219,7 @@ class AppRepositories {
       if (v == null) continue;
       final cues = await formCuesFor(v.id);
       final media = await mediaById(v.staticAssetId);
+      final animatedMedia = await mediaById(v.animatedAssetId);
       plan.add(
         WorkoutPlanItem(
           variantId: v.id,
@@ -231,7 +232,12 @@ class AppRepositories {
           formCues: cues.map((c) => c.cue).toList(),
           breathingCue: v.breathingCue,
           staticAssetPath: media?.assetPath,
+          animatedAssetPath: animatedMedia?.assetPath,
           mediaAccessibilityLabel: media?.accessibilityLabel,
+          animatedMediaAccessibilityLabel:
+              animatedMedia?.accessibilityLabel,
+          easierVariantId: v.easierVariantId,
+          harderVariantId: v.harderVariantId,
         ),
       );
     }
@@ -243,6 +249,7 @@ class AppRepositories {
     if (v == null) return const [];
     final cues = await formCuesFor(v.id);
     final media = await mediaById(v.staticAssetId);
+      final animatedMedia = await mediaById(v.animatedAssetId);
     return [
       WorkoutPlanItem(
         variantId: v.id,
@@ -255,7 +262,12 @@ class AppRepositories {
         formCues: cues.map((c) => c.cue).toList(),
         breathingCue: v.breathingCue,
         staticAssetPath: media?.assetPath,
-        mediaAccessibilityLabel: media?.accessibilityLabel,
+          animatedAssetPath: animatedMedia?.assetPath,
+          mediaAccessibilityLabel: media?.accessibilityLabel,
+          animatedMediaAccessibilityLabel:
+              animatedMedia?.accessibilityLabel,
+          easierVariantId: v.easierVariantId,
+          harderVariantId: v.harderVariantId,
       ),
     ];
   }
