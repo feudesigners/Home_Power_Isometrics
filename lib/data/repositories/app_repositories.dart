@@ -425,16 +425,21 @@ class AppRepositories {
     return row?.bestMs;
   }
 
-  Future<void> completeSession({
+  Future<void> finalizeSession({
     required String sessionId,
     required int actualDurationMs,
     required int completedCount,
     required int skippedCount,
-    required int? effort,
     required bool pain,
-    String? note,
   }) async {
     await db.transaction(() async {
+      final existing = await (db.select(
+        db.workoutSessions,
+      )..where((t) => t.id.equals(sessionId))).getSingleOrNull();
+      if (existing == null ||
+          existing.status == SessionStatus.completed.name) {
+        return;
+      }
       await (db.update(
         db.workoutSessions,
       )..where((t) => t.id.equals(sessionId))).write(
@@ -444,30 +449,102 @@ class AppRepositories {
           actualDurationMs: Value(actualDurationMs),
           completedExerciseCount: Value(completedCount),
           skippedExerciseCount: Value(skippedCount),
-          perceivedEffort: Value(effort),
           painFlag: Value(pain),
-          note: Value(note),
           recoveryJson: const Value(null),
         ),
       );
-
-      await db
-          .into(db.sessionFeedback)
-          .insert(
-            SessionFeedbackCompanion.insert(
-              sessionId: sessionId,
-              perceivedEffort: Value(effort),
-              painFlag: Value(pain),
-              note: Value(note),
-            ),
-          );
-
       await _awardCompletionRewards(
         sessionId: sessionId,
         pain: pain,
+        effort: null,
+      );
+    });
+  }
+
+  Future<void> saveSessionFeedback({
+    required String sessionId,
+    required int effort,
+    required bool pain,
+    String? note,
+  }) async {
+    if (effort < 1 || effort > 10) {
+      throw const FormatException('Effort must be between 1 and 10.');
+    }
+    await db.transaction(() async {
+      final session = await (db.select(
+        db.workoutSessions,
+      )..where((t) => t.id.equals(sessionId))).getSingleOrNull();
+      if (session == null ||
+          session.status != SessionStatus.completed.name) {
+        throw const FormatException(
+          'Feedback can only be saved for a completed session.',
+        );
+      }
+      await (db.update(
+        db.workoutSessions,
+      )..where((t) => t.id.equals(sessionId))).write(
+        WorkoutSessionsCompanion(
+          perceivedEffort: Value(effort),
+          painFlag: Value(pain || session.painFlag),
+          note: Value(note),
+        ),
+      );
+
+      final existing = await (db.select(
+        db.sessionFeedback,
+      )..where((t) => t.sessionId.equals(sessionId))).getSingleOrNull();
+      if (existing == null) {
+        await db.into(db.sessionFeedback).insert(
+          SessionFeedbackCompanion.insert(
+            sessionId: sessionId,
+            perceivedEffort: Value(effort),
+            painFlag: Value(pain || session.painFlag),
+            note: Value(note),
+          ),
+        );
+      } else {
+        await (db.update(
+          db.sessionFeedback,
+        )..where((t) => t.id.equals(existing.id))).write(
+          SessionFeedbackCompanion(
+            perceivedEffort: Value(effort),
+            painFlag: Value(pain || session.painFlag),
+            note: Value(note),
+          ),
+        );
+      }
+      await _awardCompletionRewards(
+        sessionId: sessionId,
+        pain: pain || session.painFlag,
         effort: effort,
       );
     });
+  }
+
+  Future<void> completeSession({
+    required String sessionId,
+    required int actualDurationMs,
+    required int completedCount,
+    required int skippedCount,
+    required int? effort,
+    required bool pain,
+    String? note,
+  }) async {
+    await finalizeSession(
+      sessionId: sessionId,
+      actualDurationMs: actualDurationMs,
+      completedCount: completedCount,
+      skippedCount: skippedCount,
+      pain: pain,
+    );
+    if (effort != null) {
+      await saveSessionFeedback(
+        sessionId: sessionId,
+        effort: effort,
+        pain: pain,
+        note: note,
+      );
+    }
   }
 
   Future<void> abandonSession(String sessionId, {bool partial = true}) async {
@@ -501,48 +578,50 @@ class AppRepositories {
     final existingXp = (await db.select(db.xpEvents).get())
         .map((e) => e.id)
         .toSet();
+    var changed = false;
+
     final xpId = 'xp_session_$sessionId';
-    final granted = xpService.award(
+    final base = xpService.award(
       existingEventIds: existingXp,
       eventId: xpId,
       amount: XpService.sessionCompleteBase,
-      painReported: pain,
+      painReported: false,
     );
-    if (granted > 0) {
-      await db
-          .into(db.xpEvents)
-          .insert(
-            XpEventsCompanion.insert(
-              id: xpId,
-              sourceType: 'session',
-              sourceId: sessionId,
-              amount: granted,
-            ),
-          );
-      if (effort != null) {
-        final fbId = 'xp_feedback_$sessionId';
-        final fb = xpService.award(
-          existingEventIds: {...existingXp, xpId},
-          eventId: fbId,
-          amount: XpService.feedbackBonus,
-          painReported: pain,
-        );
-        if (fb > 0) {
-          await db
-              .into(db.xpEvents)
-              .insert(
-                XpEventsCompanion.insert(
-                  id: fbId,
-                  sourceType: 'feedback',
-                  sourceId: sessionId,
-                  amount: fb,
-                ),
-              );
-        }
-      }
-      await _recalcLevel();
+    if (base > 0) {
+      await db.into(db.xpEvents).insert(
+        XpEventsCompanion.insert(
+          id: xpId,
+          sourceType: 'session',
+          sourceId: sessionId,
+          amount: base,
+        ),
+      );
+      existingXp.add(xpId);
+      changed = true;
     }
 
+    if (effort != null) {
+      final feedbackId = 'xp_feedback_$sessionId';
+      final bonus = xpService.award(
+        existingEventIds: existingXp,
+        eventId: feedbackId,
+        amount: XpService.feedbackBonus,
+        painReported: pain,
+      );
+      if (bonus > 0) {
+        await db.into(db.xpEvents).insert(
+          XpEventsCompanion.insert(
+            id: feedbackId,
+            sourceType: 'feedback',
+            sourceId: sessionId,
+            amount: bonus,
+          ),
+        );
+        changed = true;
+      }
+    }
+
+    if (changed) await _recalcLevel();
     await _evaluateAchievements(sessionId);
     await _evaluateChallenges(sessionId);
   }
