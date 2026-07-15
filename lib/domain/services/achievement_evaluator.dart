@@ -16,6 +16,7 @@ class AchievementContext {
     required this.totalHoldAttempts,
     required this.totalControlledHoldMs,
     required this.sessionsThisWeek,
+    this.weeklyTarget = 3,
     required this.categoriesThisWeek,
     required this.hadProgression,
     required this.daysSinceLastSession,
@@ -26,6 +27,7 @@ class AchievementContext {
   final int totalHoldAttempts;
   final int totalControlledHoldMs;
   final int sessionsThisWeek;
+  final int weeklyTarget;
   final Set<String> categoriesThisWeek;
   final bool hadProgression;
   final int? daysSinceLastSession;
@@ -101,7 +103,9 @@ class AchievementEvaluator {
     if (ctx.totalHoldAttempts >= 1) unlock('first_hold');
     // Corrected Starter Kit behaviour: full workout session required.
     if (ctx.totalCompletedSessions >= 1) unlock('first_complete_workout');
-    if (ctx.sessionsThisWeek >= 3) unlock('foundation_week');
+    if (ctx.sessionsThisWeek >= ctx.weeklyTarget) {
+      unlock('foundation_week');
+    }
     if (ctx.categoriesThisWeek.length >= 3) unlock('balanced_week');
     if (ctx.totalCompletedSessions >= 10) unlock('ten_workouts');
     if (ctx.totalControlledHoldMs >= 3600 * 1000) unlock('one_hour_holds');
