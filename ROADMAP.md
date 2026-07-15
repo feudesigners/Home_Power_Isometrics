@@ -2,7 +2,9 @@
 
 ## MVP status
 
-Implemented offline coach loop: onboarding, programs/library, deadline timer with recovery, SQLite history, XP/achievements/challenges, companion placeholders, export/delete, themes, tests, debug APK path.
+Implemented offline coach source: onboarding, programs/library, warm-up/hold/rest/side/cool-down deadline timing with recovery, SQLite history, progression suggestions, XP/achievements/challenges, companion placeholders, validated JSON import/export, CSV export, reset, reminders, themes, activity visuals, and accessibility fallbacks.
+
+Full test/build/emulator execution was intentionally deferred at handoff. Static analysis and the unit/widget suite passed before the final source-only completion pass; rerun every quality gate before release.
 
 ## Deferred
 

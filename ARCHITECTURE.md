@@ -35,7 +35,9 @@ Key dependency justification:
 
 ## Timer design
 
-`WorkoutStateMachine` uses an injectable `AppClock` and **deadlines**. UI `Timer.periodic` only repaints / evaluates; it is not the source of truth. Pause stores remaining duration; resume rebuilds deadline. Backgrounding pauses and persists recovery JSON; resume requires confirmation.
+`WorkoutStateMachine` uses an injectable `AppClock` and **deadlines**. UI `Timer.periodic` only repaints / evaluates; it is not the source of truth. Warm-up and cool-down template blocks are first-class plan items but do not create hold records. Pause stores remaining duration; resume rebuilds deadline. Backgrounding pauses and persists recovery JSON; `SessionRecoveryService` validates eligibility and resume requires confirmation.
+
+Current and next exercise posture assets are pre-cached. Missing media and audio are explicit production gates with labeled/static or silent fallbacks.
 
 ## Content seeding
 

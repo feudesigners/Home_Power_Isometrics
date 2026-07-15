@@ -16,7 +16,17 @@ For each exercise base id (`wall_sit`, `glute_bridge`, … `prone_w`):
 
 Companion avatars Pulse / Nova / Atlas: idle, greeting, preparing, holding, encouraging, resting, celebrating, levelUp — vector/`AvatarAnimator` or licensed `.riv`.
 
-Audio: prep beep, halfway, final-3, complete, rest (optional WAV/OGG under `assets/audio/`).
+Audio handoff filenames used by the fail-safe cue service:
+
+| Cue | Required path |
+|---|---|
+| Preparation | `assets/audio/prep.ogg` |
+| Hold begins | `assets/audio/hold.ogg` |
+| Rest / side switch | `assets/audio/rest.ogg` |
+| Final 3-second ticks | `assets/audio/countdown.ogg` |
+| Completion | `assets/audio/complete.ogg` |
+
+Missing cue files are intentionally silent and never interrupt timing.
 
 ## Manifest
 

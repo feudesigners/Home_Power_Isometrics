@@ -38,12 +38,18 @@ flutter test
 flutter test integration_test
 ```
 
+The integration suite requires an Android device or AVD; this repository only declares the Android platform.
+
 ## Build
 
 ```bash
 flutter build apk --debug
 flutter build appbundle --release   # uses debug signing locally — production keystore is an external gate
 ```
+
+## Verification status
+
+Source implementation is complete for the MVP scope. Final test, Android build, emulator/manual accessibility, lifecycle, notification, and import/reset checks are deferred and must be rerun before release. Production exercise review, anatomical media/audio, and Play signing remain external gates.
 
 ## Assets
 
