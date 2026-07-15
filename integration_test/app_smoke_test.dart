@@ -19,6 +19,7 @@ void main() {
     final db = AppDatabase.memory();
     addTearDown(db.close);
 
+    await _seedTestContent(db);
     await db.into(db.userProfiles).insert(UserProfilesCompanion.insert());
     await db.into(db.userPreferences).insert(UserPreferencesCompanion.insert());
     await db.into(db.userLevels).insert(UserLevelsCompanion.insert());
@@ -127,4 +128,43 @@ void main() {
       throwsA(isA<Exception>()),
     );
   });
+}
+
+Future<void> _seedTestContent(AppDatabase db) async {
+  await db.into(db.exerciseCategories).insert(
+    ExerciseCategoriesCompanion.insert(
+      id: 'C001',
+      name: 'Test',
+      colorHex: '#000000',
+    ),
+  );
+  for (final exercise in const {
+    'E001': 'Wall Sit',
+    'E006': 'Plank',
+  }.entries) {
+    await db.into(db.exercises).insert(
+      ExercisesCompanion.insert(
+        id: exercise.key,
+        categoryId: 'C001',
+        name: exercise.value,
+        primaryMusclesJson: '[]',
+      ),
+    );
+  }
+  for (final variant in const {
+    'wall_sit_easier': 'E001',
+    'forearm_plank_easier': 'E006',
+  }.entries) {
+    await db.into(db.exerciseVariants).insert(
+      ExerciseVariantsCompanion.insert(
+        id: variant.key,
+        exerciseId: variant.value,
+        displayName: variant.key,
+        difficultyRank: 1,
+        categoryId: 'C001',
+        primaryMusclesJson: '[]',
+        targetHoldMs: 2000,
+      ),
+    );
+  }
 }
