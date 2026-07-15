@@ -441,9 +441,9 @@ int plannedWorkoutDurationMs(List<WorkoutPlanItem> items) {
         item.holdDuration.inMilliseconds * item.sideCount +
         (item.sideCount > 1 ? item.sideSwitchDuration.inMilliseconds : 0);
     total += perSet * item.sets;
-    if (index < items.length - 1 || item.sets > 1) {
-      total += item.restDuration.inMilliseconds * item.sets;
-    }
+    final restCount =
+        (item.sets - 1) + (index < items.length - 1 ? 1 : 0);
+    total += item.restDuration.inMilliseconds * restCount;
   }
   return total;
 }
