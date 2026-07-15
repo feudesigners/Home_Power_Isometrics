@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IsometriX</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #050810;
+    --bg2: #0a0f1e;
+    --surface: rgba(255,255,255,0.04);
+    --surface-hover: rgba(255,255,255,0.08);
+    --border: rgba(255,255,255,0.08);
+    --border-bright: rgba(255,255,255,0.18);
+    --accent: #00f5c4;
+    --accent2: #5b6ef5;
+    --accent3: #ff4d6d;
+    --text: #e8eaf0;
+    --text-dim: rgba(232,234,240,0.5);
+    --text-dimmer: rgba(232,234,240,0.3);
+    --c001: #5b6ef5;
+    --c002: #00f5c4;
+    --c003: #ff4d6d;
+    --glass: rgba(10,15,30,0.6);
+    --glass-border: rgba(255,255,255,0.1);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+
+  html, body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+
+  /* Ambient background */
+  body::before {
+    content:'';
+    position:fixed;
+    inset:0;
+    background:
+      radial-gradient(ellipse 60% 40% at 20% 10%, rgba(91,110,245,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 30% at 80% 80%, rgba(0,245,196,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 50% at 60% 30%, rgba(255,77,109,0.06) 0%, transparent 60%);
+    pointer-events:none;
+    z-index:0;
+  }
+
+  /* Grid overlay */
+  body::after {
+    content:'';
+    position:fixed;
+    inset:0;
+    background-image: linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events:none;
+    z-index:0;
+  }
+
+  /* ═══ LIGHT THEME OVERRIDES ═══ */
+  html[data-theme="light"] body::after {
+    background-image: linear-gradient(rgba(0,0,0,0.05) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(0,0,0,0.05) 1px, transparent 1px);
+  }
+  html[data-theme="light"] body::before {
+    background:
+      radial-gradient(ellipse 60% 40% at 20% 10%, rgba(91,110,245,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 30% at 80% 80%, rgba(0,200,160,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 50% at 60% 30%, rgba(255,77,109,0.04) 0%, transparent 60%);
+  }
+  html[data-theme="light"] {
+    --bg: #f0f3fa;
+    --bg2: #e4e8f4;
+    --surface: rgba(0,0,0,0.04);
+    --surface-hover: rgba(0,0,0,0.07);
+    --border: rgba(0,0,0,0.09);
+    --border-bright: rgba(0,0,0,0.2);
+    --text: #0d1117;
+    --text-dim: rgba(13,17,23,0.55);
+    --text-dimmer: rgba(13,17,23,0.35);
+    --glass: rgba(255,255,255,0.72);
+    --glass-border: rgba(0,0,0,0.08);
+  }
+  html[data-theme="light"] .header {
+    background: linear-gradient(to bottom, rgba(240,243,250,0.97) 0%, rgba(240,243,250,0) 100%);
+  }
+  html[data-theme="light"] .detail-header {
+    background: linear-gradient(to bottom, rgba(240,243,250,0.97) 80%, transparent);
+  }
+  html[data-theme="light"] .bottom-nav {
+    background: linear-gradient(to top, rgba(240,243,250,0.97) 60%, transparent);
+  }
+  html[data-theme="light"] .asset-box { background: rgba(225,230,248,0.85); }
+  html[data-theme="light"] .modal-overlay { background: rgba(170,185,225,0.85); }
+  html[data-theme="light"] .detail-view { background: var(--bg); }
+  html[data-theme="light"] .stat-val {
+    background: linear-gradient(135deg, #009e80 0%, #3a4ed0 100%);
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  }
+  html[data-theme="light"] .logo {
+    background: linear-gradient(135deg, #00c49e 0%, #4558e0 100%);
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  }
+
+  /* ═══ THEME TOGGLE BUTTON ═══ */
+  .theme-toggle {
+    position: fixed;
+    bottom: 90px;
+    right: 16px;
+    z-index: 150;
+    width: 46px; height: 46px;
+    border-radius: 14px;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(16px);
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.22);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .theme-toggle:hover { transform: scale(1.1); box-shadow: 0 6px 24px rgba(0,0,0,0.3); }
+  .theme-toggle:active { transform: scale(0.88); }
+
+  /* ═══ TIMER PHASE ANIMATIONS ═══ */
+  .ring-time { transition: color 0.4s ease; }
+  @keyframes warnPulse  { 0%,100%{opacity:1} 50%{opacity:0.65} }
+  @keyframes urgentPulse{ 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.6;transform:scale(0.95)} }
+  .ring-time.phase-warn    { animation: warnPulse   1.1s infinite; }
+  .ring-time.phase-urgent  { animation: urgentPulse 0.55s infinite; }
+
+  /* ═══ RESPONSIVE / MOBILE FIRST ═══ */
+  @media (max-width: 390px) {
+    .logo { font-size: 26px; }
+    .badge-btn { padding: 6px 10px; font-size: 11px; }
+    .stat-val { font-size: 22px; }
+    .timer-ring-wrap { width: 136px; height: 136px; }
+    .ring-time { font-size: 30px; }
+    .detail-title { font-size: 22px; }
+    .t-btn { padding: 12px; font-size: 12px; }
+  }
+  @media (max-width: 320px) {
+    .diff-btn { font-size: 10px; padding: 6px 2px; letter-spacing: 0; }
+    .ex-name { font-size: 14px; }
+    .timer-ring-wrap { width: 120px; height: 120px; }
+    .ring-time { font-size: 26px; }
+  }
+  @supports (padding: env(safe-area-inset-bottom)) {
+    .bottom-nav  { padding-bottom: calc(12px + env(safe-area-inset-bottom)); }
+    #app         { padding-bottom: calc(80px  + env(safe-area-inset-bottom)); }
+    .theme-toggle{ bottom: calc(90px + env(safe-area-inset-bottom)); }
+  }
+
+  #app { position:relative; z-index:1; max-width:480px; margin:0 auto; padding:0 0 80px; }
+
+  /* ═══ HEADER ═══ */
+  .header {
+    padding: 24px 20px 16px;
+    position: sticky; top:0; z-index:100;
+    background: linear-gradient(to bottom, rgba(5,8,16,0.95) 0%, rgba(5,8,16,0) 100%);
+    backdrop-filter: blur(4px);
+  }
+  .header-top { display:flex; align-items:center; justify-content:space-between; }
+  .logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    letter-spacing: 3px;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height:1;
+  }
+  .tagline {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-dimmer);
+    font-family: 'JetBrains Mono', monospace;
+    margin-top:2px;
+  }
+  .badge-btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--accent);
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    cursor: pointer;
+    transition: all 0.2s;
+    display:flex; align-items:center; gap:6px;
+  }
+  .badge-btn:hover { background: var(--surface-hover); border-color: var(--accent); }
+  .badge-dot {
+    width:6px; height:6px; border-radius:50%;
+    background: var(--accent);
+    box-shadow: 0 0 6px var(--accent);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+  /* ═══ DIFFICULTY ═══ */
+  .difficulty-row {
+    display:flex; gap:8px; padding: 12px 20px 0;
+  }
+  .diff-btn {
+    flex:1; padding:8px; border-radius:8px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-dim);
+    font-size:11px; font-weight:600; letter-spacing:1px; text-transform:uppercase;
+    cursor:pointer; transition:all 0.2s; font-family:'DM Sans',sans-serif;
+  }
+  .diff-btn.active[data-diff="beginner"] { background:rgba(0,245,196,0.1); border-color:var(--accent); color:var(--accent); }
+  .diff-btn.active[data-diff="intermediate"] { background:rgba(91,110,245,0.1); border-color:var(--accent2); color:var(--accent2); }
+  .diff-btn.active[data-diff="advanced"] { background:rgba(255,77,109,0.1); border-color:var(--accent3); color:var(--accent3); }
+
+  /* ═══ SECTION TITLE ═══ */
+  .section-title {
+    font-family:'Bebas Neue',sans-serif;
+    font-size:13px; letter-spacing:3px; text-transform:uppercase;
+    color: var(--text-dimmer);
+    padding: 24px 20px 12px;
+  }
+
+  /* ═══ STATS BAR ═══ */
+  .stats-bar {
+    margin: 0 20px;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 16px 20px;
+    backdrop-filter: blur(12px);
+    display:flex; gap:0; position:relative; overflow:hidden;
+  }
+  .stats-bar::before {
+    content:'';
+    position:absolute; top:0; left:0; right:0; height:1px;
+    background: linear-gradient(90deg, transparent, rgba(0,245,196,0.4), transparent);
+  }
+  .stat { flex:1; text-align:center; }
+  .stat + .stat { border-left:1px solid var(--border); }
+  .stat-val {
+    font-family:'Bebas Neue',sans-serif;
+    font-size:26px; letter-spacing:1px;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  }
+  .stat-label { font-size:10px; color:var(--text-dimmer); letter-spacing:1px; margin-top:2px; text-transform:uppercase; }
+
+  /* ═══ CATEGORY PILLS ═══ */
+  .cat-scroll { display:flex; gap:10px; padding: 0 20px; overflow-x:auto; scrollbar-width:none; }
+  .cat-scroll::-webkit-scrollbar { display:none; }
+  .cat-pill {
+    flex-shrink:0; padding:10px 16px; border-radius:12px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-dim);
+    font-size:12px; font-weight:500;
+    cursor:pointer; transition:all 0.2s;
+    white-space:nowrap;
+  }
+  .cat-pill.active[data-cat="all"] { background:rgba(255,255,255,0.08); border-color:rgba(255,255,255,0.25); color:var(--text); }
+  .cat-pill.active[data-cat="C001"] { background:rgba(91,110,245,0.15); border-color:var(--c001); color:var(--c001); }
+  .cat-pill.active[data-cat="C002"] { background:rgba(0,245,196,0.1); border-color:var(--c002); color:var(--c002); }
+  .cat-pill.active[data-cat="C003"] { background:rgba(255,77,109,0.1); border-color:var(--c003); color:var(--c003); }
+
+  /* ═══ EXERCISE GRID ═══ */
+  .exercise-list { padding:0 20px; display:flex; flex-direction:column; gap:12px; }
+
+  .ex-card {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 18px 20px;
+    cursor: pointer;
+    transition: all 0.25s;
+    backdrop-filter: blur(12px);
+    position:relative; overflow:hidden;
+    animation: fadeUp 0.3s ease both;
+  }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+  .ex-card::before {
+    content:''; position:absolute; left:0; top:0; bottom:0; width:3px;
+    border-radius:3px 0 0 3px;
+    transition: opacity 0.2s;
+  }
+  .ex-card[data-cat="C001"]::before { background:var(--c001); }
+  .ex-card[data-cat="C002"]::before { background:var(--c002); }
+  .ex-card[data-cat="C003"]::before { background:var(--c003); }
+  .ex-card:hover { background:var(--surface-hover); border-color:var(--border-bright); transform:translateY(-1px); }
+  .ex-card:active { transform:scale(0.99); }
+
+  .ex-card-top { display:flex; justify-content:space-between; align-items:flex-start; }
+  .ex-name { font-weight:600; font-size:15px; line-height:1.3; }
+  .ex-hold {
+    font-family:'JetBrains Mono',monospace;
+    font-size:18px; font-weight:600;
+    line-height:1;
+  }
+  .ex-card[data-cat="C001"] .ex-hold { color:var(--c001); }
+  .ex-card[data-cat="C002"] .ex-hold { color:var(--c002); }
+  .ex-card[data-cat="C003"] .ex-hold { color:var(--c003); }
+  .ex-hold-label { font-size:9px; color:var(--text-dimmer); letter-spacing:1px; text-align:right; margin-top:2px; }
+
+  .ex-muscles { font-size:11px; color:var(--text-dimmer); margin-top:8px; }
+  .ex-arrow { 
+    position:absolute; right:18px; bottom:16px;
+    font-size:16px; color:var(--text-dimmer);
+    transition: transform 0.2s, color 0.2s;
+  }
+  .ex-card:hover .ex-arrow { transform:translateX(3px); color:var(--text); }
+
+  /* ═══ DETAIL VIEW ═══ */
+  .detail-view {
+    position:fixed; inset:0; z-index:200;
+    background: var(--bg);
+    overflow-y:auto;
+    transform:translateX(100%);
+    transition:transform 0.35s cubic-bezier(0.4,0,0.2,1);
+  }
+  .detail-view.open { transform:translateX(0); }
+  .detail-view::before {
+    content:'';
+    position:fixed; top:0; left:0; right:0; bottom:0;
+    background:
+      radial-gradient(ellipse 70% 50% at 50% 0%, rgba(91,110,245,0.15) 0%, transparent 60%);
+    pointer-events:none; z-index:0;
+  }
+
+  .detail-inner { position:relative; z-index:1; padding:0 0 40px; max-width:480px; margin:0 auto; }
+
+  .detail-header {
+    display:flex; align-items:center; gap:14px;
+    padding: 20px 20px 16px;
+    position:sticky; top:0;
+    background:linear-gradient(to bottom, rgba(5,8,16,0.95) 80%, transparent);
+    backdrop-filter:blur(4px);
+    z-index:10;
+  }
+  .back-btn {
+    width:40px; height:40px; border-radius:12px;
+    background:var(--surface); border:1px solid var(--border);
+    color:var(--text); font-size:18px; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0; transition:all 0.2s;
+  }
+  .back-btn:hover { background:var(--surface-hover); }
+  .detail-title { font-family:'Bebas Neue',sans-serif; font-size:26px; letter-spacing:2px; line-height:1.1; }
+  .detail-cat-tag {
+    font-size:10px; letter-spacing:2px; text-transform:uppercase;
+    font-family:'JetBrains Mono',monospace;
+    padding: 3px 10px; border-radius:6px;
+    border:1px solid; margin-top:4px; display:inline-block;
+  }
+
+  /* Asset box */
+  .asset-box {
+    margin:0 20px; border-radius:16px; overflow:hidden;
+    border:1px solid var(--border);
+    background: rgba(5,8,16,0.7); backdrop-filter:blur(8px);
+    aspect-ratio: 4/3; position:relative;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .asset-img {
+    max-width:100%; max-height:100%;
+    width:auto; height:auto;
+    object-fit:contain; display:block;
+    border-radius:8px;
+  }
+  .asset-fallback {
+    position:absolute; inset:0;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px;
+  }
+  .asset-icon { font-size:40px; opacity:0.3; }
+  .asset-label { font-size:11px; color:var(--text-dimmer); letter-spacing:1px; }
+  .asset-tabs { display:flex; gap:0; margin:0 20px 12px; }
+  .asset-tab {
+    flex:1; padding:8px; text-align:center;
+    font-size:11px; font-weight:600; letter-spacing:1px; text-transform:uppercase;
+    border:1px solid var(--border); color:var(--text-dim); cursor:pointer;
+    transition:all 0.2s; background:var(--surface);
+  }
+  .asset-tab:first-child { border-radius:8px 0 0 8px; border-right:none; }
+  .asset-tab:last-child { border-radius:0 8px 8px 0; }
+  .asset-tab.active { background:rgba(91,110,245,0.15); color:var(--accent2); border-color:var(--accent2); }
+
+  /* Timer */
+  .timer-card {
+    margin:16px 20px 0;
+    background:var(--glass); border:1px solid var(--glass-border);
+    border-radius:20px; padding:24px 20px; backdrop-filter:blur(12px);
+    position:relative; overflow:hidden;
+  }
+  .timer-card::before {
+    content:''; position:absolute; top:0; left:0; right:0; height:1px;
+    background:linear-gradient(90deg, transparent, rgba(0,245,196,0.5), transparent);
+  }
+
+  .timer-display {
+    text-align:center;
+    font-family:'JetBrains Mono',monospace;
+    font-size:72px; font-weight:600;
+    letter-spacing:-2px;
+    background:linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+    line-height:1;
+    transition: all 0.1s;
+  }
+  .timer-display.urgent { background:linear-gradient(135deg, var(--accent3), #ff8800); -webkit-background-clip:text; background-clip:text; }
+  .timer-target { text-align:center; font-size:11px; color:var(--text-dimmer); letter-spacing:2px; margin-top:4px; text-transform:uppercase; font-family:'JetBrains Mono',monospace; }
+
+  /* Progress ring */
+  .timer-ring-wrap { position:relative; width:160px; height:160px; margin:0 auto 16px; }
+  .timer-ring { position:absolute; inset:0; transform:rotate(-90deg); }
+  .ring-bg { fill:none; stroke:rgba(255,255,255,0.05); stroke-width:6; }
+  .ring-prog { fill:none; stroke-width:6; stroke-linecap:round;
+    stroke:url(#ringGrad); transition:stroke-dashoffset 0.5s ease; }
+  .ring-center {
+    position:absolute; inset:0; display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+  }
+  .ring-time { font-family:'JetBrains Mono',monospace; font-size:36px; font-weight:600; line-height:1; transition: color 0.4s ease; }
+  .ring-target { font-size:10px; color:var(--text-dimmer); letter-spacing:1px; margin-top:4px; }
+
+  .timer-controls { display:flex; gap:10px; margin-top:20px; }
+  .t-btn {
+    flex:1; padding:14px; border-radius:12px;
+    border:1px solid var(--border);
+    background:var(--surface);
+    color:var(--text); font-size:13px; font-weight:600; letter-spacing:1px; text-transform:uppercase;
+    cursor:pointer; transition:all 0.2s; font-family:'DM Sans',sans-serif;
+  }
+  .t-btn:hover { background:var(--surface-hover); }
+  .t-btn.primary { background:rgba(0,245,196,0.15); border-color:var(--accent); color:var(--accent); }
+  .t-btn.primary:hover { background:rgba(0,245,196,0.25); }
+  .t-btn.danger { background:rgba(255,77,109,0.1); border-color:var(--accent3); color:var(--accent3); }
+
+  /* Instructions */
+  .instructions-card {
+    margin:16px 20px 0;
+    background:var(--glass); border:1px solid var(--glass-border);
+    border-radius:16px; padding:20px; backdrop-filter:blur(8px);
+  }
+  .instructions-title {
+    font-family:'Bebas Neue',sans-serif; font-size:14px; letter-spacing:3px; color:var(--text-dim);
+    margin-bottom:16px; text-transform:uppercase;
+  }
+  .instruction-item {
+    display:flex; gap:12px; align-items:flex-start;
+    padding:10px 0; border-bottom:1px solid var(--border);
+  }
+  .instruction-item:last-child { border-bottom:none; }
+  .instr-num {
+    width:22px; height:22px; border-radius:6px;
+    background:rgba(91,110,245,0.2); border:1px solid var(--accent2);
+    color:var(--accent2); font-size:11px; font-family:'JetBrains Mono',monospace;
+    display:flex; align-items:center; justify-content:center; flex-shrink:0; font-weight:600;
+  }
+  .instr-text { font-size:13px; line-height:1.6; color:var(--text-dim); padding-top:2px; }
+
+  /* Muscles tag */
+  .muscles-tag {
+    margin:16px 20px 0;
+    background:var(--glass); border:1px solid var(--glass-border);
+    border-radius:12px; padding:14px 18px; backdrop-filter:blur(8px);
+    display:flex; align-items:center; gap:12px;
+  }
+  .muscles-label { font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--text-dimmer); font-family:'JetBrains Mono',monospace; }
+  .muscles-val { font-size:13px; font-weight:500; color:var(--text); }
+
+  /* ═══ BADGES MODAL ═══ */
+  .modal-overlay {
+    position:fixed; inset:0; z-index:300;
+    background:rgba(5,8,16,0.85); backdrop-filter:blur(8px);
+    display:flex; align-items:flex-end; justify-content:center;
+    opacity:0; pointer-events:none; transition:opacity 0.3s;
+  }
+  .modal-overlay.open { opacity:1; pointer-events:auto; }
+  .modal-sheet {
+    width:100%; max-width:480px;
+    background:var(--bg2); border:1px solid var(--border);
+    border-radius:24px 24px 0 0; padding:20px 20px 40px;
+    transform:translateY(100%); transition:transform 0.35s cubic-bezier(0.4,0,0.2,1);
+  }
+  .modal-overlay.open .modal-sheet { transform:translateY(0); }
+  .modal-handle { width:40px; height:4px; border-radius:2px; background:var(--border); margin:0 auto 20px; }
+  .modal-title { font-family:'Bebas Neue',sans-serif; font-size:22px; letter-spacing:3px; color:var(--text); }
+  .modal-close { position:absolute; right:20px; top:22px; background:var(--surface); border:1px solid var(--border); width:32px; height:32px; border-radius:8px; color:var(--text-dim); cursor:pointer; font-size:14px; display:flex; align-items:center; justify-content:center; }
+
+  .badge-grid { display:flex; flex-direction:column; gap:12px; margin-top:20px; }
+  .badge-item {
+    background:var(--glass); border:1px solid var(--glass-border);
+    border-radius:14px; padding:16px 18px; display:flex; gap:14px; align-items:center;
+    backdrop-filter:blur(8px);
+  }
+  .badge-item.earned { border-color:rgba(0,245,196,0.3); background:rgba(0,245,196,0.05); }
+  .badge-icon-box {
+    width:46px; height:46px; border-radius:12px;
+    background:var(--surface); border:1px solid var(--border);
+    display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0;
+  }
+  .badge-item.earned .badge-icon-box { background:rgba(0,245,196,0.1); border-color:var(--accent); }
+  .badge-name { font-weight:600; font-size:14px; }
+  .badge-desc { font-size:12px; color:var(--text-dimmer); margin-top:3px; line-height:1.4; }
+  .badge-status { font-size:10px; letter-spacing:1px; text-transform:uppercase; font-family:'JetBrains Mono',monospace; margin-top:6px; }
+  .badge-item.earned .badge-status { color:var(--accent); }
+  .badge-item:not(.earned) .badge-status { color:var(--text-dimmer); }
+
+  /* ═══ BOTTOM NAV (visual only) ═══ */
+  .bottom-nav {
+    position:fixed; bottom:0; left:0; right:0; z-index:50;
+    display:flex; justify-content:center;
+    padding:12px 20px 20px;
+    background:linear-gradient(to top, rgba(5,8,16,0.95) 60%, transparent);
+  }
+  .nav-inner {
+    background:var(--glass); border:1px solid var(--glass-border);
+    border-radius:20px; padding:10px 24px;
+    backdrop-filter:blur(20px);
+    font-size:11px; color:var(--text-dimmer); letter-spacing:2px; text-transform:uppercase;
+    font-family:'JetBrains Mono',monospace;
+  }
+
+  /* ═══ COMPLETE BANNER ═══ */
+  .complete-banner {
+    margin:16px 20px 0;
+    background:rgba(0,245,196,0.1); border:1px solid rgba(0,245,196,0.3);
+    border-radius:14px; padding:16px 18px;
+    display:none; align-items:center; gap:12px;
+    animation:fadeUp 0.4s ease;
+  }
+  .complete-banner.show { display:flex; }
+  .complete-banner-text { font-size:13px; color:var(--accent); font-weight:600; }
+  .complete-banner-sub { font-size:11px; color:rgba(0,245,196,0.6); }
+</style>
+</head>
+<body>
+
+<!-- ══ MAIN VIEW ══ -->
+<div id="app">
+  <div class="header">
+    <div class="header-top">
+      <div>
+        <div class="logo">IsometriX</div>
+        <div class="tagline">Static Strength. Dynamic Results.</div>
+      </div>
+      <button class="badge-btn" onclick="openBadges()">
+        <div class="badge-dot"></div>
+        <span id="badge-count">0</span> Badges
+      </button>
+    </div>
+  </div>
+
+  <div class="difficulty-row">
+    <button class="diff-btn active" data-diff="beginner" onclick="setDiff('beginner',this)">Beginner</button>
+    <button class="diff-btn" data-diff="intermediate" onclick="setDiff('intermediate',this)">Intermediate</button>
+    <button class="diff-btn" data-diff="advanced" onclick="setDiff('advanced',this)">Advanced</button>
+  </div>
+
+  <div class="section-title">Your Progress</div>
+  <div class="stats-bar">
+    <div class="stat">
+      <div class="stat-val" id="stat-holds">0</div>
+      <div class="stat-label">Holds Done</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val" id="stat-time">0s</div>
+      <div class="stat-label">Total Time</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val" id="stat-sessions">0</div>
+      <div class="stat-label">Sessions</div>
+    </div>
+  </div>
+
+  <div class="section-title">Filter</div>
+  <div class="cat-scroll">
+    <div class="cat-pill active" data-cat="all" onclick="filterCat('all',this)">All Exercises</div>
+    <div class="cat-pill" data-cat="C001" onclick="filterCat('C001',this)">Lower Body</div>
+    <div class="cat-pill" data-cat="C002" onclick="filterCat('C002',this)">Core & Spinal</div>
+    <div class="cat-pill" data-cat="C003" onclick="filterCat('C003',this)">Upper Body</div>
+  </div>
+
+  <div class="section-title">Exercises</div>
+  <div class="exercise-list" id="exercise-list"></div>
+</div>
+
+<!-- ══ DETAIL VIEW ══ -->
+<div class="detail-view" id="detail-view">
+  <div class="detail-inner">
+    <div class="detail-header">
+      <button class="back-btn" onclick="closeDetail()">←</button>
+      <div>
+        <div class="detail-title" id="d-name"></div>
+        <div class="detail-cat-tag" id="d-cat-tag"></div>
+      </div>
+    </div>
+
+    <div class="asset-tabs">
+      <div class="asset-tab active" onclick="switchTab('posture',this)">📷 Posture</div>
+      <div class="asset-tab" onclick="switchTab('gif',this)">🎬 Demo</div>
+    </div>
+
+    <div class="asset-box" id="asset-box"></div>
+
+    <div class="muscles-tag">
+      <div>
+        <div class="muscles-label">Muscles Targeted</div>
+        <div class="muscles-val" id="d-muscles"></div>
+      </div>
+    </div>
+
+    <div class="timer-card">
+      <div class="timer-ring-wrap">
+        <svg class="timer-ring" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#00f5c4"/>
+              <stop offset="100%" stop-color="#5b6ef5"/>
+            </linearGradient>
+          </defs>
+          <circle class="ring-bg" cx="80" cy="80" r="70"/>
+          <circle class="ring-prog" id="ring-prog" cx="80" cy="80" r="70"
+            stroke-dasharray="439.82" stroke-dashoffset="439.82"/>
+        </svg>
+        <div class="ring-center">
+          <div class="ring-time" id="ring-time">0:00</div>
+          <div class="ring-target" id="ring-target">— Target —</div>
+        </div>
+      </div>
+      <div class="timer-controls">
+        <button class="t-btn primary" id="start-btn" onclick="toggleTimer()">▶ Start</button>
+        <button class="t-btn" onclick="resetTimer()">↺ Reset</button>
+      </div>
+    </div>
+
+    <div class="complete-banner" id="complete-banner">
+      <div style="font-size:24px">🏆</div>
+      <div>
+        <div class="complete-banner-text">Hold Complete!</div>
+        <div class="complete-banner-sub">Great work — session logged.</div>
+      </div>
+    </div>
+
+    <div class="instructions-card">
+      <div class="instructions-title">Form Cues</div>
+      <div id="d-instructions"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ BADGES MODAL ══ -->
+<div class="modal-overlay" id="badges-modal" onclick="handleOverlayClick(event)">
+  <div class="modal-sheet" style="position:relative">
+    <button class="modal-close" onclick="closeBadges()">✕</button>
+    <div class="modal-handle"></div>
+    <div class="modal-title">Achievements</div>
+    <div class="badge-grid" id="badge-grid"></div>
+  </div>
+</div>
+
+<div class="bottom-nav"><div class="nav-inner">isometrix v1.0.0</div></div>
+
+<button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle light/dark theme">
+  <span id="theme-icon">☀️</span>
+</button>
+
+<script>
+const DATA = {
+  exercises:[
+    {id:"E001",categoryId:"C001",name:"Wall Sit",muscles:"Quadriceps, Glutes, Hamstrings",beginnerHoldSeconds:30,intermediateHoldSeconds:45,advancedHoldSeconds:60,instructions:["Back flat against the wall, thighs parallel to floor.","Knees must be stacked directly over ankles (90° bend).","Push shoulders and lower back firmly into the wall."],assetPlaceholder:"wall_sit_posture.png",assetPlaceholderGif:"wall_sit_sample.gif"},
+    {id:"E002",categoryId:"C001",name:"Glute Bridge Hold",muscles:"Glutes, Hamstrings, Core",beginnerHoldSeconds:45,intermediateHoldSeconds:60,advancedHoldSeconds:75,instructions:["Lie on your back, feet flat, hip-width apart.","Squeeze glutes to lift hips until body forms a straight line from shoulders to knees.","Avoid arching your lower back."],assetPlaceholder:"glute_bridge_posture.png",assetPlaceholderGif:"glute_bridge_sample.gif"},
+    {id:"E003",categoryId:"C001",name:"Static Lunge Hold",muscles:"Quadriceps, Glutes, Hamstrings, Calves",beginnerHoldSeconds:20,intermediateHoldSeconds:30,advancedHoldSeconds:40,instructions:["Lower until both knees are bent at 90°.","Front knee over ankle; back knee hovers just above the floor.","Keep torso upright and core engaged."],assetPlaceholder:"static_lunge_posture.png",assetPlaceholderGif:"static_lunge_sample.gif"},
+    {id:"E004",categoryId:"C001",name:"Calf Raise Hold",muscles:"Calves (Gastrocnemius and Soleus)",beginnerHoldSeconds:45,intermediateHoldSeconds:70,advancedHoldSeconds:90,instructions:["Rise up onto the balls of your feet, lifting heels as high as possible.","Hold this elevated position statically, squeezing your calf muscles.","Use a wall for light balance if needed."],assetPlaceholder:"calf_raise_posture.png",assetPlaceholderGif:"calf_raise_sample.gif"},
+    {id:"E005",categoryId:"C001",name:"Horse Stance Hold",muscles:"Quadriceps, Hip Adductors, Glutes",beginnerHoldSeconds:30,intermediateHoldSeconds:45,advancedHoldSeconds:60,instructions:["Feet wide, toes pointed slightly outward (45°).","Lower hips until thighs are parallel to the floor.","Keep back straight; push knees out over toes."],assetPlaceholder:"horse_stance_posture.png",assetPlaceholderGif:"horse_stance_sample.gif"},
+    {id:"E006",categoryId:"C002",name:"Forearm Plank",muscles:"Abdominals, Obliques, Shoulders, Back, Glutes",beginnerHoldSeconds:45,intermediateHoldSeconds:60,advancedHoldSeconds:90,instructions:["Elbows under shoulders, body in a straight line (head to heels).","Engage core by drawing belly button to spine.","Squeeze glutes to prevent hip sagging."],assetPlaceholder:"forearm_plank_video.mp4",assetPlaceholderGif:"forearm_plank_sample.gif"},
+    {id:"E007",categoryId:"C002",name:"Side Plank",muscles:"Obliques, Hip Abductors, Shoulders, Core",beginnerHoldSeconds:30,intermediateHoldSeconds:45,advancedHoldSeconds:60,instructions:["Support weight on one forearm, elbow under shoulder.","Lift hips until body forms a straight line (head to feet).","Switch sides after resting."],assetPlaceholder:"side_plank_posture.png",assetPlaceholderGif:"side_plank_sample.gif"},
+    {id:"E008",categoryId:"C002",name:"Hollow Body Hold",muscles:"Abdominals, Hip Flexors",beginnerHoldSeconds:15,intermediateHoldSeconds:30,advancedHoldSeconds:45,instructions:["Lie on back, lift head/shoulders/legs slightly.","Press lower back firmly into the floor (no arch).","Lower legs or bend knees if lower back lifts."],assetPlaceholder:"hollow_body_posture.png",assetPlaceholderGif:"hollow_body_sample.gif"},
+    {id:"E009",categoryId:"C002",name:"Bird Dog Hold",muscles:"Lower Back, Core, Glutes, Shoulders",beginnerHoldSeconds:20,intermediateHoldSeconds:30,advancedHoldSeconds:40,instructions:["Start on all fours, extend opposite arm (forward) and leg (back).","Maintain a level torso; avoid hip rotation.","Keep neck neutral and switch sides."],assetPlaceholder:"bird_dog_posture.png",assetPlaceholderGif:"bird_dog_sample.gif"},
+    {id:"E010",categoryId:"C002",name:"V-Sit Hold",muscles:"Abdominals, Hip Flexors, Obliques",beginnerHoldSeconds:15,intermediateHoldSeconds:20,advancedHoldSeconds:30,instructions:["Sit and lift legs and torso into a 'V' shape.","Keep chest lifted and back straight.","Modify with bent knees (Tuck V-Sit) if needed."],assetPlaceholder:"v_sit_posture.png",assetPlaceholderGif:"v_sit_sample.gif"},
+    {id:"E011",categoryId:"C003",name:"Isometric Push-up Hold",muscles:"Chest, Triceps, Shoulders, Core",beginnerHoldSeconds:15,intermediateHoldSeconds:20,advancedHoldSeconds:30,instructions:["Hold at the halfway point (elbows at 90° angle).","Maintain a tight, straight body line (plank position).","Keep neck neutral, looking at the floor."],assetPlaceholder:"pushup_hold_posture.png",assetPlaceholderGif:"pushup_hold_sample.gif"},
+    {id:"E012",categoryId:"C003",name:"Triceps Dip Hold",muscles:"Triceps, Chest, Shoulders",beginnerHoldSeconds:20,intermediateHoldSeconds:30,advancedHoldSeconds:45,instructions:["Sit on stable chair, hands shoulder-width apart.","Lower body until elbows are at 90°.","Do not let shoulders shrug up to ears."],assetPlaceholder:"triceps_dip_posture.png",assetPlaceholderGif:"triceps_dip_sample.gif"},
+    {id:"E013",categoryId:"C003",name:"Reverse Plank Hold",muscles:"Glutes, Hamstrings, Lower Back, Shoulders, Triceps",beginnerHoldSeconds:30,intermediateHoldSeconds:45,advancedHoldSeconds:60,instructions:["Sit, hands behind hips, fingers toward feet.","Lift hips until body is a straight line from shoulders to heels.","Engage glutes and keep neck neutral."],assetPlaceholder:"reverse_plank_posture.png",assetPlaceholderGif:"reverse_plank_sample.gif"},
+    {id:"E014",categoryId:"C003",name:"Prone Superman Hold",muscles:"Lower Back, Glutes, Upper Back",beginnerHoldSeconds:30,intermediateHoldSeconds:35,advancedHoldSeconds:45,instructions:["Lie face down, simultaneously lift arms, chest, and legs.","Only belly/hips remain on the floor.","Squeeze glutes and back muscles; look at the floor."],assetPlaceholder:"superman_hold_posture.png",assetPlaceholderGif:"superman_hold_sample.gif"},
+    {id:"E015",categoryId:"C003",name:"Pike Push-up Hold",muscles:"Shoulders, Upper Chest, Triceps",beginnerHoldSeconds:10,intermediateHoldSeconds:15,advancedHoldSeconds:20,instructions:["Start in Downward Dog ('V' shape).","Lower head toward the floor, stopping when elbows are at 90°.","Hold the static position with your head between your arms."],assetPlaceholder:"pike_pushup_posture.png",assetPlaceholderGif:"pike_pushup_sample.gif"}
+  ],
+  badges:[
+    {id:"starter_kit",name:"Starter Kit",description:"Complete 1 session of the full routine.",icon:"🥇"},
+    {id:"core_master",name:"Core Master",description:"Accumulate 10 minutes of total core hold time.",icon:"🎯"},
+    {id:"leg_day_legend",name:"Leg Day Legend",description:"Achieve a Wall Sit time of over 60 seconds.",icon:"📈"}
+  ]
+};
+
+// ── State ──
+let state = {
+  difficulty: 'beginner',
+  cat: 'all',
+  currentEx: null,
+  currentTab: 'posture',
+  timer: { running:false, elapsed:0, interval:null, target:0 },
+  progress: { holds:0, totalTime:0, sessions:0, badges:[], wallSitBest:0, coreTotalTime:0 }
+};
+
+function loadProgress() {
+  try {
+    const saved = localStorage.getItem('isometrix_progress');
+    if(saved) state.progress = {...state.progress, ...JSON.parse(saved)};
+    const diff = localStorage.getItem('isometrix_diff');
+    if(diff) state.difficulty = diff;
+  } catch(e){}
+}
+function saveProgress() {
+  try { localStorage.setItem('isometrix_progress', JSON.stringify(state.progress)); } catch(e){}
+}
+
+loadProgress();
+
+// ── Difficulty ──
+function setDiff(d, el) {
+  state.difficulty = d;
+  document.querySelectorAll('.diff-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  try{ localStorage.setItem('isometrix_diff',d); }catch(e){}
+  renderExercises();
+  if(state.currentEx) openDetail(state.currentEx);
+}
+
+// ── Filter ──
+function filterCat(cat, el) {
+  state.cat = cat;
+  document.querySelectorAll('.cat-pill').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  renderExercises();
+}
+
+// ── Render exercises ──
+function getHold(ex) {
+  return ex[state.difficulty + 'HoldSeconds'] || ex.beginnerHoldSeconds;
+}
+function catColor(catId) {
+  return {C001:'var(--c001)',C002:'var(--c002)',C003:'var(--c003)'}[catId] || 'var(--text)';
+}
+
+function renderExercises() {
+  const list = document.getElementById('exercise-list');
+  const filtered = state.cat === 'all' ? DATA.exercises : DATA.exercises.filter(e=>e.categoryId===state.cat);
+  list.innerHTML = filtered.map((ex,i)=>`
+    <div class="ex-card" data-cat="${ex.categoryId}" onclick="openDetail('${ex.id}')" style="animation-delay:${i*0.04}s">
+      <div class="ex-card-top">
+        <div class="ex-name">${ex.name}</div>
+        <div>
+          <div class="ex-hold">${getHold(ex)}s</div>
+          <div class="ex-hold-label">Target Hold</div>
+        </div>
+      </div>
+      <div class="ex-muscles">${ex.muscles}</div>
+      <div class="ex-arrow">→</div>
+    </div>
+  `).join('');
+}
+
+// ── Stats ──
+function updateStats() {
+  const t = state.progress.totalTime;
+  document.getElementById('stat-holds').textContent = state.progress.holds;
+  document.getElementById('stat-time').textContent = t >= 60 ? Math.floor(t/60)+'m '+Math.floor(t%60)+'s' : t+'s';
+  document.getElementById('stat-sessions').textContent = state.progress.sessions;
+  document.getElementById('badge-count').textContent = state.progress.badges.length;
+}
+
+// ── Asset rendering ──
+function renderAssetBox(ex, tab) {
+  const isGif = tab === 'gif';
+  const filename = isGif ? ex.assetPlaceholderGif : ex.assetPlaceholder;
+  const box = document.getElementById('asset-box');
+  const img = new Image();
+  box.innerHTML = `
+    <div class="asset-fallback" id="asset-fallback">
+      <div class="asset-icon">${isGif ? '🎬' : '🖼️'}</div>
+      <div class="asset-label">${filename}</div>
+    </div>`;
+  img.className = 'asset-img';
+  img.alt = `${ex.name} ${isGif ? 'animation' : 'posture'}`;
+  img.onload = () => {
+    document.getElementById('asset-fallback').style.display = 'none';
+    box.appendChild(img);
+  };
+  img.onerror = () => { /* fallback already showing */ };
+  img.src = filename;
+}
+
+// ── Detail ──
+function openDetail(id) {
+  const ex = DATA.exercises.find(e=>e.id===id);
+  if(!ex) return;
+  state.currentEx = id;
+  state.currentTab = 'posture';
+  resetTimer();
+
+  const target = getHold(ex);
+  document.getElementById('d-name').textContent = ex.name;
+  document.getElementById('d-muscles').textContent = ex.muscles;
+
+  const catNames={C001:'Lower Body',C002:'Core & Spinal',C003:'Upper Body'};
+  const catColors={C001:'var(--c001)',C002:'var(--c002)',C003:'var(--c003)'};
+  const tag = document.getElementById('d-cat-tag');
+  tag.textContent = catNames[ex.categoryId]||'';
+  tag.style.color = catColors[ex.categoryId];
+  tag.style.borderColor = catColors[ex.categoryId];
+  tag.style.background = catColors[ex.categoryId].replace('var(','').replace(')','') + '20';
+
+  document.getElementById('ring-target').textContent = target+'s target';
+  document.querySelectorAll('.asset-tab').forEach((t,i)=>t.classList.toggle('active',i===0));
+  renderAssetBox(ex, 'posture');
+
+  const instrs = document.getElementById('d-instructions');
+  instrs.innerHTML = ex.instructions.map((t,i)=>`
+    <div class="instruction-item">
+      <div class="instr-num">${i+1}</div>
+      <div class="instr-text">${t}</div>
+    </div>`).join('');
+
+  document.getElementById('complete-banner').classList.remove('show');
+  document.getElementById('detail-view').classList.add('open');
+  document.getElementById('detail-view').scrollTop = 0;
+  updateRing();
+}
+
+function closeDetail() {
+  pauseTimer();
+  document.getElementById('detail-view').classList.remove('open');
+}
+
+function switchTab(tab, el) {
+  state.currentTab = tab;
+  document.querySelectorAll('.asset-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  const ex = DATA.exercises.find(e=>e.id===state.currentEx);
+  if(!ex) return;
+  renderAssetBox(ex, tab);
+}
+
+// ── Timer ──
+function getTarget() {
+  const ex = DATA.exercises.find(e=>e.id===state.currentEx);
+  return ex ? getHold(ex) : 30;
+}
+
+function formatTime(s) {
+  const m=Math.floor(s/60); const sec=s%60;
+  return m+':'+(sec<10?'0':'')+sec;
+}
+
+function updateRing() {
+  const target = getTarget();
+  const elapsed = state.timer.elapsed;
+  const remaining = Math.max(target - elapsed, 0);
+  const r = 70, circ = 2 * Math.PI * r;
+  const prog = Math.min(elapsed / target, 1);
+  document.getElementById('ring-prog').style.strokeDashoffset = circ - prog * circ;
+  document.getElementById('ring-time').textContent = formatTime(remaining);
+
+  const ratio = target > 0 ? remaining / target : 1;
+  const rt = document.getElementById('ring-time');
+  const grad = document.getElementById('ringGrad');
+  const stops = grad ? grad.querySelectorAll('stop') : [];
+
+  if (remaining === 0 && elapsed > 0) {
+    // Complete — flash green
+    if (stops.length >= 2) { stops[0].setAttribute('stop-color','#00f5c4'); stops[1].setAttribute('stop-color','#5b6ef5'); }
+    rt.style.color = 'var(--accent)'; rt.className = 'ring-time';
+  } else if (ratio > 0.5) {
+    if (stops.length >= 2) { stops[0].setAttribute('stop-color','#00f5c4'); stops[1].setAttribute('stop-color','#5b6ef5'); }
+    rt.style.color = ''; rt.className = 'ring-time';
+  } else if (ratio > 0.25) {
+    if (stops.length >= 2) { stops[0].setAttribute('stop-color','#ffa040'); stops[1].setAttribute('stop-color','#ff6000'); }
+    rt.style.color = '#ffa040'; rt.className = 'ring-time phase-warn';
+  } else {
+    if (stops.length >= 2) { stops[0].setAttribute('stop-color','#ff4d6d'); stops[1].setAttribute('stop-color','#ff1a40'); }
+    rt.style.color = 'var(--accent3)'; rt.className = 'ring-time phase-urgent';
+  }
+}
+
+function toggleTimer() {
+  if(state.timer.running) pauseTimer(); else startTimer();
+}
+
+function startTimer() {
+  if(state.timer.running) return;
+  state.timer.running = true;
+  document.getElementById('start-btn').textContent = '⏸ Pause';
+  state.timer.interval = setInterval(()=>{
+    state.timer.elapsed++;
+    updateRing();
+    const target = getTarget();
+    if(state.timer.elapsed >= target && !state.timer.completed) {
+      state.timer.completed = true;
+      onHoldComplete();
+    }
+  }, 1000);
+}
+
+function pauseTimer() {
+  state.timer.running = false;
+  clearInterval(state.timer.interval);
+  document.getElementById('start-btn').textContent = '▶ Resume';
+}
+
+function resetTimer() {
+  pauseTimer();
+  state.timer.elapsed = 0;
+  state.timer.completed = false;
+  document.getElementById('start-btn').textContent = '▶ Start';
+  document.getElementById('complete-banner').classList.remove('show');
+  const grad = document.getElementById('ringGrad');
+  if (grad) {
+    const stops = grad.querySelectorAll('stop');
+    if (stops.length >= 2) { stops[0].setAttribute('stop-color','#00f5c4'); stops[1].setAttribute('stop-color','#5b6ef5'); }
+  }
+  const rt = document.getElementById('ring-time');
+  if (rt) { rt.className = 'ring-time'; rt.style.color = ''; }
+  updateRing();
+}
+
+function onHoldComplete() {
+  if (navigator.vibrate) navigator.vibrate([80, 40, 180]);
+  const ex = DATA.exercises.find(e=>e.id===state.currentEx);
+  const t = getTarget();
+  state.progress.holds++;
+  state.progress.totalTime += t;
+  state.progress.sessions++;
+
+  // badge checks
+  if(ex.id==='E001') state.progress.wallSitBest = Math.max(state.progress.wallSitBest||0, t);
+  if(ex.categoryId==='C002') state.progress.coreTotalTime = (state.progress.coreTotalTime||0)+t;
+
+  checkBadges(ex);
+  saveProgress();
+  updateStats();
+  renderBadges();
+
+  document.getElementById('complete-banner').classList.add('show');
+  pauseTimer();
+}
+
+function checkBadges(ex) {
+  const earn = (id)=>{ if(!state.progress.badges.includes(id)) state.progress.badges.push(id); };
+  if(state.progress.sessions >= 1) earn('starter_kit');
+  if((state.progress.coreTotalTime||0) >= 600) earn('core_master');
+  if((state.progress.wallSitBest||0) >= 60) earn('leg_day_legend');
+}
+
+// ── Badges ──
+function openBadges() {
+  renderBadges();
+  document.getElementById('badges-modal').classList.add('open');
+}
+function closeBadges() { document.getElementById('badges-modal').classList.remove('open'); }
+function handleOverlayClick(e) { if(e.target===document.getElementById('badges-modal')) closeBadges(); }
+
+function renderBadges() {
+  const grid = document.getElementById('badge-grid');
+  grid.innerHTML = DATA.badges.map(b=>{
+    const earned = state.progress.badges.includes(b.id);
+    return `<div class="badge-item ${earned?'earned':''}">
+      <div class="badge-icon-box">${b.icon}</div>
+      <div>
+        <div class="badge-name">${b.name}</div>
+        <div class="badge-desc">${b.description}</div>
+        <div class="badge-status">${earned?'✓ Earned':'Locked'}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── Theme ──
+function toggleTheme() {
+  const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+  if (isLight) {
+    document.documentElement.removeAttribute('data-theme');
+    document.getElementById('theme-icon').textContent = '☀️';
+    try { localStorage.setItem('isometrix_theme', 'dark'); } catch(e) {}
+  } else {
+    document.documentElement.setAttribute('data-theme', 'light');
+    document.getElementById('theme-icon').textContent = '🌙';
+    try { localStorage.setItem('isometrix_theme', 'light'); } catch(e) {}
+  }
+}
+
+// Set saved difficulty btn active
+document.querySelectorAll('.diff-btn').forEach(b=>{
+  b.classList.toggle('active', b.dataset.diff===state.difficulty);
+});
+
+// Init theme from storage
+try {
+  if (localStorage.getItem('isometrix_theme') === 'light') {
+    document.documentElement.setAttribute('data-theme', 'light');
+    document.getElementById('theme-icon').textContent = '🌙';
+  }
+} catch(e) {}
+
+// Init
+renderExercises();
+updateStats();
+renderBadges();
+</script>
+</body>
+</html>
