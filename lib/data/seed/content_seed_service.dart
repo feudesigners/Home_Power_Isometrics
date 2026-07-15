@@ -164,6 +164,7 @@ class ContentSeedService {
             ),
           );
     }
+    await db.delete(db.exerciseMedia).go();
     for (final m
         in (mediaManifest['media'] as List).cast<Map<String, dynamic>>()) {
       await db
