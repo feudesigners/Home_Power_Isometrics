@@ -182,11 +182,17 @@ class _WorkoutRunnerScreenState extends ConsumerState<WorkoutRunnerScreen>
               const SizedBox(height: 8),
               ExerciseMediaView(
                 label:
-                    item?.mediaAccessibilityLabel ??
-                    '${item?.displayName ?? 'Exercise'} demonstration',
-                assetPath: item?.staticAssetPath,
+                    (prefs.valueOrNull?.reducedMotion ?? false)
+                    ? (item?.mediaAccessibilityLabel ??
+                          '${item?.displayName ?? 'Exercise'} posture')
+                    : (item?.animatedMediaAccessibilityLabel ??
+                          item?.mediaAccessibilityLabel ??
+                          '${item?.displayName ?? 'Exercise'} demonstration'),
+                assetPath: (prefs.valueOrNull?.reducedMotion ?? false)
+                    ? item?.staticAssetPath
+                    : (item?.animatedAssetPath ?? item?.staticAssetPath),
                 height: 120,
-                reducedMotion: prefs.valueOrNull?.reducedMotion ?? false,
+                reducedMotion: false,
               ),
               const SizedBox(height: 16),
               SizedBox(
@@ -253,15 +259,21 @@ class _WorkoutRunnerScreenState extends ConsumerState<WorkoutRunnerScreen>
                     child: const Text('Skip'),
                   ),
                   OutlinedButton(
-                    onPressed: () {
-                      ctrl.machine.useEasierDuration(
-                        Duration(
-                          milliseconds:
-                              (item?.holdDuration.inMilliseconds ?? 10000) ~/ 2,
-                        ),
-                      );
-                    },
-                    child: const Text('Easier'),
+                    onPressed: item?.easierVariantId == null
+                        ? null
+                        : () async {
+                            final changed = await ctrl.useEasierVariant();
+                            if (context.mounted && changed) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                    'Switched to the supported variation. Preparation restarted.',
+                                  ),
+                                ),
+                              );
+                            }
+                          },
+                    child: const Text('Use easier variation'),
                   ),
                   OutlinedButton(
                     style: OutlinedButton.styleFrom(
