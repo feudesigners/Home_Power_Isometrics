@@ -313,6 +313,7 @@ class WorkoutStateMachine {
     required DateTime? deadlineAt,
     required Duration remainingWhenPaused,
     required Duration pausedAccumulated,
+    required DateTime? pauseStartedAt,
     required int currentItemIndex,
     required int currentSet,
     required HoldSide currentSide,
@@ -324,6 +325,7 @@ class WorkoutStateMachine {
     this.deadlineAt = deadlineAt;
     this.remainingWhenPaused = remainingWhenPaused;
     this.pausedAccumulated = pausedAccumulated;
+    this.pauseStartedAt = pauseStartedAt;
     this.currentItemIndex = currentItemIndex;
     this.currentSet = currentSet;
     this.currentSide = currentSide;
