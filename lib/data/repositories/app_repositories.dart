@@ -355,6 +355,20 @@ class AppRepositories {
     );
   }
 
+  Future<void> markSessionActive(
+    String sessionId,
+    Map<String, dynamic> snap,
+  ) async {
+    await (db.update(
+      db.workoutSessions,
+    )..where((table) => table.id.equals(sessionId))).write(
+      WorkoutSessionsCompanion(
+        status: Value(SessionStatus.active.name),
+        recoveryJson: Value(jsonEncode(snap)),
+      ),
+    );
+  }
+
   Future<void> markSessionPaused(
     String sessionId,
     Map<String, dynamic> snap,
