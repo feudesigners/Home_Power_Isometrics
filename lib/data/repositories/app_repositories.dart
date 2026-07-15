@@ -385,6 +385,7 @@ class AppRepositories {
     required int pauseMs,
     required HoldResult result,
     required bool painFlag,
+    DateTime? startedAt,
     int? effort,
   }) async {
     final id = _uuid.v4();
@@ -407,7 +408,9 @@ class AppRepositories {
             result: result.name,
             perceivedEffort: Value(effort),
             painFlag: Value(painFlag),
-            startedAt: now.subtract(Duration(milliseconds: completedMs)),
+            startedAt:
+                startedAt ??
+                now.subtract(Duration(milliseconds: completedMs)),
             endedAt: now,
           ),
         );
