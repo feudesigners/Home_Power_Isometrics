@@ -179,7 +179,7 @@ class _WorkoutRunnerScreenState extends ConsumerState<WorkoutRunnerScreen>
               Row(
                 children: [
                   CompanionAvatar(
-                    avatarId: profile.valueOrNull?.avatarId ?? 'pulse',
+                    avatarId: profile.valueOrNull?.selectedAvatarId ?? 'pulse',
                     mood: switch (machine.phase) {
                       WorkoutPhase.holding => AvatarMood.holding,
                       WorkoutPhase.preparing => AvatarMood.preparing,
