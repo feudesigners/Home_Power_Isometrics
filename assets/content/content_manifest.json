@@ -1,9 +1,10 @@
 {
-  "version": 1,
+  "version": 2,
   "files": [
     "exercises_v1.json",
     "programs_v1.json",
     "achievements_v1.json",
     "avatars_v1.json"
-  ]
+  ],
+  "note": "Content v2 completes program schedules and links static/animated media. Exercise guidance remains provisional pending professional review."
 }
