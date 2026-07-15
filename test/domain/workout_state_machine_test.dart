@@ -202,4 +202,53 @@ void main() {
     expect(machine.phase, WorkoutPhase.completed);
   });
 
+
+  test('planned duration includes sets both sides switches and real rests', () {
+    final duration = plannedWorkoutDurationMs([
+      WorkoutPlanItem(
+        variantId: 'a',
+        exerciseId: 'E001',
+        displayName: 'A',
+        holdDuration: const Duration(seconds: 10),
+        setupDuration: const Duration(seconds: 2),
+        restDuration: const Duration(seconds: 4),
+        sideSwitchDuration: const Duration(seconds: 3),
+        unilateralMode: UnilateralMode.leftRight,
+        sets: 2,
+      ),
+    ]);
+
+    // Two sets of (2 setup + 20 holds + 3 switch), plus one inter-set rest.
+    expect(duration, 54000);
+  });
+
+  test('replacing current item restarts preparation with safer metadata', () {
+    machine.loadPlan([
+      WorkoutPlanItem(
+        variantId: 'hard',
+        exerciseId: 'E001',
+        displayName: 'Hard',
+        holdDuration: const Duration(seconds: 10),
+        setupDuration: const Duration(seconds: 2),
+        restDuration: const Duration(seconds: 4),
+        easierVariantId: 'easy',
+      ),
+    ]);
+    machine.start();
+    machine.replaceCurrentItem(
+      const WorkoutPlanItem(
+        variantId: 'easy',
+        exerciseId: 'E001',
+        displayName: 'Easy',
+        holdDuration: Duration(seconds: 6),
+        setupDuration: Duration(seconds: 3),
+        restDuration: Duration(seconds: 4),
+      ),
+    );
+
+    expect(machine.currentItem?.variantId, 'easy');
+    expect(machine.phase, WorkoutPhase.preparing);
+    expect(machine.remaining(clock.now()), const Duration(seconds: 3));
+  });
+
 }
