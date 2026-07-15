@@ -49,7 +49,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       final reminder = await repositories.reminderSchedule();
       if (!mounted) return;
       setState(() {
-        step = profile.onboardingStep.clamp(0, 8);
+        step = profile.onboardingStep.clamp(0, 8).toInt();
         _nameController.text = profile.displayName;
         goal = profile.goal ?? goal;
         level = profile.startingLevel;
