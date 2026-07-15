@@ -33,6 +33,36 @@ class AppRepositories {
     return (await db.select(db.userPreferences).get()).first;
   }
 
+  Future<ReminderSchedule> reminderSchedule() async {
+    return (await db.select(db.reminderSchedules).get()).first;
+  }
+
+  Future<void> saveReminderSchedule({
+    required bool enabled,
+    required List<int> weekdays,
+    required int hour,
+    required int minute,
+  }) async {
+    if (weekdays.any((day) => day < 1 || day > 7) ||
+        hour < 0 ||
+        hour > 23 ||
+        minute < 0 ||
+        minute > 59) {
+      throw const FormatException('Reminder schedule is invalid.');
+    }
+    final schedule = await reminderSchedule();
+    await (db.update(
+      db.reminderSchedules,
+    )..where((table) => table.id.equals(schedule.id))).write(
+      ReminderSchedulesCompanion(
+        enabled: Value(enabled),
+        weekdaysCsv: Value(weekdays.join(',')),
+        hour: Value(hour),
+        minute: Value(minute),
+      ),
+    );
+  }
+
   Future<void> updateTheme(String theme) async {
     final pref = await preferences();
     await (db.update(
