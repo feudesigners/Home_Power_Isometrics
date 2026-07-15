@@ -166,10 +166,46 @@ class AppRepositories {
   }
 
   Future<WorkoutTemplate?> recommendedTemplate() async {
+    final enrolledProgramId = await db.getMeta('enrolled_program_id');
+    if (enrolledProgramId != null) {
+      final templates = await templatesForProgram(enrolledProgramId);
+      templates.sort((a, b) => a.name.compareTo(b.name));
+      final completedIds = await completedTemplateIdsForProgram(
+        enrolledProgramId,
+      );
+      for (final template in templates) {
+        if (!completedIds.contains(template.id)) return template;
+      }
+    }
     final rows = await (db.select(
       db.workoutTemplates,
     )..where((t) => t.isDefaultRecommended.equals(true))).get();
     return rows.isEmpty ? null : rows.first;
+  }
+
+  Future<void> enrollProgram(String programId) async {
+    final exists = await (db.select(
+      db.programs,
+    )..where((table) => table.id.equals(programId))).getSingleOrNull();
+    if (exists == null) {
+      throw const FormatException('Program is unavailable.');
+    }
+    await db.setMeta('enrolled_program_id', programId);
+  }
+
+  Future<Set<String>> completedTemplateIdsForProgram(
+    String programId,
+  ) async {
+    final sessions = await (db.select(db.workoutSessions)..where(
+          (table) =>
+              table.programId.equals(programId) &
+              table.status.equals(SessionStatus.completed.name),
+        ))
+        .get();
+    return sessions
+        .map((session) => session.templateId)
+        .whereType<String>()
+        .toSet();
   }
 
   Future<WorkoutTemplate?> quickStartTemplate() async {
@@ -1040,7 +1076,8 @@ class AppRepositories {
       await (db.delete(db.metaEntries)..where(
             (table) =>
                 table.key.like('progression_%') |
-                table.key.equals('accepted_progression_count'),
+                table.key.equals('accepted_progression_count') |
+                table.key.equals('enrolled_program_id'),
           ))
           .go();
       final reminders = await db.select(db.reminderSchedules).get();
