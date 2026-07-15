@@ -123,7 +123,7 @@ void main() {
             startedAt: DateTime.utc(2026, 4, 2, 10, 1),
             endedAt: DateTime.utc(2026, 4, 2, 10, 1, 18),
           ),
-    );
+        );
 
     final exported = await AppRepositories(source).exportUserData();
     await source.close();

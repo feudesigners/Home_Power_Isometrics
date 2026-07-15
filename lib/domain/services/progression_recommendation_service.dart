@@ -46,6 +46,18 @@ class ProgressionRecommendation {
   final String? suggestedVariantId;
 }
 
+class ProgressionSuggestion {
+  const ProgressionSuggestion({
+    required this.variantId,
+    required this.displayName,
+    required this.recommendation,
+  });
+
+  final String variantId;
+  final String displayName;
+  final ProgressionRecommendation recommendation;
+}
+
 /// Deterministic progression rules — unit tested, inspectable.
 class ProgressionRecommendationService {
   const ProgressionRecommendationService();

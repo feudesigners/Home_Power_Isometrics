@@ -50,6 +50,49 @@ class YouScreen extends ConsumerWidget {
                       ),
                     ],
                   ),
+                  FutureBuilder(
+                    future: ref.read(repositoriesProvider).avatars(),
+                    builder: (context, snapshot) {
+                      final avatars = snapshot.data ?? const [];
+                      if (avatars.isEmpty) return const SizedBox.shrink();
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: 12),
+                          Text(
+                            'Companion',
+                            style: Theme.of(context).textTheme.titleLarge,
+                          ),
+                          const Text(
+                            'Pulse, Nova, and Atlas are included starter companions.',
+                          ),
+                          const SizedBox(height: 8),
+                          Wrap(
+                            spacing: 8,
+                            runSpacing: 8,
+                            children: [
+                              for (final avatar in avatars)
+                                ChoiceChip(
+                                  avatar: CompanionAvatar(
+                                    avatarId: avatar.id,
+                                    size: 32,
+                                  ),
+                                  label: Text(avatar.name),
+                                  selected:
+                                      profile.selectedAvatarId == avatar.id,
+                                  onSelected: (_) async {
+                                    await ref
+                                        .read(repositoriesProvider)
+                                        .selectAvatar(avatar.id);
+                                    ref.invalidate(profileProvider);
+                                  },
+                                ),
+                            ],
+                          ),
+                        ],
+                      );
+                    },
+                  ),
                   const Divider(height: 32),
                   Text(
                     'Appearance',

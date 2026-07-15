@@ -6,6 +6,7 @@ import '../../data/repositories/app_repositories.dart';
 import '../../data/seed/content_seed_service.dart';
 import '../../domain/services/reminder_scheduler.dart';
 import '../../core/services/android_reminder_scheduler.dart';
+import '../../core/services/workout_cue_service.dart';
 
 final appClockProvider = Provider<AppClock>((ref) => const SystemAppClock());
 
@@ -21,6 +22,12 @@ final repositoriesProvider = Provider<AppRepositories>((ref) {
 
 final reminderSchedulerProvider = Provider<ReminderScheduler>((ref) {
   return AndroidReminderScheduler();
+});
+
+final workoutCueServiceProvider = Provider<WorkoutCueService>((ref) {
+  final service = BundledWorkoutCueService();
+  ref.onDispose(service.dispose);
+  return service;
 });
 
 final bootstrapProvider = FutureProvider<void>((ref) async {

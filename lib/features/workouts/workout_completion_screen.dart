@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../app/bootstrap/providers.dart';
+import '../../domain/services/progression_recommendation_service.dart';
 import '../avatar/companion_avatar.dart';
 import 'workout_controller.dart';
 
@@ -20,6 +21,7 @@ class _WorkoutCompletionScreenState
   bool pain = false;
   final noteCtrl = TextEditingController();
   bool submitted = false;
+  List<ProgressionSuggestion> suggestions = const [];
 
   @override
   void dispose() {
@@ -85,7 +87,16 @@ class _WorkoutCompletionScreenState
                           ? null
                           : noteCtrl.text.trim(),
                     );
-                    setState(() => submitted = true);
+                    final sessionId = ctrl.sessionId;
+                    final next = sessionId == null
+                        ? const <ProgressionSuggestion>[]
+                        : await ref
+                              .read(repositoriesProvider)
+                              .progressionSuggestionsForSession(sessionId);
+                    setState(() {
+                      submitted = true;
+                      suggestions = next;
+                    });
                     ref.invalidate(profileProvider);
                     if (context.mounted) {
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -98,6 +109,27 @@ class _WorkoutCompletionScreenState
             child: Text(submitted ? 'Saved' : 'Save feedback'),
           ),
           const SizedBox(height: 8),
+          if (submitted && suggestions.isNotEmpty) ...[
+            Text(
+              'Next-session suggestions',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+            const Text(
+              'Suggestions never change your variation automatically.',
+            ),
+            for (final suggestion in suggestions.take(3))
+              ListTile(
+                contentPadding: EdgeInsets.zero,
+                title: Text(suggestion.displayName),
+                subtitle: Text(suggestion.recommendation.explanation),
+                leading: Icon(switch (suggestion.recommendation.action) {
+                  ProgressionAction.increaseTime => Icons.timer_outlined,
+                  ProgressionAction.suggestHarder => Icons.trending_up,
+                  ProgressionAction.regress => Icons.trending_down,
+                  ProgressionAction.maintain => Icons.horizontal_rule,
+                }),
+              ),
+          ],
           OutlinedButton(
             onPressed: () => context.go('/today'),
             child: const Text('Back to Today'),

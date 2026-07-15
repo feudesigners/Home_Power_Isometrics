@@ -7,6 +7,7 @@ import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../../domain/entities/enums.dart';
 import '../../domain/services/workout_state_machine.dart';
+import '../../domain/services/session_recovery_service.dart';
 import '../../app/bootstrap/providers.dart';
 
 class WorkoutController extends ChangeNotifier {
@@ -26,6 +27,8 @@ class WorkoutController extends ChangeNotifier {
   DateTime? sessionStartedAt;
   Duration lastRemaining = Duration.zero;
   bool awaitingResumeConfirm = false;
+  static const _recovery = SessionRecoveryService();
+  int? _lastCountdownCue;
 
   WorkoutStateMachine get machine => _machine;
   WorkoutPhase get phase => _machine.phase;
@@ -69,6 +72,8 @@ class WorkoutController extends ChangeNotifier {
     sessionStartedAt = _ref.read(appClockProvider).now();
     _machine.start();
     lastRemaining = _machine.remaining(null);
+    _lastCountdownCue = null;
+    await _playPhaseCue(_machine.phase);
     await WakelockPlus.enable();
     _startUiTicker();
     await _persistPhaseBoundary();
@@ -87,19 +92,34 @@ class WorkoutController extends ChangeNotifier {
     final result = _machine.evaluate();
     lastRemaining = result.remaining;
 
+    if (_machine.phase == WorkoutPhase.holding) {
+      final seconds =
+          result.remaining.inSeconds +
+          (result.remaining.inMilliseconds.remainder(1000) > 0 ? 1 : 0);
+      if (seconds >= 1 && seconds <= 3 && seconds != _lastCountdownCue) {
+        _lastCountdownCue = seconds;
+        await _playCountdownCue(seconds);
+      }
+    }
+
     if (result.holdCompletedFully) {
-      completedHolds += 1;
-      await _recordCurrentHold(
-        HoldResult.completed,
-        full: true,
-        side: result.holdCompletedSide,
-      );
+      final completedItem = _machine.currentItem;
+      if (completedItem?.isHold == true) {
+        completedHolds += 1;
+        await _recordCurrentHold(
+          HoldResult.completed,
+          full: true,
+          side: result.holdCompletedSide,
+        );
+      }
     }
     if (result.sessionCompleted) {
       await WakelockPlus.disable();
       _uiTimer?.cancel();
     }
     if (before != result.phase || result.phaseCompleted != null) {
+      _lastCountdownCue = null;
+      await _playPhaseCue(result.phase);
       await _persistPhaseBoundary();
     }
     notifyListeners();
@@ -112,7 +132,7 @@ class WorkoutController extends ChangeNotifier {
   }) async {
     final item = _machine.currentItem;
     final sid = sessionId;
-    if (item == null || sid == null) return;
+    if (item == null || sid == null || !item.isHold) return;
     final target = item.holdDuration.inMilliseconds;
     final completed = full
         ? target
@@ -164,6 +184,9 @@ class WorkoutController extends ChangeNotifier {
             'unilateralMode': i.unilateralMode.name,
             'formCues': i.formCues,
             'breathingCue': i.breathingCue,
+            'kind': i.kind.name,
+            'staticAssetPath': i.staticAssetPath,
+            'mediaAccessibilityLabel': i.mediaAccessibilityLabel,
           },
         )
         .toList(),
@@ -173,6 +196,20 @@ class WorkoutController extends ChangeNotifier {
     final sid = sessionId;
     if (sid == null) return;
     await _ref.read(repositoriesProvider).markSessionPaused(sid, snapshot());
+  }
+
+  Future<void> _playPhaseCue(WorkoutPhase phase) async {
+    final prefs = await _ref.read(repositoriesProvider).preferences();
+    if (prefs.audioEnabled) {
+      await _ref.read(workoutCueServiceProvider).playPhase(phase);
+    }
+  }
+
+  Future<void> _playCountdownCue(int seconds) async {
+    final prefs = await _ref.read(repositoriesProvider).preferences();
+    if (prefs.audioEnabled) {
+      await _ref.read(workoutCueServiceProvider).playCountdown(seconds);
+    }
   }
 
   Future<void> pause({bool fromBackground = false}) async {
@@ -202,8 +239,10 @@ class WorkoutController extends ChangeNotifier {
   }
 
   Future<void> skip() async {
-    skippedHolds += 1;
-    await _recordCurrentHold(HoldResult.skipped);
+    if (_machine.currentItem?.isHold == true) {
+      skippedHolds += 1;
+      await _recordCurrentHold(HoldResult.skipped);
+    }
     _machine.skipCurrent();
     await _persistPhaseBoundary();
     notifyListeners();
@@ -252,7 +291,13 @@ class WorkoutController extends ChangeNotifier {
   Future<bool> tryRestoreInterrupted() async {
     final repos = _ref.read(repositoriesProvider);
     final session = await repos.interruptedSession();
-    if (session == null || session.recoveryJson == null) return false;
+    if (session == null ||
+        !_recovery.canOfferRecovery(
+          status: session.status,
+          recoveryJson: session.recoveryJson,
+        )) {
+      return false;
+    }
     final map = jsonDecode(session.recoveryJson!) as Map<String, dynamic>;
     final items = (map['items'] as List)
         .cast<Map<String, dynamic>>()
@@ -269,6 +314,12 @@ class WorkoutController extends ChangeNotifier {
             ),
             formCues: (i['formCues'] as List?)?.cast<String>() ?? const [],
             breathingCue: i['breathingCue'] as String? ?? '',
+            kind: WorkoutItemKind.values.firstWhere(
+              (kind) => kind.name == i['kind'],
+              orElse: () => WorkoutItemKind.hold,
+            ),
+            staticAssetPath: i['staticAssetPath'] as String?,
+            mediaAccessibilityLabel: i['mediaAccessibilityLabel'] as String?,
           ),
         )
         .toList();
@@ -281,10 +332,7 @@ class WorkoutController extends ChangeNotifier {
     painDuringSession = map['painDuringSession'] as bool? ?? false;
     _machine.restoreFromSnapshot(
       restoredPhase: WorkoutPhase.paused,
-      phaseBeforePause: WorkoutPhase.values.firstWhere(
-        (p) => p.name == map['phaseBeforePause'],
-        orElse: () => WorkoutPhase.holding,
-      ),
+      phaseBeforePause: _recovery.resumablePhase(map['phaseBeforePause']),
       phaseStartedAt: map['phaseStartedAt'] != null
           ? DateTime.parse(map['phaseStartedAt'] as String)
           : null,

@@ -8,6 +8,7 @@ import '../../domain/services/achievement_evaluator.dart';
 import '../../domain/services/challenge_evaluator.dart';
 import '../../domain/services/export_import_service.dart';
 import '../../domain/services/personal_best_service.dart';
+import '../../domain/services/progression_recommendation_service.dart';
 import '../../domain/services/workout_state_machine.dart';
 import '../../domain/services/xp_service.dart';
 import '../database/database.dart';
@@ -21,6 +22,7 @@ class AppRepositories {
   final achievements = const AchievementEvaluator();
   final challenges = const ChallengeEvaluator();
   final personalBests = const PersonalBestService();
+  final progression = const ProgressionRecommendationService();
 
   Future<UserProfile> profile() async {
     return (await db.select(db.userProfiles).get()).first;
@@ -37,6 +39,22 @@ class AppRepositories {
     )..where((t) => t.id.equals(pref.id))).write(
       UserPreferencesCompanion(
         theme: Value(theme),
+        updatedAt: Value(DateTime.now()),
+      ),
+    );
+  }
+
+  Future<void> selectAvatar(String avatarId) async {
+    final available = await (db.select(
+      db.avatarDefinitions,
+    )..where((t) => t.id.equals(avatarId))).getSingleOrNull();
+    if (available == null) return;
+    final current = await profile();
+    await (db.update(
+      db.userProfiles,
+    )..where((t) => t.id.equals(current.id))).write(
+      UserProfilesCompanion(
+        selectedAvatarId: Value(avatarId),
         updatedAt: Value(DateTime.now()),
       ),
     );
@@ -169,14 +187,38 @@ class AppRepositories {
         .get();
   }
 
+  Future<ExerciseMediaData?> mediaById(String? id) {
+    if (id == null) return Future.value();
+    return (db.select(
+      db.exerciseMedia,
+    )..where((t) => t.id.equals(id))).getSingleOrNull();
+  }
+
   Future<List<WorkoutPlanItem>> planFromTemplate(String templateId) async {
     final items = await templateItems(templateId);
     final plan = <WorkoutPlanItem>[];
     for (final item in items) {
-      if (item.itemType != 'hold' || item.variantId == null) continue;
+      if (item.itemType != 'hold') {
+        plan.add(
+          WorkoutPlanItem(
+            variantId: 'block_${item.id}',
+            exerciseId: '',
+            displayName: item.label,
+            holdDuration: Duration(milliseconds: item.durationMs),
+            setupDuration: Duration.zero,
+            restDuration: Duration.zero,
+            kind: item.itemType == 'cooldown'
+                ? WorkoutItemKind.cooldown
+                : WorkoutItemKind.warmup,
+          ),
+        );
+        continue;
+      }
+      if (item.variantId == null) continue;
       final v = await variantById(item.variantId!);
       if (v == null) continue;
       final cues = await formCuesFor(v.id);
+      final media = await mediaById(v.staticAssetId);
       plan.add(
         WorkoutPlanItem(
           variantId: v.id,
@@ -188,6 +230,8 @@ class AppRepositories {
           unilateralMode: unilateralModeFromString(v.unilateralMode),
           formCues: cues.map((c) => c.cue).toList(),
           breathingCue: v.breathingCue,
+          staticAssetPath: media?.assetPath,
+          mediaAccessibilityLabel: media?.accessibilityLabel,
         ),
       );
     }
@@ -198,6 +242,7 @@ class AppRepositories {
     final v = await variantById(variantId);
     if (v == null) return const [];
     final cues = await formCuesFor(v.id);
+    final media = await mediaById(v.staticAssetId);
     return [
       WorkoutPlanItem(
         variantId: v.id,
@@ -209,6 +254,8 @@ class AppRepositories {
         unilateralMode: unilateralModeFromString(v.unilateralMode),
         formCues: cues.map((c) => c.cue).toList(),
         breathingCue: v.breathingCue,
+        staticAssetPath: media?.assetPath,
+        mediaAccessibilityLabel: media?.accessibilityLabel,
       ),
     ];
   }
@@ -625,6 +672,57 @@ class AppRepositories {
       db.select(db.avatarDefinitions).get();
 
   Future<List<PersonalBest>> bests() => db.select(db.personalBests).get();
+
+  Future<List<ProgressionSuggestion>> progressionSuggestionsForSession(
+    String sessionId,
+  ) async {
+    final session = await (db.select(
+      db.workoutSessions,
+    )..where((t) => t.id.equals(sessionId))).getSingleOrNull();
+    if (session == null) return const [];
+    final attempts = await holdsForSession(sessionId);
+    final careTags = await limitationTags();
+    final suggestions = <ProgressionSuggestion>[];
+    final seen = <String>{};
+
+    for (final attempt in attempts.reversed) {
+      if (!seen.add(attempt.variantId)) continue;
+      final variant = await variantById(attempt.variantId);
+      if (variant == null) continue;
+      final successes =
+          await (db.select(db.holdAttempts)..where(
+                (t) =>
+                    t.variantId.equals(attempt.variantId) &
+                    t.result.equals(HoldResult.completed.name),
+              ))
+              .get();
+      final recommendation = progression.recommend(
+        ProgressionInput(
+          variantId: variant.id,
+          easierVariantId: variant.easierVariantId,
+          harderVariantId: variant.harderVariantId,
+          targetMs: attempt.targetMs,
+          completedMs: attempt.completedMs,
+          perceivedEffort: session.perceivedEffort ?? 8,
+          painReported: session.painFlag || attempt.painFlag,
+          formMaintained: attempt.result == HoldResult.completed.name,
+          result: holdResultFromString(attempt.result),
+          recentSuccessfulCompletions: successes.length,
+          limitationTags: careTags,
+          variantLimitationTags:
+              (jsonDecode(variant.limitationTagsJson) as List).cast<String>(),
+        ),
+      );
+      suggestions.add(
+        ProgressionSuggestion(
+          variantId: variant.id,
+          displayName: variant.displayName,
+          recommendation: recommendation,
+        ),
+      );
+    }
+    return suggestions;
+  }
 
   Future<void> deleteAllUserData() async {
     await db.transaction(() async {

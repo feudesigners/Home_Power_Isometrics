@@ -49,6 +49,20 @@ class ProgressScreen extends ConsumerWidget {
           final summary7 =
               'Last 7 days: ${d7.length} sessions logged, ${completed.where((s) => d7.contains(s)).length} completed.';
           final summary28 = 'Last 28 days: ${d28.length} sessions logged.';
+          int completedOn(DateTime day) => completed.where((session) {
+            final started = session.startedAt as DateTime;
+            return started.year == day.year &&
+                started.month == day.month &&
+                started.day == day.day;
+          }).length;
+          final last7 = List.generate(
+            7,
+            (index) => now.subtract(Duration(days: 6 - index)),
+          );
+          final last28 = List.generate(
+            28,
+            (index) => now.subtract(Duration(days: 27 - index)),
+          );
 
           return ListView(
             padding: const EdgeInsets.all(20),
@@ -60,6 +74,23 @@ class ProgressScreen extends ConsumerWidget {
               const SizedBox(height: 8),
               Text(summary7),
               Text(summary28),
+              const SizedBox(height: 12),
+              _ActivityBars(
+                days: last7,
+                counts: last7.map(completedOn).toList(),
+                semanticLabel: summary7,
+              ),
+              const SizedBox(height: 16),
+              Text(
+                '28-day activity calendar',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              const SizedBox(height: 8),
+              _ActivityCalendar(
+                days: last28,
+                counts: last28.map(completedOn).toList(),
+                semanticLabel: summary28,
+              ),
               Text(
                 'Level ${level.level} · ${level.totalXp} XP · $unlocked achievements unlocked',
               ),
@@ -99,6 +130,114 @@ class ProgressScreen extends ConsumerWidget {
             ],
           );
         },
+      ),
+    );
+  }
+}
+
+class _ActivityBars extends StatelessWidget {
+  const _ActivityBars({
+    required this.days,
+    required this.counts,
+    required this.semanticLabel,
+  });
+
+  final List<DateTime> days;
+  final List<int> counts;
+  final String semanticLabel;
+
+  @override
+  Widget build(BuildContext context) {
+    final maxCount = counts.fold<int>(
+      1,
+      (max, value) => value > max ? value : max,
+    );
+    return Semantics(
+      label: semanticLabel,
+      image: true,
+      child: ExcludeSemantics(
+        child: SizedBox(
+          height: 96,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              for (var index = 0; index < days.length; index++)
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 3),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text('${counts[index]}'),
+                        const SizedBox(height: 3),
+                        Container(
+                          height: 12 + (52 * counts[index] / maxCount),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.primary,
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                        ),
+                        const SizedBox(height: 3),
+                        Text(
+                          DateFormat.E().format(days[index]).substring(0, 1),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ActivityCalendar extends StatelessWidget {
+  const _ActivityCalendar({
+    required this.days,
+    required this.counts,
+    required this.semanticLabel,
+  });
+
+  final List<DateTime> days;
+  final List<int> counts;
+  final String semanticLabel;
+
+  @override
+  Widget build(BuildContext context) {
+    final primary = Theme.of(context).colorScheme.primary;
+    return Semantics(
+      label: semanticLabel,
+      image: true,
+      child: ExcludeSemantics(
+        child: Wrap(
+          spacing: 5,
+          runSpacing: 5,
+          children: [
+            for (var index = 0; index < days.length; index++)
+              Tooltip(
+                message:
+                    '${DateFormat.yMMMd().format(days[index])}: ${counts[index]} completed',
+                child: Container(
+                  width: 28,
+                  height: 28,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: counts[index] == 0
+                        ? Theme.of(context).dividerColor.withValues(alpha: 0.2)
+                        : primary.withValues(
+                            alpha: (0.35 + counts[index] * 0.2)
+                                .clamp(0.35, 1)
+                                .toDouble(),
+                          ),
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: Text('${days[index].day}'),
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }

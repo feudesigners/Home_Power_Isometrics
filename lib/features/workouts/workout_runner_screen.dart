@@ -8,6 +8,7 @@ import '../../app/bootstrap/providers.dart';
 import '../../app/theme/isometrix_theme.dart';
 import '../../core/widgets/exercise_media_view.dart';
 import '../../domain/entities/enums.dart';
+import '../../domain/services/workout_state_machine.dart';
 import '../avatar/companion_avatar.dart';
 import 'workout_controller.dart';
 
@@ -22,6 +23,7 @@ class WorkoutRunnerScreen extends ConsumerStatefulWidget {
 class _WorkoutRunnerScreenState extends ConsumerState<WorkoutRunnerScreen>
     with WidgetsBindingObserver {
   WorkoutPhase? _lastAnnounced;
+  int? _lastPrecachedIndex;
 
   @override
   void initState() {
@@ -49,12 +51,40 @@ class _WorkoutRunnerScreenState extends ConsumerState<WorkoutRunnerScreen>
     return '$m:$s';
   }
 
+  String _phaseLabel(WorkoutPhase phase, WorkoutPlanItem? item) {
+    if (phase == WorkoutPhase.holding && item != null && !item.isHold) {
+      return item.kind == WorkoutItemKind.cooldown ? 'COOL-DOWN' : 'WARM-UP';
+    }
+    return phase.name.toUpperCase();
+  }
+
+  void _precacheCurrentAndNext(WorkoutStateMachine machine) {
+    if (_lastPrecachedIndex == machine.currentItemIndex) return;
+    _lastPrecachedIndex = machine.currentItemIndex;
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      for (final index in [
+        machine.currentItemIndex,
+        machine.currentItemIndex + 1,
+      ]) {
+        if (!mounted || index < 0 || index >= machine.items.length) continue;
+        final path = machine.items[index].staticAssetPath;
+        if (path == null) continue;
+        try {
+          await precacheImage(AssetImage(path), context);
+        } catch (_) {
+          // The labeled media fallback remains available.
+        }
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final ctrl = ref.watch(workoutControllerProvider);
     final machine = ctrl.machine;
     final item = machine.currentItem;
     final prefs = ref.watch(preferencesProvider);
+    _precacheCurrentAndNext(machine);
 
     if (machine.phase == WorkoutPhase.completed) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -145,12 +175,15 @@ class _WorkoutRunnerScreenState extends ConsumerState<WorkoutRunnerScreen>
               ),
               const SizedBox(height: 8),
               Text(
-                '${machine.phase.name.toUpperCase()} · $sideLabel · Set ${machine.currentSet}',
+                '${_phaseLabel(machine.phase, item)} · $sideLabel · Set ${machine.currentSet}',
                 style: Theme.of(context).textTheme.labelLarge,
               ),
               const SizedBox(height: 8),
               ExerciseMediaView(
-                label: '${item?.displayName ?? 'Exercise'} demonstration',
+                label:
+                    item?.mediaAccessibilityLabel ??
+                    '${item?.displayName ?? 'Exercise'} demonstration',
+                assetPath: item?.staticAssetPath,
                 height: 120,
                 reducedMotion: prefs.valueOrNull?.reducedMotion ?? false,
               ),
@@ -183,7 +216,7 @@ class _WorkoutRunnerScreenState extends ConsumerState<WorkoutRunnerScreen>
                           ),
                         ),
                         Text(
-                          machine.phase.name,
+                          _phaseLabel(machine.phase, item).toLowerCase(),
                           style: Theme.of(context).textTheme.labelLarge,
                         ),
                       ],
@@ -192,7 +225,7 @@ class _WorkoutRunnerScreenState extends ConsumerState<WorkoutRunnerScreen>
                 ),
               ),
               const SizedBox(height: 12),
-              if (item != null) ...[
+              if (item != null && item.isHold) ...[
                 Text(item.breathingCue, textAlign: TextAlign.center),
                 const SizedBox(height: 8),
                 for (final cue in item.formCues.take(3))

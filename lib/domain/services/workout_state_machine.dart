@@ -366,6 +366,9 @@ class WorkoutPlanItem {
     this.unilateralMode = UnilateralMode.none,
     this.formCues = const [],
     this.breathingCue = '',
+    this.kind = WorkoutItemKind.hold,
+    this.staticAssetPath,
+    this.mediaAccessibilityLabel,
   });
 
   final String variantId;
@@ -379,7 +382,14 @@ class WorkoutPlanItem {
   final UnilateralMode unilateralMode;
   final List<String> formCues;
   final String breathingCue;
+  final WorkoutItemKind kind;
+  final String? staticAssetPath;
+  final String? mediaAccessibilityLabel;
+
+  bool get isHold => kind == WorkoutItemKind.hold;
 }
+
+enum WorkoutItemKind { hold, warmup, cooldown }
 
 class WorkoutTickResult {
   const WorkoutTickResult({
