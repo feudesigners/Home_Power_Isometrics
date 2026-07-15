@@ -84,6 +84,7 @@ class _WorkoutRunnerScreenState extends ConsumerState<WorkoutRunnerScreen>
     final machine = ctrl.machine;
     final item = machine.currentItem;
     final prefs = ref.watch(preferencesProvider);
+    final profile = ref.watch(profileProvider);
     _precacheCurrentAndNext(machine);
 
     if (machine.phase == WorkoutPhase.completed) {
@@ -150,7 +151,7 @@ class _WorkoutRunnerScreenState extends ConsumerState<WorkoutRunnerScreen>
               Row(
                 children: [
                   CompanionAvatar(
-                    avatarId: 'pulse',
+                    avatarId: profile.valueOrNull?.avatarId ?? 'pulse',
                     mood: switch (machine.phase) {
                       WorkoutPhase.holding => AvatarMood.holding,
                       WorkoutPhase.preparing => AvatarMood.preparing,
