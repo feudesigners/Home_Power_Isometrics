@@ -95,9 +95,10 @@ class _TodayScreenState extends ConsumerState<TodayScreen> {
               final sessions = snap.data![3] as List;
               final weekCount = sessions.where((s) {
                 final started = (s as dynamic).startedAt as DateTime;
-                return started.isAfter(
-                  DateTime.now().subtract(const Duration(days: 7)),
-                );
+                return (s as dynamic).status == 'completed' &&
+                    started.isAfter(
+                      DateTime.now().subtract(const Duration(days: 7)),
+                    );
               }).length;
               final recoveryDay = weekCount >= profile.weeklyWorkoutTarget;
 
