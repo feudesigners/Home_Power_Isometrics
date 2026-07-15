@@ -18,7 +18,7 @@ class AndroidReminderScheduler implements ReminderScheduler {
     tz.initializeTimeZones();
     try {
       final deviceTimezone = await FlutterTimezone.getLocalTimezone();
-      tz.setLocalLocation(tz.getLocation(deviceTimezone.name));
+      tz.setLocalLocation(tz.getLocation(deviceTimezone.identifier));
     } catch (_) {
       // tz.local remains UTC only if the OS timezone cannot be resolved.
     }
