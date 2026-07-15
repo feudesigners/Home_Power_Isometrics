@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -22,6 +23,12 @@ class _WorkoutPreviewScreenState extends ConsumerState<WorkoutPreviewScreen> {
   Future<_PreviewData> _load() async {
     final repositories = ref.read(repositoriesProvider);
     final plan = await repositories.planFromTemplate(widget.templateId);
+    for (var index = 0; index < plan.length; index++) {
+      final replacementId = _variantOverrides[plan[index].variantId];
+      if (replacementId == null) continue;
+      final replacement = await repositories.planForPractice(replacementId);
+      if (replacement.isNotEmpty) plan[index] = replacement.single;
+    }
     final templates = await repositories.allTemplates();
     final limitations = await repositories.limitationTags();
     final template = templates.firstWhere(
@@ -80,8 +87,14 @@ class _WorkoutPreviewScreenState extends ConsumerState<WorkoutPreviewScreen> {
                           tooltip: 'Use easier variation',
                           icon: const Icon(Icons.trending_down),
                           onPressed: () {
+                            final originalId = _variantOverrides.entries
+                                .where(
+                                  (entry) => entry.value == item.variantId,
+                                )
+                                .map((entry) => entry.key)
+                                .firstOrNull;
                             setState(() {
-                              _variantOverrides[item.variantId] =
+                              _variantOverrides[originalId ?? item.variantId] =
                                   item.easierVariantId!;
                             });
                             ScaffoldMessenger.of(context).showSnackBar(
