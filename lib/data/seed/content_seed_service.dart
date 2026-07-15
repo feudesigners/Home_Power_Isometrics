@@ -98,6 +98,9 @@ class ContentSeedService {
               secondaryMusclesJson: Value(
                 jsonEncode(e['secondaryMuscles'] ?? []),
               ),
+              contentVersion: Value(
+                e['contentVersion'] as int? ?? data['version'] as int? ?? 1,
+              ),
             ),
           );
     }
@@ -134,6 +137,9 @@ class ContentSeedService {
               reviewStatus: Value(
                 v['reviewStatus'] as String? ?? 'provisional',
               ),
+              contentVersion: Value(
+                v['contentVersion'] as int? ?? data['version'] as int? ?? 1,
+              ),
             ),
           );
     }
@@ -165,6 +171,12 @@ class ContentSeedService {
   }
 
   Future<void> _seedPrograms(Map<String, dynamic> data) async {
+    // Definitions are replaceable seed content; user history keeps textual IDs.
+    await db.delete(db.workoutTemplateItems).go();
+    await db.delete(db.workoutTemplates).go();
+    await db.delete(db.programWeeks).go();
+    await db.delete(db.programs).go();
+
     for (final p in (data['programs'] as List).cast<Map<String, dynamic>>()) {
       await db
           .into(db.programs)
@@ -210,7 +222,6 @@ class ContentSeedService {
             ),
           );
     }
-    await db.delete(db.workoutTemplateItems).go();
     for (final i
         in (data['workoutTemplateItems'] as List)
             .cast<Map<String, dynamic>>()) {
