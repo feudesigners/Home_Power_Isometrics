@@ -149,6 +149,56 @@ void main() {
     expect(await target.select(target.workoutSessions).get(), hasLength(1));
     expect(await target.select(target.holdAttempts).get(), hasLength(1));
   });
+
+
+  test('completion persists before optional feedback and rewards once', () async {
+    final db = AppDatabase.memory();
+    addTearDown(db.close);
+    await _seedTestContent(db);
+    await db.into(db.userProfiles).insert(UserProfilesCompanion.insert());
+    await db.into(db.userPreferences).insert(UserPreferencesCompanion.insert());
+    await db.into(db.userLevels).insert(UserLevelsCompanion.insert());
+    await db.into(db.workoutSessions).insert(
+      WorkoutSessionsCompanion.insert(
+        id: 'finalize-me',
+        startedAt: DateTime.utc(2026, 5, 1, 10),
+        status: 'active',
+      ),
+    );
+    final repositories = AppRepositories(db);
+
+    await repositories.finalizeSession(
+      sessionId: 'finalize-me',
+      actualDurationMs: 60000,
+      completedCount: 2,
+      skippedCount: 0,
+      pain: false,
+    );
+
+    final finalized = await (db.select(
+      db.workoutSessions,
+    )..where((table) => table.id.equals('finalize-me'))).getSingle();
+    expect(finalized.status, 'completed');
+    expect(await db.select(db.sessionFeedback).get(), isEmpty);
+
+    await repositories.saveSessionFeedback(
+      sessionId: 'finalize-me',
+      effort: 6,
+      pain: false,
+      note: 'Controlled',
+    );
+    await repositories.saveSessionFeedback(
+      sessionId: 'finalize-me',
+      effort: 7,
+      pain: false,
+      note: 'Updated',
+    );
+
+    expect(await db.select(db.sessionFeedback).get(), hasLength(1));
+    final xp = await db.select(db.xpEvents).get();
+    expect(xp.where((event) => event.id == 'xp_session_finalize-me'), hasLength(1));
+    expect(xp.where((event) => event.id == 'xp_feedback_finalize-me'), hasLength(1));
+  });
 }
 
 Future<void> _seedTestContent(AppDatabase db) async {
