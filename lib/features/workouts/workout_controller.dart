@@ -223,10 +223,15 @@ class WorkoutController extends ChangeNotifier {
         .toList(),
   };
 
-  Future<void> _persistPhaseBoundary() async {
+  Future<void> _persistPhaseBoundary({bool paused = false}) async {
     final sid = sessionId;
     if (sid == null || _sessionFinalized) return;
-    await _ref.read(repositoriesProvider).markSessionPaused(sid, snapshot());
+    final repositories = _ref.read(repositoriesProvider);
+    if (paused) {
+      await repositories.markSessionPaused(sid, snapshot());
+    } else {
+      await repositories.markSessionActive(sid, snapshot());
+    }
   }
 
   Future<void> _playPhaseCue(WorkoutPhase phase) async {
@@ -254,7 +259,7 @@ class WorkoutController extends ChangeNotifier {
         await _ref.read(repositoriesProvider).persistRecovery(sid, snapshot());
       }
     } else {
-      await _persistPhaseBoundary();
+      await _persistPhaseBoundary(paused: true);
     }
     await WakelockPlus.disable();
     notifyListeners();
