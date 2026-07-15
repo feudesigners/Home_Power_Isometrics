@@ -22,6 +22,7 @@ class _WorkoutCompletionScreenState
   final noteCtrl = TextEditingController();
   bool submitted = false;
   List<ProgressionSuggestion> suggestions = const [];
+  final Set<String> acceptedProgressions = {};
 
   @override
   void dispose() {
@@ -32,14 +33,15 @@ class _WorkoutCompletionScreenState
   @override
   Widget build(BuildContext context) {
     final ctrl = ref.watch(workoutControllerProvider);
+    final profile = ref.watch(profileProvider);
     return Scaffold(
       appBar: AppBar(title: const Text('Session complete')),
       body: ListView(
         padding: const EdgeInsets.all(20),
         children: [
-          const Center(
+          Center(
             child: CompanionAvatar(
-              avatarId: 'pulse',
+              avatarId: profile.valueOrNull?.selectedAvatarId ?? 'pulse',
               mood: AvatarMood.celebrating,
               size: 96,
             ),
@@ -128,6 +130,47 @@ class _WorkoutCompletionScreenState
                   ProgressionAction.regress => Icons.trending_down,
                   ProgressionAction.maintain => Icons.horizontal_rule,
                 }),
+                trailing:
+                    suggestion.recommendation.action ==
+                            ProgressionAction.maintain
+                        ? null
+                        : FilledButton.tonal(
+                            onPressed:
+                                acceptedProgressions.contains(
+                                  suggestion.variantId,
+                                )
+                                ? null
+                                : () async {
+                                    final sessionId = ctrl.sessionId;
+                                    if (sessionId == null) return;
+                                    await ref
+                                        .read(repositoriesProvider)
+                                        .acceptProgression(
+                                          sessionId: sessionId,
+                                          suggestion: suggestion,
+                                        );
+                                    if (!mounted) return;
+                                    setState(
+                                      () => acceptedProgressions.add(
+                                        suggestion.variantId,
+                                      ),
+                                    );
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text(
+                                          'Progression saved for future plans.',
+                                        ),
+                                      ),
+                                    );
+                                  },
+                            child: Text(
+                              acceptedProgressions.contains(
+                                suggestion.variantId,
+                              )
+                                  ? 'Saved'
+                                  : 'Use next time',
+                            ),
+                          ),
               ),
           ],
           OutlinedButton(
