@@ -10,7 +10,9 @@ val keystoreProperties = Properties()
 val keystorePropertiesFile = rootProject.file("key.properties")
 val hasReleaseSigning = keystorePropertiesFile.exists()
 if (hasReleaseSigning) {
-    FileInputStream(keystorePropertiesFile).use(keystoreProperties::load)
+    FileInputStream(keystorePropertiesFile).use { input ->
+        keystoreProperties.load(input)
+    }
 }
 
 android {
