@@ -1,0 +1,230 @@
+{
+  "version": 1,
+  "media": [
+    {
+      "id": "wall_sit_posture",
+      "variantId": "wall_sit_foundation",
+      "kind": "posture",
+      "assetPath": "assets/images/wall_sit_posture.png",
+      "accessibilityLabel": "Wall Sit static posture illustration (placeholder)"
+    },
+    {
+      "id": "wall_sit_anim",
+      "variantId": "wall_sit_foundation",
+      "kind": "animation",
+      "assetPath": "assets/animations/wall_sit.webp",
+      "accessibilityLabel": "Wall Sit demonstration loop (placeholder)"
+    },
+    {
+      "id": "glute_bridge_posture",
+      "variantId": "glute_bridge_foundation",
+      "kind": "posture",
+      "assetPath": "assets/images/glute_bridge_posture.png",
+      "accessibilityLabel": "Glute Bridge Hold static posture illustration (placeholder)"
+    },
+    {
+      "id": "glute_bridge_anim",
+      "variantId": "glute_bridge_foundation",
+      "kind": "animation",
+      "assetPath": "assets/animations/glute_bridge.webp",
+      "accessibilityLabel": "Glute Bridge Hold demonstration loop (placeholder)"
+    },
+    {
+      "id": "static_lunge_posture",
+      "variantId": "static_lunge_foundation",
+      "kind": "posture",
+      "assetPath": "assets/images/static_lunge_posture.png",
+      "accessibilityLabel": "Static Lunge Hold static posture illustration (placeholder)"
+    },
+    {
+      "id": "static_lunge_anim",
+      "variantId": "static_lunge_foundation",
+      "kind": "animation",
+      "assetPath": "assets/animations/static_lunge.webp",
+      "accessibilityLabel": "Static Lunge Hold demonstration loop (placeholder)"
+    },
+    {
+      "id": "calf_raise_posture",
+      "variantId": "calf_raise_foundation",
+      "kind": "posture",
+      "assetPath": "assets/images/calf_raise_posture.png",
+      "accessibilityLabel": "Calf Raise Hold static posture illustration (placeholder)"
+    },
+    {
+      "id": "calf_raise_anim",
+      "variantId": "calf_raise_foundation",
+      "kind": "animation",
+      "assetPath": "assets/animations/calf_raise.webp",
+      "accessibilityLabel": "Calf Raise Hold demonstration loop (placeholder)"
+    },
+    {
+      "id": "horse_stance_posture",
+      "variantId": "horse_stance_foundation",
+      "kind": "posture",
+      "assetPath": "assets/images/horse_stance_posture.png",
+      "accessibilityLabel": "Horse Stance Hold static posture illustration (placeholder)"
+    },
+    {
+      "id": "horse_stance_anim",
+      "variantId": "horse_stance_foundation",
+      "kind": "animation",
+      "assetPath": "assets/animations/horse_stance.webp",
+      "accessibilityLabel": "Horse Stance Hold demonstration loop (placeholder)"
+    },
+    {
+      "id": "forearm_plank_posture",
+      "variantId": "forearm_plank_foundation",
+      "kind": "posture",
+      "assetPath": "assets/images/forearm_plank_posture.png",
+      "accessibilityLabel": "Forearm Plank static posture illustration (placeholder)"
+    },
+    {
+      "id": "forearm_plank_anim",
+      "variantId": "forearm_plank_foundation",
+      "kind": "animation",
+      "assetPath": "assets/animations/forearm_plank.webp",
+      "accessibilityLabel": "Forearm Plank demonstration loop (placeholder)"
+    },
+    {
+      "id": "side_plank_posture",
+      "variantId": "side_plank_foundation",
+      "kind": "posture",
+      "assetPath": "assets/images/side_plank_posture.png",
+      "accessibilityLabel": "Side Plank static posture illustration (placeholder)"
+    },
+    {
+      "id": "side_plank_anim",
+      "variantId": "side_plank_foundation",
+      "kind": "animation",
+      "assetPath": "assets/animations/side_plank.webp",
+      "accessibilityLabel": "Side Plank demonstration loop (placeholder)"
+    },
+    {
+      "id": "hollow_body_posture",
+      "variantId": "hollow_body_foundation",
+      "kind": "posture",
+      "assetPath": "assets/images/hollow_body_posture.png",
+      "accessibilityLabel": "Hollow Body Hold static posture illustration (placeholder)"
+    },
+    {
+      "id": "hollow_body_anim",
+      "variantId": "hollow_body_foundation",
+      "kind": "animation",
+      "assetPath": "assets/animations/hollow_body.webp",
+      "accessibilityLabel": "Hollow Body Hold demonstration loop (placeholder)"
+    },
+    {
+      "id": "bird_dog_posture",
+      "variantId": "bird_dog_foundation",
+      "kind": "posture",
+      "assetPath": "assets/images/bird_dog_posture.png",
+      "accessibilityLabel": "Bird Dog Hold static posture illustration (placeholder)"
+    },
+    {
+      "id": "bird_dog_anim",
+      "variantId": "bird_dog_foundation",
+      "kind": "animation",
+      "assetPath": "assets/animations/bird_dog.webp",
+      "accessibilityLabel": "Bird Dog Hold demonstration loop (placeholder)"
+    },
+    {
+      "id": "v_sit_posture",
+      "variantId": "v_sit_foundation",
+      "kind": "posture",
+      "assetPath": "assets/images/v_sit_posture.png",
+      "accessibilityLabel": "V-Sit Hold static posture illustration (placeholder)"
+    },
+    {
+      "id": "v_sit_anim",
+      "variantId": "v_sit_foundation",
+      "kind": "animation",
+      "assetPath": "assets/animations/v_sit.webp",
+      "accessibilityLabel": "V-Sit Hold demonstration loop (placeholder)"
+    },
+    {
+      "id": "pushup_hold_posture",
+      "variantId": "pushup_hold_foundation",
+      "kind": "posture",
+      "assetPath": "assets/images/pushup_hold_posture.png",
+      "accessibilityLabel": "Isometric Push-up Hold static posture illustration (placeholder)"
+    },
+    {
+      "id": "pushup_hold_anim",
+      "variantId": "pushup_hold_foundation",
+      "kind": "animation",
+      "assetPath": "assets/animations/pushup_hold.webp",
+      "accessibilityLabel": "Isometric Push-up Hold demonstration loop (placeholder)"
+    },
+    {
+      "id": "triceps_dip_posture",
+      "variantId": "triceps_dip_foundation",
+      "kind": "posture",
+      "assetPath": "assets/images/triceps_dip_posture.png",
+      "accessibilityLabel": "Triceps Dip Hold static posture illustration (placeholder)"
+    },
+    {
+      "id": "triceps_dip_anim",
+      "variantId": "triceps_dip_foundation",
+      "kind": "animation",
+      "assetPath": "assets/animations/triceps_dip.webp",
+      "accessibilityLabel": "Triceps Dip Hold demonstration loop (placeholder)"
+    },
+    {
+      "id": "reverse_plank_posture",
+      "variantId": "reverse_plank_foundation",
+      "kind": "posture",
+      "assetPath": "assets/images/reverse_plank_posture.png",
+      "accessibilityLabel": "Reverse Plank Hold static posture illustration (placeholder)"
+    },
+    {
+      "id": "reverse_plank_anim",
+      "variantId": "reverse_plank_foundation",
+      "kind": "animation",
+      "assetPath": "assets/animations/reverse_plank.webp",
+      "accessibilityLabel": "Reverse Plank Hold demonstration loop (placeholder)"
+    },
+    {
+      "id": "superman_posture",
+      "variantId": "superman_foundation",
+      "kind": "posture",
+      "assetPath": "assets/images/superman_posture.png",
+      "accessibilityLabel": "Prone Superman Hold static posture illustration (placeholder)"
+    },
+    {
+      "id": "superman_anim",
+      "variantId": "superman_foundation",
+      "kind": "animation",
+      "assetPath": "assets/animations/superman.webp",
+      "accessibilityLabel": "Prone Superman Hold demonstration loop (placeholder)"
+    },
+    {
+      "id": "pike_pushup_posture",
+      "variantId": "pike_pushup_foundation",
+      "kind": "posture",
+      "assetPath": "assets/images/pike_pushup_posture.png",
+      "accessibilityLabel": "Pike Push-up Hold static posture illustration (placeholder)"
+    },
+    {
+      "id": "pike_pushup_anim",
+      "variantId": "pike_pushup_foundation",
+      "kind": "animation",
+      "assetPath": "assets/animations/pike_pushup.webp",
+      "accessibilityLabel": "Pike Push-up Hold demonstration loop (placeholder)"
+    },
+    {
+      "id": "prone_w_posture",
+      "variantId": "prone_w_foundation",
+      "kind": "posture",
+      "assetPath": "assets/images/prone_w_posture.png",
+      "accessibilityLabel": "Prone W Hold static posture illustration (placeholder)"
+    },
+    {
+      "id": "prone_w_anim",
+      "variantId": "prone_w_foundation",
+      "kind": "animation",
+      "assetPath": "assets/animations/prone_w.webp",
+      "accessibilityLabel": "Prone W Hold demonstration loop (placeholder)"
+    }
+  ],
+  "note": "Placeholders \u2014 final anatomical art is an external gate"
+}

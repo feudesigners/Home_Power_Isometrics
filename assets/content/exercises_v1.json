@@ -1,0 +1,2370 @@
+{
+  "version": 1,
+  "categories": [
+    {
+      "id": "C001",
+      "name": "Lower Body",
+      "colorHex": "#5B6EF5"
+    },
+    {
+      "id": "C002",
+      "name": "Core and Spinal Stability",
+      "colorHex": "#00F5C4"
+    },
+    {
+      "id": "C003",
+      "name": "Upper Body and Posterior Chain",
+      "colorHex": "#FF4D6D"
+    }
+  ],
+  "exercises": [
+    {
+      "id": "E001",
+      "categoryId": "C001",
+      "name": "Wall Sit",
+      "primaryMuscles": [
+        "Quadriceps",
+        "Glutes"
+      ],
+      "secondaryMuscles": [
+        "Hamstrings"
+      ]
+    },
+    {
+      "id": "E002",
+      "categoryId": "C001",
+      "name": "Glute Bridge Hold",
+      "primaryMuscles": [
+        "Glutes",
+        "Hamstrings"
+      ],
+      "secondaryMuscles": [
+        "Core"
+      ]
+    },
+    {
+      "id": "E003",
+      "categoryId": "C001",
+      "name": "Static Lunge Hold",
+      "primaryMuscles": [
+        "Quadriceps",
+        "Glutes"
+      ],
+      "secondaryMuscles": [
+        "Hamstrings",
+        "Calves"
+      ]
+    },
+    {
+      "id": "E004",
+      "categoryId": "C001",
+      "name": "Calf Raise Hold",
+      "primaryMuscles": [
+        "Calves"
+      ],
+      "secondaryMuscles": []
+    },
+    {
+      "id": "E005",
+      "categoryId": "C001",
+      "name": "Horse Stance Hold",
+      "primaryMuscles": [
+        "Quadriceps",
+        "Adductors"
+      ],
+      "secondaryMuscles": [
+        "Glutes"
+      ]
+    },
+    {
+      "id": "E006",
+      "categoryId": "C002",
+      "name": "Forearm Plank",
+      "primaryMuscles": [
+        "Abdominals"
+      ],
+      "secondaryMuscles": [
+        "Shoulders",
+        "Glutes"
+      ]
+    },
+    {
+      "id": "E007",
+      "categoryId": "C002",
+      "name": "Side Plank",
+      "primaryMuscles": [
+        "Obliques"
+      ],
+      "secondaryMuscles": [
+        "Shoulders",
+        "Hip Abductors"
+      ]
+    },
+    {
+      "id": "E008",
+      "categoryId": "C002",
+      "name": "Hollow Body Hold",
+      "primaryMuscles": [
+        "Abdominals"
+      ],
+      "secondaryMuscles": [
+        "Hip Flexors"
+      ]
+    },
+    {
+      "id": "E009",
+      "categoryId": "C002",
+      "name": "Bird Dog Hold",
+      "primaryMuscles": [
+        "Core",
+        "Lower Back"
+      ],
+      "secondaryMuscles": [
+        "Glutes",
+        "Shoulders"
+      ]
+    },
+    {
+      "id": "E010",
+      "categoryId": "C002",
+      "name": "V-Sit Hold",
+      "primaryMuscles": [
+        "Abdominals"
+      ],
+      "secondaryMuscles": [
+        "Hip Flexors"
+      ]
+    },
+    {
+      "id": "E011",
+      "categoryId": "C003",
+      "name": "Isometric Push-up Hold",
+      "primaryMuscles": [
+        "Chest",
+        "Triceps"
+      ],
+      "secondaryMuscles": [
+        "Shoulders",
+        "Core"
+      ]
+    },
+    {
+      "id": "E012",
+      "categoryId": "C003",
+      "name": "Triceps Dip Hold",
+      "primaryMuscles": [
+        "Triceps"
+      ],
+      "secondaryMuscles": [
+        "Chest",
+        "Shoulders"
+      ]
+    },
+    {
+      "id": "E013",
+      "categoryId": "C003",
+      "name": "Reverse Plank Hold",
+      "primaryMuscles": [
+        "Glutes",
+        "Posterior Chain"
+      ],
+      "secondaryMuscles": [
+        "Shoulders",
+        "Triceps"
+      ]
+    },
+    {
+      "id": "E014",
+      "categoryId": "C003",
+      "name": "Prone Superman Hold",
+      "primaryMuscles": [
+        "Lower Back",
+        "Glutes"
+      ],
+      "secondaryMuscles": [
+        "Upper Back"
+      ]
+    },
+    {
+      "id": "E015",
+      "categoryId": "C003",
+      "name": "Pike Push-up Hold",
+      "primaryMuscles": [
+        "Shoulders"
+      ],
+      "secondaryMuscles": [
+        "Triceps",
+        "Upper Chest"
+      ]
+    },
+    {
+      "id": "E016",
+      "categoryId": "C003",
+      "name": "Prone W Hold",
+      "primaryMuscles": [
+        "Upper Back",
+        "Scapular Stabilizers"
+      ],
+      "secondaryMuscles": [
+        "Rear Deltoids"
+      ]
+    }
+  ],
+  "variants": [
+    {
+      "secondaryMuscles": [],
+      "equipment": [
+        "wall"
+      ],
+      "unilateralMode": "none",
+      "setupDurationMs": 5000,
+      "restDurationMs": 15000,
+      "easierVariantId": null,
+      "harderVariantId": "wall_sit_foundation",
+      "breathingCue": "Breathe steadily; never hold your breath.",
+      "commonMistakes": [
+        "Holding breath",
+        "Losing alignment"
+      ],
+      "safetyNotes": "Stop for sharp pain, dizziness, or chest pain.",
+      "limitationTags": [
+        "knees"
+      ],
+      "staticAssetId": "wall_sit_posture",
+      "animatedAssetId": null,
+      "gatedForBeginners": false,
+      "reviewStatus": "provisional",
+      "contentVersion": 1,
+      "primaryMuscles": [
+        "Quadriceps",
+        "Glutes"
+      ],
+      "categoryId": "C001",
+      "difficultyRank": 1,
+      "targetHoldMs": 12000,
+      "id": "wall_sit_easier",
+      "exerciseId": "E001",
+      "displayName": "High / Shallow Wall Sit"
+    },
+    {
+      "secondaryMuscles": [],
+      "equipment": [
+        "wall"
+      ],
+      "unilateralMode": "none",
+      "setupDurationMs": 5000,
+      "restDurationMs": 15000,
+      "easierVariantId": "wall_sit_easier",
+      "harderVariantId": "wall_sit_control",
+      "breathingCue": "Breathe steadily; never hold your breath.",
+      "commonMistakes": [
+        "Holding breath",
+        "Losing alignment"
+      ],
+      "safetyNotes": "Stop for sharp pain, dizziness, or chest pain.",
+      "limitationTags": [
+        "knees"
+      ],
+      "staticAssetId": "wall_sit_posture",
+      "animatedAssetId": null,
+      "gatedForBeginners": false,
+      "reviewStatus": "provisional",
+      "contentVersion": 1,
+      "primaryMuscles": [
+        "Quadriceps",
+        "Glutes"
+      ],
+      "categoryId": "C001",
+      "difficultyRank": 2,
+      "targetHoldMs": 18000,
+      "id": "wall_sit_foundation",
+      "exerciseId": "E001",
+      "displayName": "Wall Sit"
+    },
+    {
+      "secondaryMuscles": [],
+      "equipment": [
+        "wall"
+      ],
+      "unilateralMode": "none",
+      "setupDurationMs": 5000,
+      "restDurationMs": 15000,
+      "easierVariantId": "wall_sit_foundation",
+      "harderVariantId": null,
+      "breathingCue": "Breathe steadily; never hold your breath.",
+      "commonMistakes": [
+        "Holding breath",
+        "Losing alignment"
+      ],
+      "safetyNotes": "Stop for sharp pain, dizziness, or chest pain.",
+      "limitationTags": [
+        "knees"
+      ],
+      "staticAssetId": "wall_sit_posture",
+      "animatedAssetId": null,
+      "gatedForBeginners": false,
+      "reviewStatus": "provisional",
+      "contentVersion": 1,
+      "primaryMuscles": [
+        "Quadriceps",
+        "Glutes"
+      ],
+      "categoryId": "C001",
+      "difficultyRank": 3,
+      "targetHoldMs": 25000,
+      "id": "wall_sit_control",
+      "exerciseId": "E001",
+      "displayName": "Wall Sit Control"
+    },
+    {
+      "secondaryMuscles": [],
+      "equipment": [
+        "floor"
+      ],
+      "unilateralMode": "none",
+      "setupDurationMs": 5000,
+      "restDurationMs": 15000,
+      "easierVariantId": null,
+      "harderVariantId": "glute_bridge_foundation",
+      "breathingCue": "Breathe steadily; never hold your breath.",
+      "commonMistakes": [
+        "Holding breath",
+        "Losing alignment"
+      ],
+      "safetyNotes": "Stop for sharp pain, dizziness, or chest pain.",
+      "limitationTags": [
+        "lower_back"
+      ],
+      "staticAssetId": "glute_bridge_posture",
+      "animatedAssetId": null,
+      "gatedForBeginners": false,
+      "reviewStatus": "provisional",
+      "contentVersion": 1,
+      "primaryMuscles": [
+        "Glutes",
+        "Hamstrings"
+      ],
+      "categoryId": "C001",
+      "difficultyRank": 1,
+      "targetHoldMs": 12000,
+      "id": "glute_bridge_easier",
+      "exerciseId": "E002",
+      "displayName": "Shoulders-Supported Bridge Hold"
+    },
+    {
+      "secondaryMuscles": [],
+      "equipment": [
+        "floor"
+      ],
+      "unilateralMode": "none",
+      "setupDurationMs": 5000,
+      "restDurationMs": 15000,
+      "easierVariantId": "glute_bridge_easier",
+      "harderVariantId": "glute_bridge_control",
+      "breathingCue": "Breathe steadily; never hold your breath.",
+      "commonMistakes": [
+        "Holding breath",
+        "Losing alignment"
+      ],
+      "safetyNotes": "Stop for sharp pain, dizziness, or chest pain.",
+      "limitationTags": [
+        "lower_back"
+      ],
+      "staticAssetId": "glute_bridge_posture",
+      "animatedAssetId": null,
+      "gatedForBeginners": false,
+      "reviewStatus": "provisional",
+      "contentVersion": 1,
+      "primaryMuscles": [
+        "Glutes",
+        "Hamstrings"
+      ],
+      "categoryId": "C001",
+      "difficultyRank": 2,
+      "targetHoldMs": 20000,
+      "id": "glute_bridge_foundation",
+      "exerciseId": "E002",
+      "displayName": "Glute Bridge Hold"
+    },
+    {
+      "secondaryMuscles": [],
+      "equipment": [
+        "floor"
+      ],
+      "unilateralMode": "none",
+      "setupDurationMs": 5000,
+      "restDurationMs": 15000,
+      "easierVariantId": "glute_bridge_foundation",
+      "harderVariantId": null,
+      "breathingCue": "Breathe steadily; never hold your breath.",
+      "commonMistakes": [
+        "Holding breath",
+        "Losing alignment"
+      ],
+      "safetyNotes": "Stop for sharp pain, dizziness, or chest pain.",
+      "limitationTags": [
+        "lower_back"
+      ],
+      "staticAssetId": "glute_bridge_posture",
+      "animatedAssetId": null,
+      "gatedForBeginners": false,
+      "reviewStatus": "provisional",
+      "contentVersion": 1,
+      "primaryMuscles": [
+        "Glutes",
+        "Hamstrings"
+      ],
+      "categoryId": "C001",
+      "difficultyRank": 3,
+      "targetHoldMs": 28000,
+      "id": "glute_bridge_control",
+      "exerciseId": "E002",
+      "displayName": "Glute Bridge Control"
+    },
+    {
+      "secondaryMuscles": [],
+      "equipment": [
+        "none",
+        "wall"
+      ],
+      "unilateralMode": "leftRight",
+      "setupDurationMs": 5000,
+      "restDurationMs": 15000,
+      "easierVariantId": null,
+      "harderVariantId": "static_lunge_foundation",
+      "breathingCue": "Breathe steadily; never hold your breath.",
+      "commonMistakes": [
+        "Holding breath",
+        "Losing alignment"
+      ],
+      "safetyNotes": "Stop for sharp pain, dizziness, or chest pain.",
+      "limitationTags": [
+        "knees",
+        "balance"
+      ],
+      "staticAssetId": "static_lunge_posture",
+      "animatedAssetId": null,
+      "gatedForBeginners": false,
+      "reviewStatus": "provisional",
+      "contentVersion": 1,
+      "primaryMuscles": [
+        "Quadriceps",
+        "Glutes"
+      ],
+      "categoryId": "C001",
+      "difficultyRank": 1,
+      "targetHoldMs": 10000,
+      "id": "static_lunge_easier",
+      "exerciseId": "E003",
+      "displayName": "Supported Static Lunge"
+    },
+    {
+      "secondaryMuscles": [],
+      "equipment": [
+        "none"
+      ],
+      "unilateralMode": "leftRight",
+      "setupDurationMs": 5000,
+      "restDurationMs": 15000,
+      "easierVariantId": "static_lunge_easier",
+      "harderVariantId": "static_lunge_control",
+      "breathingCue": "Breathe steadily; never hold your breath.",
+      "commonMistakes": [
+        "Holding breath",
+        "Losing alignment"
+      ],
+      "safetyNotes": "Stop for sharp pain, dizziness, or chest pain.",
+      "limitationTags": [
+        "knees",
+        "balance"
+      ],
+      "staticAssetId": "static_lunge_posture",
+      "animatedAssetId": null,
+      "gatedForBeginners": false,
+      "reviewStatus": "provisional",
+      "contentVersion": 1,
+      "primaryMuscles": [
+        "Quadriceps",
+        "Glutes"
+      ],
+      "categoryId": "C001",
+      "difficultyRank": 2,
+      "targetHoldMs": 15000,
+      "id": "static_lunge_foundation",
+      "exerciseId": "E003",
+      "displayName": "Static Lunge Hold"
+    },
+    {
+      "secondaryMuscles": [],
+      "equipment": [
+        "none"
+      ],
+      "unilateralMode": "leftRight",
+      "setupDurationMs": 5000,
+      "restDurationMs": 15000,
+      "easierVariantId": "static_lunge_foundation",
+      "harderVariantId": null,
+      "breathingCue": "Breathe steadily; never hold your breath.",
+      "commonMistakes": [
+        "Holding breath",
+        "Losing alignment"
+      ],
+      "safetyNotes": "Stop for sharp pain, dizziness, or chest pain.",
+      "limitationTags": [
+        "knees",
+        "balance"
+      ],
+      "staticAssetId": "static_lunge_posture",
+      "animatedAssetId": null,
+      "gatedForBeginners": false,
+      "reviewStatus": "provisional",
+      "contentVersion": 1,
+      "primaryMuscles": [
+        "Quadriceps",
+        "Glutes"
+      ],
+      "categoryId": "C001",
+      "difficultyRank": 3,
+      "targetHoldMs": 22000,
+      "id": "static_lunge_control",
+      "exerciseId": "E003",
+      "displayName": "Static Lunge Control"
+    },
+    {
+      "secondaryMuscles": [],
+      "equipment": [
+        "wall"
+      ],
+      "unilateralMode": "none",
+      "setupDurationMs": 5000,
+      "restDurationMs": 15000,
+      "easierVariantId": null,
+      "harderVariantId": "calf_raise_foundation",
+      "breathingCue": "Breathe steadily; never hold your breath.",
+      "commonMistakes": [
+        "Holding breath",
+        "Losing alignment"
+      ],
+      "safetyNotes": "Stop for sharp pain, dizziness, or chest pain.",
+      "limitationTags": [
+        "balance"
+      ],
+      "staticAssetId": "calf_raise_posture",
+      "animatedAssetId": null,
+      "gatedForBeginners": false,
+      "reviewStatus": "provisional",
+      "contentVersion": 1,
+      "primaryMuscles": [
+        "Calves"
+      ],
+      "categoryId": "C001",
+      "difficultyRank": 1,
+      "targetHoldMs": 12000,
+      "id": "calf_raise_easier",
+      "exerciseId": "E004",
+      "displayName": "Supported Calf Raise Hold"
+    },
+    {
+      "secondaryMuscles": [],
+      "equipment": [
+        "none"
+      ],
+      "unilateralMode": "none",
+      "setupDurationMs": 5000,
+      "restDurationMs": 15000,
+      "easierVariantId": "calf_raise_easier",
+      "harderVariantId": "calf_raise_control",
+      "breathingCue": "Breathe steadily; never hold your breath.",
+      "commonMistakes": [
+        "Holding breath",
+        "Losing alignment"
+      ],
+      "safetyNotes": "Stop for sharp pain, dizziness, or chest pain.",
+      "limitationTags": [
+        "balance"
+      ],
+      "staticAssetId": "calf_raise_posture",
+      "animatedAssetId": null,
+      "gatedForBeginners": false,
+      "reviewStatus": "provisional",
+      "contentVersion": 1,
+      "primaryMuscles": [
+        "Calves"
+      ],
+      "categoryId": "C001",
+      "difficultyRank": 2,
+      "targetHoldMs": 20000,
+      "id": "calf_raise_foundation",
+      "exerciseId": "E004",
+      "displayName": "Calf Raise Hold"
+    },
+    {
+      "secondaryMuscles": [],
+      "equipment": [
+        "none"
+      ],
+      "unilateralMode": "none",
+      "setupDurationMs": 5000,
+      "restDurationMs": 15000,
+      "easierVariantId": "calf_raise_foundation",
+      "harderVariantId": null,
+      "breathingCue": "Breathe steadily; never hold your breath.",
+      "commonMistakes": [
+        "Holding breath",
+        "Losing alignment"
+      ],
+      "safetyNotes": "Stop for sharp pain, dizziness, or chest pain.",
+      "limitationTags": [
+        "balance"
+      ],
+      "staticAssetId": "calf_raise_posture",
+      "animatedAssetId": null,
+      "gatedForBeginners": false,
+      "reviewStatus": "provisional",
+      "contentVersion": 1,
+      "primaryMuscles": [
+        "Calves"
+      ],
+      "categoryId": "C001",
+      "difficultyRank": 3,
+      "targetHoldMs": 30000,
+      "id": "calf_raise_control",
+      "exerciseId": "E004",
+      "displayName": "Calf Raise Control"
+    },
+    {
+      "secondaryMuscles": [],
+      "equipment": [
+        "none"
+      ],
+      "unilateralMode": "none",
+      "setupDurationMs": 5000,
+      "restDurationMs": 15000,
+      "easierVariantId": null,
+      "harderVariantId": "horse_stance_foundation",
+      "breathingCue": "Breathe steadily; never hold your breath.",
+      "commonMistakes": [
+        "Holding breath",
+        "Losing alignment"
+      ],
+      "safetyNotes": "Stop for sharp pain, dizziness, or chest pain.",
+      "limitationTags": [
+        "knees"
+      ],
+      "staticAssetId": "horse_stance_posture",
+      "animatedAssetId": null,
+      "gatedForBeginners": false,
+      "reviewStatus": "provisional",
+      "contentVersion": 1,
+      "primaryMuscles": [
+        "Quadriceps",
+        "Adductors"
+      ],
+      "categoryId": "C001",
+      "difficultyRank": 1,
+      "targetHoldMs": 10000,
+      "id": "horse_stance_easier",
+      "exerciseId": "E005",
+      "displayName": "Shallow Horse Stance"
+    },
+    {
+      "secondaryMuscles": [],
+      "equipment": [
+        "none"
+      ],
+      "unilateralMode": "none",
+      "setupDurationMs": 5000,
+      "restDurationMs": 15000,
+      "easierVariantId": "horse_stance_easier",
+      "harderVariantId": "horse_stance_control",
+      "breathingCue": "Breathe steadily; never hold your breath.",
+      "commonMistakes": [
+        "Holding breath",
+        "Losing alignment"
+      ],
+      "safetyNotes": "Stop for sharp pain, dizziness, or chest pain.",
+      "limitationTags": [
+        "knees"
+      ],
+      "staticAssetId": "horse_stance_posture",
+      "animatedAssetId": null,
+      "gatedForBeginners": false,
+      "reviewStatus": "provisional",
+      "contentVersion": 1,
+      "primaryMuscles": [
+        "Quadriceps",
+        "Adductors"
+      ],
+      "categoryId": "C001",
+      "difficultyRank": 2,
+      "targetHoldMs": 16000,
+      "id": "horse_stance_foundation",
+      "exerciseId": "E005",
+      "displayName": "Horse Stance Hold"
+    },
+    {
+      "secondaryMuscles": [],
+      "equipment": [
+        "none"
+      ],
+      "unilateralMode": "none",
+      "setupDurationMs": 5000,
+      "restDurationMs": 15000,
+      "easierVariantId": "horse_stance_foundation",
+      "harderVariantId": null,
+      "breathingCue": "Breathe steadily; never hold your breath.",
+      "commonMistakes": [
+        "Holding breath",
+        "Losing alignment"
+      ],
+      "safetyNotes": "Stop for sharp pain, dizziness, or chest pain.",
+      "limitationTags": [
+        "knees"
+      ],
+      "staticAssetId": "horse_stance_posture",
+      "animatedAssetId": null,
+      "gatedForBeginners": false,
+      "reviewStatus": "provisional",
+      "contentVersion": 1,
+      "primaryMuscles": [
+        "Quadriceps",
+        "Adductors"
+      ],
+      "categoryId": "C001",
+      "difficultyRank": 3,
+      "targetHoldMs": 25000,
+      "id": "horse_stance_control",
+      "exerciseId": "E005",
+      "displayName": "Horse Stance Control"
+    },
+    {
+      "secondaryMuscles": [],
+      "equipment": [
+        "floor"
+      ],
+      "unilateralMode": "none",
+      "setupDurationMs": 5000,
+      "restDurationMs": 15000,
+      "easierVariantId": null,
+      "harderVariantId": "forearm_plank_foundation",
+      "breathingCue": "Breathe steadily; never hold your breath.",
+      "commonMistakes": [
+        "Holding breath",
+        "Losing alignment"
+      ],
+      "safetyNotes": "Stop for sharp pain, dizziness, or chest pain.",
+      "limitationTags": [
+        "wrists",
+        "shoulders",
+        "lower_back"
+      ],
+      "staticAssetId": "forearm_plank_posture",
+      "animatedAssetId": null,
+      "gatedForBeginners": false,
+      "reviewStatus": "provisional",
+      "contentVersion": 1,
+      "primaryMuscles": [
+        "Abdominals"
+      ],
+      "categoryId": "C002",
+      "difficultyRank": 1,
+      "targetHoldMs": 12000,
+      "id": "forearm_plank_easier",
+      "exerciseId": "E006",
+      "displayName": "Kneeling Forearm Plank"
+    },
+    {
+      "secondaryMuscles": [],
+      "equipment": [
+        "floor"
+      ],
+      "unilateralMode": "none",
+      "setupDurationMs": 5000,
+      "restDurationMs": 15000,
+      "easierVariantId": "forearm_plank_easier",
+      "harderVariantId": "forearm_plank_control",
+      "breathingCue": "Breathe steadily; never hold your breath.",
+      "commonMistakes": [
+        "Holding breath",
+        "Losing alignment"
+      ],
+      "safetyNotes": "Stop for sharp pain, dizziness, or chest pain.",
+      "limitationTags": [
+        "wrists",
+        "shoulders",
+        "lower_back"
+      ],
+      "staticAssetId": "forearm_plank_posture",
+      "animatedAssetId": null,
+      "gatedForBeginners": false,
+      "reviewStatus": "provisional",
+      "contentVersion": 1,
+      "primaryMuscles": [
+        "Abdominals"
+      ],
+      "categoryId": "C002",
+      "difficultyRank": 2,
+      "targetHoldMs": 20000,
+      "id": "forearm_plank_foundation",
+      "exerciseId": "E006",
+      "displayName": "Forearm Plank"
+    },
+    {
+      "secondaryMuscles": [],
+      "equipment": [
+        "floor"
+      ],
+      "unilateralMode": "none",
+      "setupDurationMs": 5000,
+      "restDurationMs": 15000,
+      "easierVariantId": "forearm_plank_foundation",
+      "harderVariantId": null,
+      "breathingCue": "Breathe steadily; never hold your breath.",
+      "commonMistakes": [
+        "Holding breath",
+        "Losing alignment"
+      ],
+      "safetyNotes": "Stop for sharp pain, dizziness, or chest pain.",
+      "limitationTags": [
+        "wrists",
+        "shoulders",
+        "lower_back"
+      ],
+      "staticAssetId": "forearm_plank_posture",
+      "animatedAssetId": null,
+      "gatedForBeginners": false,
+      "reviewStatus": "provisional",
+      "contentVersion": 1,
+      "primaryMuscles": [
+        "Abdominals"
+      ],
+      "categoryId": "C002",
+      "difficultyRank": 3,
+      "targetHoldMs": 30000,
+      "id": "forearm_plank_control",
+      "exerciseId": "E006",
+      "displayName": "Forearm Plank Control"
+    },
+    {
+      "secondaryMuscles": [],
+      "equipment": [
+        "floor"
+      ],
+      "unilateralMode": "leftRight",
+      "setupDurationMs": 5000,
+      "restDurationMs": 15000,
+      "easierVariantId": null,
+      "harderVariantId": "side_plank_foundation",
+      "breathingCue": "Breathe steadily; never hold your breath.",
+      "commonMistakes": [
+        "Holding breath",
+        "Losing alignment"
+      ],
+      "safetyNotes": "Stop for sharp pain, dizziness, or chest pain.",
+      "limitationTags": [
+        "shoulders",
+        "wrists"
+      ],
+      "staticAssetId": "side_plank_posture",
+      "animatedAssetId": null,
+      "gatedForBeginners": false,
+      "reviewStatus": "provisional",
+      "contentVersion": 1,
+      "primaryMuscles": [
+        "Obliques"
+      ],
+      "categoryId": "C002",
+      "difficultyRank": 1,
+      "targetHoldMs": 10000,
+      "id": "side_plank_easier",
+      "exerciseId": "E007",
+      "displayName": "Bent-Knee Side Plank"
+    },
+    {
+      "secondaryMuscles": [],
+      "equipment": [
+        "floor"
+      ],
+      "unilateralMode": "leftRight",
+      "setupDurationMs": 5000,
+      "restDurationMs": 15000,
+      "easierVariantId": "side_plank_easier",
+      "harderVariantId": "side_plank_control",
+      "breathingCue": "Breathe steadily; never hold your breath.",
+      "commonMistakes": [
+        "Holding breath",
+        "Losing alignment"
+      ],
+      "safetyNotes": "Stop for sharp pain, dizziness, or chest pain.",
+      "limitationTags": [
+        "shoulders",
+        "wrists"
+      ],
+      "staticAssetId": "side_plank_posture",
+      "animatedAssetId": null,
+      "gatedForBeginners": false,
+      "reviewStatus": "provisional",
+      "contentVersion": 1,
+      "primaryMuscles": [
+        "Obliques"
+      ],
+      "categoryId": "C002",
+      "difficultyRank": 2,
+      "targetHoldMs": 15000,
+      "id": "side_plank_foundation",
+      "exerciseId": "E007",
+      "displayName": "Side Plank"
+    },
+    {
+      "secondaryMuscles": [],
+      "equipment": [
+        "floor"
+      ],
+      "unilateralMode": "leftRight",
+      "setupDurationMs": 5000,
+      "restDurationMs": 15000,
+      "easierVariantId": "side_plank_foundation",
+      "harderVariantId": null,
+      "breathingCue": "Breathe steadily; never hold your breath.",
+      "commonMistakes": [
+        "Holding breath",
+        "Losing alignment"
+      ],
+      "safetyNotes": "Stop for sharp pain, dizziness, or chest pain.",
+      "limitationTags": [
+        "shoulders",
+        "wrists"
+      ],
+      "staticAssetId": "side_plank_posture",
+      "animatedAssetId": null,
+      "gatedForBeginners": false,
+      "reviewStatus": "provisional",
+      "contentVersion": 1,
+      "primaryMuscles": [
+        "Obliques"
+      ],
+      "categoryId": "C002",
+      "difficultyRank": 3,
+      "targetHoldMs": 25000,
+      "id": "side_plank_control",
+      "exerciseId": "E007",
+      "displayName": "Side Plank Control"
+    },
+    {
+      "secondaryMuscles": [],
+      "equipment": [
+        "floor"
+      ],
+      "unilateralMode": "none",
+      "setupDurationMs": 5000,
+      "restDurationMs": 15000,
+      "easierVariantId": null,
+      "harderVariantId": "hollow_body_foundation",
+      "breathingCue": "Breathe steadily; never hold your breath.",
+      "commonMistakes": [
+        "Holding breath",
+        "Losing alignment"
+      ],
+      "safetyNotes": "Stop for sharp pain, dizziness, or chest pain.",
+      "limitationTags": [
+        "lower_back"
+      ],
+      "staticAssetId": "hollow_body_posture",
+      "animatedAssetId": null,
+      "gatedForBeginners": false,
+      "reviewStatus": "provisional",
+      "contentVersion": 1,
+      "primaryMuscles": [
+        "Abdominals"
+      ],
+      "categoryId": "C002",
+      "difficultyRank": 1,
+      "targetHoldMs": 10000,
+      "id": "hollow_body_easier",
+      "exerciseId": "E008",
+      "displayName": "Tuck Hollow Hold"
+    },
+    {
+      "secondaryMuscles": [],
+      "equipment": [
+        "floor"
+      ],
+      "unilateralMode": "none",
+      "setupDurationMs": 5000,
+      "restDurationMs": 15000,
+      "easierVariantId": "hollow_body_easier",
+      "harderVariantId": "hollow_body_control",
+      "breathingCue": "Breathe steadily; never hold your breath.",
+      "commonMistakes": [
+        "Holding breath",
+        "Losing alignment"
+      ],
+      "safetyNotes": "Stop for sharp pain, dizziness, or chest pain.",
+      "limitationTags": [
+        "lower_back"
+      ],
+      "staticAssetId": "hollow_body_posture",
+      "animatedAssetId": null,
+      "gatedForBeginners": true,
+      "reviewStatus": "provisional",
+      "contentVersion": 1,
+      "primaryMuscles": [
+        "Abdominals"
+      ],
+      "categoryId": "C002",
+      "difficultyRank": 2,
+      "targetHoldMs": 15000,
+      "id": "hollow_body_foundation",
+      "exerciseId": "E008",
+      "displayName": "Hollow Body Hold"
+    },
+    {
+      "secondaryMuscles": [],
+      "equipment": [
+        "floor"
+      ],
+      "unilateralMode": "none",
+      "setupDurationMs": 5000,
+      "restDurationMs": 15000,
+      "easierVariantId": "hollow_body_foundation",
+      "harderVariantId": null,
+      "breathingCue": "Breathe steadily; never hold your breath.",
+      "commonMistakes": [
+        "Holding breath",
+        "Losing alignment"
+      ],
+      "safetyNotes": "Stop for sharp pain, dizziness, or chest pain.",
+      "limitationTags": [
+        "lower_back"
+      ],
+      "staticAssetId": "hollow_body_posture",
+      "animatedAssetId": null,
+      "gatedForBeginners": true,
+      "reviewStatus": "provisional",
+      "contentVersion": 1,
+      "primaryMuscles": [
+        "Abdominals"
+      ],
+      "categoryId": "C002",
+      "difficultyRank": 3,
+      "targetHoldMs": 25000,
+      "id": "hollow_body_control",
+      "exerciseId": "E008",
+      "displayName": "Full Hollow Body Hold"
+    },
+    {
+      "secondaryMuscles": [],
+      "equipment": [
+        "floor"
+      ],
+      "unilateralMode": "alternating",
+      "setupDurationMs": 5000,
+      "restDurationMs": 15000,
+      "easierVariantId": null,
+      "harderVariantId": "bird_dog_foundation",
+      "breathingCue": "Breathe steadily; never hold your breath.",
+      "commonMistakes": [
+        "Holding breath",
+        "Losing alignment"
+      ],
+      "safetyNotes": "Stop for sharp pain, dizziness, or chest pain.",
+      "limitationTags": [
+        "lower_back",
+        "balance"
+      ],
+      "staticAssetId": "bird_dog_posture",
+      "animatedAssetId": null,
+      "gatedForBeginners": false,
+      "reviewStatus": "provisional",
+      "contentVersion": 1,
+      "primaryMuscles": [
+        "Core",
+        "Lower Back"
+      ],
+      "categoryId": "C002",
+      "difficultyRank": 1,
+      "targetHoldMs": 10000,
+      "id": "bird_dog_easier",
+      "exerciseId": "E009",
+      "displayName": "Simplified Bird Dog Hold"
+    },
+    {
+      "secondaryMuscles": [],
+      "equipment": [
+        "floor"
+      ],
+      "unilateralMode": "alternating",
+      "setupDurationMs": 5000,
+      "restDurationMs": 15000,
+      "easierVariantId": "bird_dog_easier",
+      "harderVariantId": "bird_dog_control",
+      "breathingCue": "Breathe steadily; never hold your breath.",
+      "commonMistakes": [
+        "Holding breath",
+        "Losing alignment"
+      ],
+      "safetyNotes": "Stop for sharp pain, dizziness, or chest pain.",
+      "limitationTags": [
+        "lower_back",
+        "balance"
+      ],
+      "staticAssetId": "bird_dog_posture",
+      "animatedAssetId": null,
+      "gatedForBeginners": false,
+      "reviewStatus": "provisional",
+      "contentVersion": 1,
+      "primaryMuscles": [
+        "Core",
+        "Lower Back"
+      ],
+      "categoryId": "C002",
+      "difficultyRank": 2,
+      "targetHoldMs": 15000,
+      "id": "bird_dog_foundation",
+      "exerciseId": "E009",
+      "displayName": "Bird Dog Hold"
+    },
+    {
+      "secondaryMuscles": [],
+      "equipment": [
+        "floor"
+      ],
+      "unilateralMode": "alternating",
+      "setupDurationMs": 5000,
+      "restDurationMs": 15000,
+      "easierVariantId": "bird_dog_foundation",
+      "harderVariantId": null,
+      "breathingCue": "Breathe steadily; never hold your breath.",
+      "commonMistakes": [
+        "Holding breath",
+        "Losing alignment"
+      ],
+      "safetyNotes": "Stop for sharp pain, dizziness, or chest pain.",
+      "limitationTags": [
+        "lower_back",
+        "balance"
+      ],
+      "staticAssetId": "bird_dog_posture",
+      "animatedAssetId": null,
+      "gatedForBeginners": false,
+      "reviewStatus": "provisional",
+      "contentVersion": 1,
+      "primaryMuscles": [
+        "Core",
+        "Lower Back"
+      ],
+      "categoryId": "C002",
+      "difficultyRank": 3,
+      "targetHoldMs": 22000,
+      "id": "bird_dog_control",
+      "exerciseId": "E009",
+      "displayName": "Bird Dog Control"
+    },
+    {
+      "secondaryMuscles": [],
+      "equipment": [
+        "floor"
+      ],
+      "unilateralMode": "none",
+      "setupDurationMs": 5000,
+      "restDurationMs": 15000,
+      "easierVariantId": null,
+      "harderVariantId": "v_sit_foundation",
+      "breathingCue": "Breathe steadily; never hold your breath.",
+      "commonMistakes": [
+        "Holding breath",
+        "Losing alignment"
+      ],
+      "safetyNotes": "Stop for sharp pain, dizziness, or chest pain.",
+      "limitationTags": [
+        "lower_back"
+      ],
+      "staticAssetId": "v_sit_posture",
+      "animatedAssetId": null,
+      "gatedForBeginners": false,
+      "reviewStatus": "provisional",
+      "contentVersion": 1,
+      "primaryMuscles": [
+        "Abdominals"
+      ],
+      "categoryId": "C002",
+      "difficultyRank": 1,
+      "targetHoldMs": 8000,
+      "id": "v_sit_easier",
+      "exerciseId": "E010",
+      "displayName": "Tuck V-Sit"
+    },
+    {
+      "secondaryMuscles": [],
+      "equipment": [
+        "floor"
+      ],
+      "unilateralMode": "none",
+      "setupDurationMs": 5000,
+      "restDurationMs": 15000,
+      "easierVariantId": "v_sit_easier",
+      "harderVariantId": "v_sit_control",
+      "breathingCue": "Breathe steadily; never hold your breath.",
+      "commonMistakes": [
+        "Holding breath",
+        "Losing alignment"
+      ],
+      "safetyNotes": "Stop for sharp pain, dizziness, or chest pain.",
+      "limitationTags": [
+        "lower_back"
+      ],
+      "staticAssetId": "v_sit_posture",
+      "animatedAssetId": null,
+      "gatedForBeginners": true,
+      "reviewStatus": "provisional",
+      "contentVersion": 1,
+      "primaryMuscles": [
+        "Abdominals"
+      ],
+      "categoryId": "C002",
+      "difficultyRank": 2,
+      "targetHoldMs": 12000,
+      "id": "v_sit_foundation",
+      "exerciseId": "E010",
+      "displayName": "V-Sit Hold"
+    },
+    {
+      "secondaryMuscles": [],
+      "equipment": [
+        "floor"
+      ],
+      "unilateralMode": "none",
+      "setupDurationMs": 5000,
+      "restDurationMs": 15000,
+      "easierVariantId": "v_sit_foundation",
+      "harderVariantId": null,
+      "breathingCue": "Breathe steadily; never hold your breath.",
+      "commonMistakes": [
+        "Holding breath",
+        "Losing alignment"
+      ],
+      "safetyNotes": "Stop for sharp pain, dizziness, or chest pain.",
+      "limitationTags": [
+        "lower_back"
+      ],
+      "staticAssetId": "v_sit_posture",
+      "animatedAssetId": null,
+      "gatedForBeginners": true,
+      "reviewStatus": "provisional",
+      "contentVersion": 1,
+      "primaryMuscles": [
+        "Abdominals"
+      ],
+      "categoryId": "C002",
+      "difficultyRank": 3,
+      "targetHoldMs": 20000,
+      "id": "v_sit_control",
+      "exerciseId": "E010",
+      "displayName": "Full V-Sit Hold"
+    },
+    {
+      "secondaryMuscles": [],
+      "equipment": [
+        "wall"
+      ],
+      "unilateralMode": "none",
+      "setupDurationMs": 5000,
+      "restDurationMs": 15000,
+      "easierVariantId": null,
+      "harderVariantId": "pushup_hold_foundation",
+      "breathingCue": "Breathe steadily; never hold your breath.",
+      "commonMistakes": [
+        "Holding breath",
+        "Losing alignment"
+      ],
+      "safetyNotes": "Stop for sharp pain, dizziness, or chest pain.",
+      "limitationTags": [
+        "wrists",
+        "shoulders"
+      ],
+      "staticAssetId": "pushup_hold_posture",
+      "animatedAssetId": null,
+      "gatedForBeginners": false,
+      "reviewStatus": "provisional",
+      "contentVersion": 1,
+      "primaryMuscles": [
+        "Chest",
+        "Triceps"
+      ],
+      "categoryId": "C003",
+      "difficultyRank": 1,
+      "targetHoldMs": 10000,
+      "id": "pushup_hold_easier",
+      "exerciseId": "E011",
+      "displayName": "Wall or Incline Push-up Hold"
+    },
+    {
+      "secondaryMuscles": [],
+      "equipment": [
+        "floor"
+      ],
+      "unilateralMode": "none",
+      "setupDurationMs": 5000,
+      "restDurationMs": 15000,
+      "easierVariantId": "pushup_hold_easier",
+      "harderVariantId": "pushup_hold_control",
+      "breathingCue": "Breathe steadily; never hold your breath.",
+      "commonMistakes": [
+        "Holding breath",
+        "Losing alignment"
+      ],
+      "safetyNotes": "Stop for sharp pain, dizziness, or chest pain.",
+      "limitationTags": [
+        "wrists",
+        "shoulders"
+      ],
+      "staticAssetId": "pushup_hold_posture",
+      "animatedAssetId": null,
+      "gatedForBeginners": true,
+      "reviewStatus": "provisional",
+      "contentVersion": 1,
+      "primaryMuscles": [
+        "Chest",
+        "Triceps"
+      ],
+      "categoryId": "C003",
+      "difficultyRank": 2,
+      "targetHoldMs": 15000,
+      "id": "pushup_hold_foundation",
+      "exerciseId": "E011",
+      "displayName": "Isometric Push-up Hold"
+    },
+    {
+      "secondaryMuscles": [],
+      "equipment": [
+        "floor"
+      ],
+      "unilateralMode": "none",
+      "setupDurationMs": 5000,
+      "restDurationMs": 15000,
+      "easierVariantId": "pushup_hold_foundation",
+      "harderVariantId": null,
+      "breathingCue": "Breathe steadily; never hold your breath.",
+      "commonMistakes": [
+        "Holding breath",
+        "Losing alignment"
+      ],
+      "safetyNotes": "Stop for sharp pain, dizziness, or chest pain.",
+      "limitationTags": [
+        "wrists",
+        "shoulders"
+      ],
+      "staticAssetId": "pushup_hold_posture",
+      "animatedAssetId": null,
+      "gatedForBeginners": true,
+      "reviewStatus": "provisional",
+      "contentVersion": 1,
+      "primaryMuscles": [
+        "Chest",
+        "Triceps"
+      ],
+      "categoryId": "C003",
+      "difficultyRank": 3,
+      "targetHoldMs": 22000,
+      "id": "pushup_hold_control",
+      "exerciseId": "E011",
+      "displayName": "Full Midpoint Push-up Hold"
+    },
+    {
+      "secondaryMuscles": [],
+      "equipment": [
+        "chair"
+      ],
+      "unilateralMode": "none",
+      "setupDurationMs": 5000,
+      "restDurationMs": 15000,
+      "easierVariantId": null,
+      "harderVariantId": "triceps_dip_foundation",
+      "breathingCue": "Breathe steadily; never hold your breath.",
+      "commonMistakes": [
+        "Holding breath",
+        "Losing alignment"
+      ],
+      "safetyNotes": "Stop for sharp pain, dizziness, or chest pain.",
+      "limitationTags": [
+        "shoulders",
+        "wrists"
+      ],
+      "staticAssetId": "triceps_dip_posture",
+      "animatedAssetId": null,
+      "gatedForBeginners": false,
+      "reviewStatus": "provisional",
+      "contentVersion": 1,
+      "primaryMuscles": [
+        "Triceps"
+      ],
+      "categoryId": "C003",
+      "difficultyRank": 1,
+      "targetHoldMs": 10000,
+      "id": "triceps_dip_easier",
+      "exerciseId": "E012",
+      "displayName": "Bench-Edge Supported Dip Hold"
+    },
+    {
+      "secondaryMuscles": [],
+      "equipment": [
+        "chair"
+      ],
+      "unilateralMode": "none",
+      "setupDurationMs": 5000,
+      "restDurationMs": 15000,
+      "easierVariantId": "triceps_dip_easier",
+      "harderVariantId": "triceps_dip_control",
+      "breathingCue": "Breathe steadily; never hold your breath.",
+      "commonMistakes": [
+        "Holding breath",
+        "Losing alignment"
+      ],
+      "safetyNotes": "Stop for sharp pain, dizziness, or chest pain.",
+      "limitationTags": [
+        "shoulders",
+        "wrists"
+      ],
+      "staticAssetId": "triceps_dip_posture",
+      "animatedAssetId": null,
+      "gatedForBeginners": true,
+      "reviewStatus": "provisional",
+      "contentVersion": 1,
+      "primaryMuscles": [
+        "Triceps"
+      ],
+      "categoryId": "C003",
+      "difficultyRank": 2,
+      "targetHoldMs": 15000,
+      "id": "triceps_dip_foundation",
+      "exerciseId": "E012",
+      "displayName": "Triceps Dip Hold"
+    },
+    {
+      "secondaryMuscles": [],
+      "equipment": [
+        "chair"
+      ],
+      "unilateralMode": "none",
+      "setupDurationMs": 5000,
+      "restDurationMs": 15000,
+      "easierVariantId": "triceps_dip_foundation",
+      "harderVariantId": null,
+      "breathingCue": "Breathe steadily; never hold your breath.",
+      "commonMistakes": [
+        "Holding breath",
+        "Losing alignment"
+      ],
+      "safetyNotes": "Stop for sharp pain, dizziness, or chest pain.",
+      "limitationTags": [
+        "shoulders",
+        "wrists"
+      ],
+      "staticAssetId": "triceps_dip_posture",
+      "animatedAssetId": null,
+      "gatedForBeginners": true,
+      "reviewStatus": "provisional",
+      "contentVersion": 1,
+      "primaryMuscles": [
+        "Triceps"
+      ],
+      "categoryId": "C003",
+      "difficultyRank": 3,
+      "targetHoldMs": 25000,
+      "id": "triceps_dip_control",
+      "exerciseId": "E012",
+      "displayName": "Triceps Dip Hold"
+    },
+    {
+      "secondaryMuscles": [],
+      "equipment": [
+        "floor"
+      ],
+      "unilateralMode": "none",
+      "setupDurationMs": 5000,
+      "restDurationMs": 15000,
+      "easierVariantId": null,
+      "harderVariantId": "reverse_plank_foundation",
+      "breathingCue": "Breathe steadily; never hold your breath.",
+      "commonMistakes": [
+        "Holding breath",
+        "Losing alignment"
+      ],
+      "safetyNotes": "Stop for sharp pain, dizziness, or chest pain.",
+      "limitationTags": [
+        "shoulders",
+        "wrists"
+      ],
+      "staticAssetId": "reverse_plank_posture",
+      "animatedAssetId": null,
+      "gatedForBeginners": false,
+      "reviewStatus": "provisional",
+      "contentVersion": 1,
+      "primaryMuscles": [
+        "Glutes",
+        "Posterior Chain"
+      ],
+      "categoryId": "C003",
+      "difficultyRank": 1,
+      "targetHoldMs": 10000,
+      "id": "reverse_plank_easier",
+      "exerciseId": "E013",
+      "displayName": "Reverse Tabletop Hold"
+    },
+    {
+      "secondaryMuscles": [],
+      "equipment": [
+        "floor"
+      ],
+      "unilateralMode": "none",
+      "setupDurationMs": 5000,
+      "restDurationMs": 15000,
+      "easierVariantId": "reverse_plank_easier",
+      "harderVariantId": "reverse_plank_control",
+      "breathingCue": "Breathe steadily; never hold your breath.",
+      "commonMistakes": [
+        "Holding breath",
+        "Losing alignment"
+      ],
+      "safetyNotes": "Stop for sharp pain, dizziness, or chest pain.",
+      "limitationTags": [
+        "shoulders",
+        "wrists"
+      ],
+      "staticAssetId": "reverse_plank_posture",
+      "animatedAssetId": null,
+      "gatedForBeginners": false,
+      "reviewStatus": "provisional",
+      "contentVersion": 1,
+      "primaryMuscles": [
+        "Glutes",
+        "Posterior Chain"
+      ],
+      "categoryId": "C003",
+      "difficultyRank": 2,
+      "targetHoldMs": 16000,
+      "id": "reverse_plank_foundation",
+      "exerciseId": "E013",
+      "displayName": "Reverse Plank Hold"
+    },
+    {
+      "secondaryMuscles": [],
+      "equipment": [
+        "floor"
+      ],
+      "unilateralMode": "none",
+      "setupDurationMs": 5000,
+      "restDurationMs": 15000,
+      "easierVariantId": "reverse_plank_foundation",
+      "harderVariantId": null,
+      "breathingCue": "Breathe steadily; never hold your breath.",
+      "commonMistakes": [
+        "Holding breath",
+        "Losing alignment"
+      ],
+      "safetyNotes": "Stop for sharp pain, dizziness, or chest pain.",
+      "limitationTags": [
+        "shoulders",
+        "wrists"
+      ],
+      "staticAssetId": "reverse_plank_posture",
+      "animatedAssetId": null,
+      "gatedForBeginners": false,
+      "reviewStatus": "provisional",
+      "contentVersion": 1,
+      "primaryMuscles": [
+        "Glutes",
+        "Posterior Chain"
+      ],
+      "categoryId": "C003",
+      "difficultyRank": 3,
+      "targetHoldMs": 25000,
+      "id": "reverse_plank_control",
+      "exerciseId": "E013",
+      "displayName": "Reverse Plank Control"
+    },
+    {
+      "secondaryMuscles": [],
+      "equipment": [
+        "floor"
+      ],
+      "unilateralMode": "none",
+      "setupDurationMs": 5000,
+      "restDurationMs": 15000,
+      "easierVariantId": null,
+      "harderVariantId": "superman_foundation",
+      "breathingCue": "Breathe steadily; never hold your breath.",
+      "commonMistakes": [
+        "Holding breath",
+        "Losing alignment"
+      ],
+      "safetyNotes": "Stop for sharp pain, dizziness, or chest pain.",
+      "limitationTags": [
+        "lower_back"
+      ],
+      "staticAssetId": "superman_posture",
+      "animatedAssetId": null,
+      "gatedForBeginners": false,
+      "reviewStatus": "provisional",
+      "contentVersion": 1,
+      "primaryMuscles": [
+        "Lower Back",
+        "Glutes"
+      ],
+      "categoryId": "C003",
+      "difficultyRank": 1,
+      "targetHoldMs": 10000,
+      "id": "superman_easier",
+      "exerciseId": "E014",
+      "displayName": "Reduced-Range Back Extension Hold"
+    },
+    {
+      "secondaryMuscles": [],
+      "equipment": [
+        "floor"
+      ],
+      "unilateralMode": "none",
+      "setupDurationMs": 5000,
+      "restDurationMs": 15000,
+      "easierVariantId": "superman_easier",
+      "harderVariantId": "superman_control",
+      "breathingCue": "Breathe steadily; never hold your breath.",
+      "commonMistakes": [
+        "Holding breath",
+        "Losing alignment"
+      ],
+      "safetyNotes": "Stop for sharp pain, dizziness, or chest pain.",
+      "limitationTags": [
+        "lower_back"
+      ],
+      "staticAssetId": "superman_posture",
+      "animatedAssetId": null,
+      "gatedForBeginners": false,
+      "reviewStatus": "provisional",
+      "contentVersion": 1,
+      "primaryMuscles": [
+        "Lower Back",
+        "Glutes"
+      ],
+      "categoryId": "C003",
+      "difficultyRank": 2,
+      "targetHoldMs": 18000,
+      "id": "superman_foundation",
+      "exerciseId": "E014",
+      "displayName": "Prone Superman Hold"
+    },
+    {
+      "secondaryMuscles": [],
+      "equipment": [
+        "floor"
+      ],
+      "unilateralMode": "none",
+      "setupDurationMs": 5000,
+      "restDurationMs": 15000,
+      "easierVariantId": "superman_foundation",
+      "harderVariantId": null,
+      "breathingCue": "Breathe steadily; never hold your breath.",
+      "commonMistakes": [
+        "Holding breath",
+        "Losing alignment"
+      ],
+      "safetyNotes": "Stop for sharp pain, dizziness, or chest pain.",
+      "limitationTags": [
+        "lower_back"
+      ],
+      "staticAssetId": "superman_posture",
+      "animatedAssetId": null,
+      "gatedForBeginners": false,
+      "reviewStatus": "provisional",
+      "contentVersion": 1,
+      "primaryMuscles": [
+        "Lower Back",
+        "Glutes"
+      ],
+      "categoryId": "C003",
+      "difficultyRank": 3,
+      "targetHoldMs": 25000,
+      "id": "superman_control",
+      "exerciseId": "E014",
+      "displayName": "Prone Superman Control"
+    },
+    {
+      "secondaryMuscles": [],
+      "equipment": [
+        "floor"
+      ],
+      "unilateralMode": "none",
+      "setupDurationMs": 5000,
+      "restDurationMs": 15000,
+      "easierVariantId": null,
+      "harderVariantId": "pike_pushup_foundation",
+      "breathingCue": "Breathe steadily; never hold your breath.",
+      "commonMistakes": [
+        "Holding breath",
+        "Losing alignment"
+      ],
+      "safetyNotes": "Stop for sharp pain, dizziness, or chest pain.",
+      "limitationTags": [
+        "shoulders",
+        "wrists"
+      ],
+      "staticAssetId": "pike_pushup_posture",
+      "animatedAssetId": null,
+      "gatedForBeginners": false,
+      "reviewStatus": "provisional",
+      "contentVersion": 1,
+      "primaryMuscles": [
+        "Shoulders"
+      ],
+      "categoryId": "C003",
+      "difficultyRank": 1,
+      "targetHoldMs": 8000,
+      "id": "pike_pushup_easier",
+      "exerciseId": "E015",
+      "displayName": "Elevated Pike Hold (hands higher)"
+    },
+    {
+      "secondaryMuscles": [],
+      "equipment": [
+        "floor"
+      ],
+      "unilateralMode": "none",
+      "setupDurationMs": 5000,
+      "restDurationMs": 15000,
+      "easierVariantId": "pike_pushup_easier",
+      "harderVariantId": "pike_pushup_control",
+      "breathingCue": "Breathe steadily; never hold your breath.",
+      "commonMistakes": [
+        "Holding breath",
+        "Losing alignment"
+      ],
+      "safetyNotes": "Stop for sharp pain, dizziness, or chest pain.",
+      "limitationTags": [
+        "shoulders",
+        "wrists"
+      ],
+      "staticAssetId": "pike_pushup_posture",
+      "animatedAssetId": null,
+      "gatedForBeginners": true,
+      "reviewStatus": "provisional",
+      "contentVersion": 1,
+      "primaryMuscles": [
+        "Shoulders"
+      ],
+      "categoryId": "C003",
+      "difficultyRank": 2,
+      "targetHoldMs": 12000,
+      "id": "pike_pushup_foundation",
+      "exerciseId": "E015",
+      "displayName": "Pike Push-up Hold"
+    },
+    {
+      "secondaryMuscles": [],
+      "equipment": [
+        "floor"
+      ],
+      "unilateralMode": "none",
+      "setupDurationMs": 5000,
+      "restDurationMs": 15000,
+      "easierVariantId": "pike_pushup_foundation",
+      "harderVariantId": null,
+      "breathingCue": "Breathe steadily; never hold your breath.",
+      "commonMistakes": [
+        "Holding breath",
+        "Losing alignment"
+      ],
+      "safetyNotes": "Stop for sharp pain, dizziness, or chest pain.",
+      "limitationTags": [
+        "shoulders",
+        "wrists"
+      ],
+      "staticAssetId": "pike_pushup_posture",
+      "animatedAssetId": null,
+      "gatedForBeginners": true,
+      "reviewStatus": "provisional",
+      "contentVersion": 1,
+      "primaryMuscles": [
+        "Shoulders"
+      ],
+      "categoryId": "C003",
+      "difficultyRank": 3,
+      "targetHoldMs": 18000,
+      "id": "pike_pushup_control",
+      "exerciseId": "E015",
+      "displayName": "Pike Push-up Hold"
+    },
+    {
+      "secondaryMuscles": [],
+      "equipment": [
+        "floor"
+      ],
+      "unilateralMode": "none",
+      "setupDurationMs": 5000,
+      "restDurationMs": 15000,
+      "easierVariantId": null,
+      "harderVariantId": "prone_w_foundation",
+      "breathingCue": "Breathe steadily; never hold your breath.",
+      "commonMistakes": [
+        "Holding breath",
+        "Losing alignment"
+      ],
+      "safetyNotes": "Stop for sharp pain, dizziness, or chest pain.",
+      "limitationTags": [
+        "shoulders"
+      ],
+      "staticAssetId": "prone_w_posture",
+      "animatedAssetId": null,
+      "gatedForBeginners": false,
+      "reviewStatus": "provisional",
+      "contentVersion": 1,
+      "primaryMuscles": [
+        "Upper Back",
+        "Scapular Stabilizers"
+      ],
+      "categoryId": "C003",
+      "difficultyRank": 1,
+      "targetHoldMs": 12000,
+      "id": "prone_w_easier",
+      "exerciseId": "E016",
+      "displayName": "Prone W Hold (short range)"
+    },
+    {
+      "secondaryMuscles": [],
+      "equipment": [
+        "floor"
+      ],
+      "unilateralMode": "none",
+      "setupDurationMs": 5000,
+      "restDurationMs": 15000,
+      "easierVariantId": "prone_w_easier",
+      "harderVariantId": "prone_w_control",
+      "breathingCue": "Breathe steadily; never hold your breath.",
+      "commonMistakes": [
+        "Holding breath",
+        "Losing alignment"
+      ],
+      "safetyNotes": "Stop for sharp pain, dizziness, or chest pain.",
+      "limitationTags": [
+        "shoulders"
+      ],
+      "staticAssetId": "prone_w_posture",
+      "animatedAssetId": null,
+      "gatedForBeginners": false,
+      "reviewStatus": "provisional",
+      "contentVersion": 1,
+      "primaryMuscles": [
+        "Upper Back",
+        "Scapular Stabilizers"
+      ],
+      "categoryId": "C003",
+      "difficultyRank": 2,
+      "targetHoldMs": 20000,
+      "id": "prone_w_foundation",
+      "exerciseId": "E016",
+      "displayName": "Prone W Hold"
+    },
+    {
+      "secondaryMuscles": [],
+      "equipment": [
+        "floor"
+      ],
+      "unilateralMode": "none",
+      "setupDurationMs": 5000,
+      "restDurationMs": 15000,
+      "easierVariantId": "prone_w_foundation",
+      "harderVariantId": null,
+      "breathingCue": "Breathe steadily; never hold your breath.",
+      "commonMistakes": [
+        "Holding breath",
+        "Losing alignment"
+      ],
+      "safetyNotes": "Stop for sharp pain, dizziness, or chest pain.",
+      "limitationTags": [
+        "shoulders"
+      ],
+      "staticAssetId": "prone_w_posture",
+      "animatedAssetId": null,
+      "gatedForBeginners": false,
+      "reviewStatus": "provisional",
+      "contentVersion": 1,
+      "primaryMuscles": [
+        "Upper Back",
+        "Scapular Stabilizers"
+      ],
+      "categoryId": "C003",
+      "difficultyRank": 3,
+      "targetHoldMs": 28000,
+      "id": "prone_w_control",
+      "exerciseId": "E016",
+      "displayName": "Prone W Hold Control"
+    }
+  ],
+  "formCues": [
+    {
+      "variantId": "wall_sit_foundation",
+      "sortOrder": 0,
+      "cue": "Back flat on wall"
+    },
+    {
+      "variantId": "wall_sit_foundation",
+      "sortOrder": 1,
+      "cue": "Knees over ankles"
+    },
+    {
+      "variantId": "wall_sit_foundation",
+      "sortOrder": 2,
+      "cue": "Shoulders relaxed"
+    },
+    {
+      "variantId": "glute_bridge_foundation",
+      "sortOrder": 0,
+      "cue": "Feet hip-width"
+    },
+    {
+      "variantId": "glute_bridge_foundation",
+      "sortOrder": 1,
+      "cue": "Squeeze glutes"
+    },
+    {
+      "variantId": "glute_bridge_foundation",
+      "sortOrder": 2,
+      "cue": "Avoid over-arching lower back"
+    },
+    {
+      "variantId": "static_lunge_foundation",
+      "sortOrder": 0,
+      "cue": "Front knee over ankle"
+    },
+    {
+      "variantId": "static_lunge_foundation",
+      "sortOrder": 1,
+      "cue": "Upright torso"
+    },
+    {
+      "variantId": "static_lunge_foundation",
+      "sortOrder": 2,
+      "cue": "Light support allowed"
+    },
+    {
+      "variantId": "calf_raise_foundation",
+      "sortOrder": 0,
+      "cue": "Rise onto balls of feet"
+    },
+    {
+      "variantId": "calf_raise_foundation",
+      "sortOrder": 1,
+      "cue": "Light wall support OK"
+    },
+    {
+      "variantId": "calf_raise_foundation",
+      "sortOrder": 2,
+      "cue": "Even weight both feet"
+    },
+    {
+      "variantId": "horse_stance_foundation",
+      "sortOrder": 0,
+      "cue": "Feet wide"
+    },
+    {
+      "variantId": "horse_stance_foundation",
+      "sortOrder": 1,
+      "cue": "Knees track over toes"
+    },
+    {
+      "variantId": "horse_stance_foundation",
+      "sortOrder": 2,
+      "cue": "Upright torso"
+    },
+    {
+      "variantId": "forearm_plank_foundation",
+      "sortOrder": 0,
+      "cue": "Elbows under shoulders"
+    },
+    {
+      "variantId": "forearm_plank_foundation",
+      "sortOrder": 1,
+      "cue": "Long body line"
+    },
+    {
+      "variantId": "forearm_plank_foundation",
+      "sortOrder": 2,
+      "cue": "Glutes gently engaged"
+    },
+    {
+      "variantId": "side_plank_foundation",
+      "sortOrder": 0,
+      "cue": "Elbow under shoulder"
+    },
+    {
+      "variantId": "side_plank_foundation",
+      "sortOrder": 1,
+      "cue": "Hips lifted"
+    },
+    {
+      "variantId": "side_plank_foundation",
+      "sortOrder": 2,
+      "cue": "Stack or stagger feet"
+    },
+    {
+      "variantId": "hollow_body_foundation",
+      "sortOrder": 0,
+      "cue": "Press low back down"
+    },
+    {
+      "variantId": "hollow_body_foundation",
+      "sortOrder": 1,
+      "cue": "Ribs down"
+    },
+    {
+      "variantId": "hollow_body_foundation",
+      "sortOrder": 2,
+      "cue": "Bend knees if needed"
+    },
+    {
+      "variantId": "bird_dog_foundation",
+      "sortOrder": 0,
+      "cue": "Square hips"
+    },
+    {
+      "variantId": "bird_dog_foundation",
+      "sortOrder": 1,
+      "cue": "Reach long"
+    },
+    {
+      "variantId": "bird_dog_foundation",
+      "sortOrder": 2,
+      "cue": "Neutral neck"
+    },
+    {
+      "variantId": "v_sit_foundation",
+      "sortOrder": 0,
+      "cue": "Chest lifted"
+    },
+    {
+      "variantId": "v_sit_foundation",
+      "sortOrder": 1,
+      "cue": "Bend knees as needed"
+    },
+    {
+      "variantId": "v_sit_foundation",
+      "sortOrder": 2,
+      "cue": "Steady breathing"
+    },
+    {
+      "variantId": "pushup_hold_foundation",
+      "sortOrder": 0,
+      "cue": "Straight body line"
+    },
+    {
+      "variantId": "pushup_hold_foundation",
+      "sortOrder": 1,
+      "cue": "Elbows ~90\u00b0 at midpoint"
+    },
+    {
+      "variantId": "pushup_hold_foundation",
+      "sortOrder": 2,
+      "cue": "Neutral neck"
+    },
+    {
+      "variantId": "triceps_dip_foundation",
+      "sortOrder": 0,
+      "cue": "Stable non-rolling chair"
+    },
+    {
+      "variantId": "triceps_dip_foundation",
+      "sortOrder": 1,
+      "cue": "Elbows ~90\u00b0"
+    },
+    {
+      "variantId": "triceps_dip_foundation",
+      "sortOrder": 2,
+      "cue": "Shoulders away from ears"
+    },
+    {
+      "variantId": "reverse_plank_foundation",
+      "sortOrder": 0,
+      "cue": "Hips lifted"
+    },
+    {
+      "variantId": "reverse_plank_foundation",
+      "sortOrder": 1,
+      "cue": "Fingers toward feet or sides"
+    },
+    {
+      "variantId": "reverse_plank_foundation",
+      "sortOrder": 2,
+      "cue": "Neutral neck"
+    },
+    {
+      "variantId": "superman_foundation",
+      "sortOrder": 0,
+      "cue": "Lift gently"
+    },
+    {
+      "variantId": "superman_foundation",
+      "sortOrder": 1,
+      "cue": "Look at floor"
+    },
+    {
+      "variantId": "superman_foundation",
+      "sortOrder": 2,
+      "cue": "Squeeze glutes"
+    },
+    {
+      "variantId": "pike_pushup_foundation",
+      "sortOrder": 0,
+      "cue": "Hips high"
+    },
+    {
+      "variantId": "pike_pushup_foundation",
+      "sortOrder": 1,
+      "cue": "Elbows ~90\u00b0"
+    },
+    {
+      "variantId": "pike_pushup_foundation",
+      "sortOrder": 2,
+      "cue": "Stop if shoulder pain"
+    },
+    {
+      "variantId": "prone_w_foundation",
+      "sortOrder": 0,
+      "cue": "Arms in W shape"
+    },
+    {
+      "variantId": "prone_w_foundation",
+      "sortOrder": 1,
+      "cue": "Squeeze shoulder blades"
+    },
+    {
+      "variantId": "prone_w_foundation",
+      "sortOrder": 2,
+      "cue": "Forehead lightly on floor or towel"
+    }
+  ],
+  "media": [
+    {
+      "id": "wall_sit_posture",
+      "variantId": "wall_sit_foundation",
+      "kind": "posture",
+      "assetPath": "assets/images/wall_sit_posture.png",
+      "accessibilityLabel": "Wall Sit static posture illustration (placeholder)"
+    },
+    {
+      "id": "wall_sit_anim",
+      "variantId": "wall_sit_foundation",
+      "kind": "animation",
+      "assetPath": "assets/animations/wall_sit.webp",
+      "accessibilityLabel": "Wall Sit demonstration loop (placeholder)"
+    },
+    {
+      "id": "glute_bridge_posture",
+      "variantId": "glute_bridge_foundation",
+      "kind": "posture",
+      "assetPath": "assets/images/glute_bridge_posture.png",
+      "accessibilityLabel": "Glute Bridge Hold static posture illustration (placeholder)"
+    },
+    {
+      "id": "glute_bridge_anim",
+      "variantId": "glute_bridge_foundation",
+      "kind": "animation",
+      "assetPath": "assets/animations/glute_bridge.webp",
+      "accessibilityLabel": "Glute Bridge Hold demonstration loop (placeholder)"
+    },
+    {
+      "id": "static_lunge_posture",
+      "variantId": "static_lunge_foundation",
+      "kind": "posture",
+      "assetPath": "assets/images/static_lunge_posture.png",
+      "accessibilityLabel": "Static Lunge Hold static posture illustration (placeholder)"
+    },
+    {
+      "id": "static_lunge_anim",
+      "variantId": "static_lunge_foundation",
+      "kind": "animation",
+      "assetPath": "assets/animations/static_lunge.webp",
+      "accessibilityLabel": "Static Lunge Hold demonstration loop (placeholder)"
+    },
+    {
+      "id": "calf_raise_posture",
+      "variantId": "calf_raise_foundation",
+      "kind": "posture",
+      "assetPath": "assets/images/calf_raise_posture.png",
+      "accessibilityLabel": "Calf Raise Hold static posture illustration (placeholder)"
+    },
+    {
+      "id": "calf_raise_anim",
+      "variantId": "calf_raise_foundation",
+      "kind": "animation",
+      "assetPath": "assets/animations/calf_raise.webp",
+      "accessibilityLabel": "Calf Raise Hold demonstration loop (placeholder)"
+    },
+    {
+      "id": "horse_stance_posture",
+      "variantId": "horse_stance_foundation",
+      "kind": "posture",
+      "assetPath": "assets/images/horse_stance_posture.png",
+      "accessibilityLabel": "Horse Stance Hold static posture illustration (placeholder)"
+    },
+    {
+      "id": "horse_stance_anim",
+      "variantId": "horse_stance_foundation",
+      "kind": "animation",
+      "assetPath": "assets/animations/horse_stance.webp",
+      "accessibilityLabel": "Horse Stance Hold demonstration loop (placeholder)"
+    },
+    {
+      "id": "forearm_plank_posture",
+      "variantId": "forearm_plank_foundation",
+      "kind": "posture",
+      "assetPath": "assets/images/forearm_plank_posture.png",
+      "accessibilityLabel": "Forearm Plank static posture illustration (placeholder)"
+    },
+    {
+      "id": "forearm_plank_anim",
+      "variantId": "forearm_plank_foundation",
+      "kind": "animation",
+      "assetPath": "assets/animations/forearm_plank.webp",
+      "accessibilityLabel": "Forearm Plank demonstration loop (placeholder)"
+    },
+    {
+      "id": "side_plank_posture",
+      "variantId": "side_plank_foundation",
+      "kind": "posture",
+      "assetPath": "assets/images/side_plank_posture.png",
+      "accessibilityLabel": "Side Plank static posture illustration (placeholder)"
+    },
+    {
+      "id": "side_plank_anim",
+      "variantId": "side_plank_foundation",
+      "kind": "animation",
+      "assetPath": "assets/animations/side_plank.webp",
+      "accessibilityLabel": "Side Plank demonstration loop (placeholder)"
+    },
+    {
+      "id": "hollow_body_posture",
+      "variantId": "hollow_body_foundation",
+      "kind": "posture",
+      "assetPath": "assets/images/hollow_body_posture.png",
+      "accessibilityLabel": "Hollow Body Hold static posture illustration (placeholder)"
+    },
+    {
+      "id": "hollow_body_anim",
+      "variantId": "hollow_body_foundation",
+      "kind": "animation",
+      "assetPath": "assets/animations/hollow_body.webp",
+      "accessibilityLabel": "Hollow Body Hold demonstration loop (placeholder)"
+    },
+    {
+      "id": "bird_dog_posture",
+      "variantId": "bird_dog_foundation",
+      "kind": "posture",
+      "assetPath": "assets/images/bird_dog_posture.png",
+      "accessibilityLabel": "Bird Dog Hold static posture illustration (placeholder)"
+    },
+    {
+      "id": "bird_dog_anim",
+      "variantId": "bird_dog_foundation",
+      "kind": "animation",
+      "assetPath": "assets/animations/bird_dog.webp",
+      "accessibilityLabel": "Bird Dog Hold demonstration loop (placeholder)"
+    },
+    {
+      "id": "v_sit_posture",
+      "variantId": "v_sit_foundation",
+      "kind": "posture",
+      "assetPath": "assets/images/v_sit_posture.png",
+      "accessibilityLabel": "V-Sit Hold static posture illustration (placeholder)"
+    },
+    {
+      "id": "v_sit_anim",
+      "variantId": "v_sit_foundation",
+      "kind": "animation",
+      "assetPath": "assets/animations/v_sit.webp",
+      "accessibilityLabel": "V-Sit Hold demonstration loop (placeholder)"
+    },
+    {
+      "id": "pushup_hold_posture",
+      "variantId": "pushup_hold_foundation",
+      "kind": "posture",
+      "assetPath": "assets/images/pushup_hold_posture.png",
+      "accessibilityLabel": "Isometric Push-up Hold static posture illustration (placeholder)"
+    },
+    {
+      "id": "pushup_hold_anim",
+      "variantId": "pushup_hold_foundation",
+      "kind": "animation",
+      "assetPath": "assets/animations/pushup_hold.webp",
+      "accessibilityLabel": "Isometric Push-up Hold demonstration loop (placeholder)"
+    },
+    {
+      "id": "triceps_dip_posture",
+      "variantId": "triceps_dip_foundation",
+      "kind": "posture",
+      "assetPath": "assets/images/triceps_dip_posture.png",
+      "accessibilityLabel": "Triceps Dip Hold static posture illustration (placeholder)"
+    },
+    {
+      "id": "triceps_dip_anim",
+      "variantId": "triceps_dip_foundation",
+      "kind": "animation",
+      "assetPath": "assets/animations/triceps_dip.webp",
+      "accessibilityLabel": "Triceps Dip Hold demonstration loop (placeholder)"
+    },
+    {
+      "id": "reverse_plank_posture",
+      "variantId": "reverse_plank_foundation",
+      "kind": "posture",
+      "assetPath": "assets/images/reverse_plank_posture.png",
+      "accessibilityLabel": "Reverse Plank Hold static posture illustration (placeholder)"
+    },
+    {
+      "id": "reverse_plank_anim",
+      "variantId": "reverse_plank_foundation",
+      "kind": "animation",
+      "assetPath": "assets/animations/reverse_plank.webp",
+      "accessibilityLabel": "Reverse Plank Hold demonstration loop (placeholder)"
+    },
+    {
+      "id": "superman_posture",
+      "variantId": "superman_foundation",
+      "kind": "posture",
+      "assetPath": "assets/images/superman_posture.png",
+      "accessibilityLabel": "Prone Superman Hold static posture illustration (placeholder)"
+    },
+    {
+      "id": "superman_anim",
+      "variantId": "superman_foundation",
+      "kind": "animation",
+      "assetPath": "assets/animations/superman.webp",
+      "accessibilityLabel": "Prone Superman Hold demonstration loop (placeholder)"
+    },
+    {
+      "id": "pike_pushup_posture",
+      "variantId": "pike_pushup_foundation",
+      "kind": "posture",
+      "assetPath": "assets/images/pike_pushup_posture.png",
+      "accessibilityLabel": "Pike Push-up Hold static posture illustration (placeholder)"
+    },
+    {
+      "id": "pike_pushup_anim",
+      "variantId": "pike_pushup_foundation",
+      "kind": "animation",
+      "assetPath": "assets/animations/pike_pushup.webp",
+      "accessibilityLabel": "Pike Push-up Hold demonstration loop (placeholder)"
+    },
+    {
+      "id": "prone_w_posture",
+      "variantId": "prone_w_foundation",
+      "kind": "posture",
+      "assetPath": "assets/images/prone_w_posture.png",
+      "accessibilityLabel": "Prone W Hold static posture illustration (placeholder)"
+    },
+    {
+      "id": "prone_w_anim",
+      "variantId": "prone_w_foundation",
+      "kind": "animation",
+      "assetPath": "assets/animations/prone_w.webp",
+      "accessibilityLabel": "Prone W Hold demonstration loop (placeholder)"
+    }
+  ]
+}

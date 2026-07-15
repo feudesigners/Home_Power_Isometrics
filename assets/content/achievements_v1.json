@@ -1,0 +1,99 @@
+{
+  "version": 1,
+  "achievements": [
+    {
+      "id": "first_hold",
+      "name": "First Hold",
+      "description": "Complete your first timed hold."
+    },
+    {
+      "id": "first_complete_workout",
+      "name": "First Complete Workout",
+      "description": "Finish a full multi-exercise session."
+    },
+    {
+      "id": "foundation_week",
+      "name": "Foundation Week",
+      "description": "Complete your weekly foundation target."
+    },
+    {
+      "id": "core_control",
+      "name": "Core Control",
+      "description": "Complete a Core Control program session."
+    },
+    {
+      "id": "lower_body_stability",
+      "name": "Lower Body Stability",
+      "description": "Complete a Lower Body Stability session."
+    },
+    {
+      "id": "balanced_week",
+      "name": "Balanced Week",
+      "description": "Train all three categories in one week."
+    },
+    {
+      "id": "ten_workouts",
+      "name": "Ten Workouts",
+      "description": "Complete ten full sessions."
+    },
+    {
+      "id": "one_hour_holds",
+      "name": "One Hour of Controlled Holds",
+      "description": "Accumulate one hour of controlled hold time."
+    },
+    {
+      "id": "first_progression",
+      "name": "First Progression",
+      "description": "Accept a suitable progression suggestion."
+    },
+    {
+      "id": "welcome_back",
+      "name": "Welcome Back",
+      "description": "Return after a break of seven or more days."
+    }
+  ],
+  "challenges": [
+    {
+      "id": "first_workout",
+      "name": "First Workout",
+      "description": "Complete your first guided session.",
+      "targetCount": 1
+    },
+    {
+      "id": "three_sessions_week",
+      "name": "Three Sessions in One Week",
+      "description": "Train three times in a rolling seven-day window.",
+      "targetCount": 3
+    },
+    {
+      "id": "balanced_week",
+      "name": "Balanced Week",
+      "description": "Cover lower body, core, and upper/posterior work.",
+      "targetCount": 3
+    },
+    {
+      "id": "seven_day_starter",
+      "name": "Seven-Day Starter Quest",
+      "description": "Complete sessions across seven calendar days with grace days.",
+      "targetCount": 5
+    },
+    {
+      "id": "twenty_one_day_consistency",
+      "name": "Twenty-One Day Consistency",
+      "description": "Stay active across a three-week habit window.",
+      "targetCount": 12
+    },
+    {
+      "id": "progression_milestones",
+      "name": "Exercise Progression",
+      "description": "Accept three suitable progressions.",
+      "targetCount": 3
+    },
+    {
+      "id": "recovery_mobility",
+      "name": "Recovery and Mobility",
+      "description": "Complete warm-up and cooldown blocks.",
+      "targetCount": 3
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "version": 1,
+  "files": [
+    "exercises_v1.json",
+    "programs_v1.json",
+    "achievements_v1.json",
+    "avatars_v1.json"
+  ]
+}

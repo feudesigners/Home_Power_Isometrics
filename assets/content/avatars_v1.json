@@ -1,0 +1,82 @@
+{
+  "version": 1,
+  "avatars": [
+    {
+      "id": "pulse",
+      "name": "Pulse",
+      "description": "An energetic companion that keeps time with your breath.",
+      "statesJson": [
+        "idle",
+        "greeting",
+        "preparing",
+        "holding",
+        "encouraging",
+        "resting",
+        "celebrating",
+        "levelUp"
+      ]
+    },
+    {
+      "id": "nova",
+      "name": "Nova",
+      "description": "A calm stellar guide for steady strength.",
+      "statesJson": [
+        "idle",
+        "greeting",
+        "preparing",
+        "holding",
+        "encouraging",
+        "resting",
+        "celebrating",
+        "levelUp"
+      ]
+    },
+    {
+      "id": "atlas",
+      "name": "Atlas",
+      "description": "A sturdy robot ally for durable training days.",
+      "statesJson": [
+        "idle",
+        "greeting",
+        "preparing",
+        "holding",
+        "encouraging",
+        "resting",
+        "celebrating",
+        "levelUp"
+      ]
+    }
+  ],
+  "items": [
+    {
+      "id": "aura_mint",
+      "avatarId": null,
+      "kind": "aura",
+      "name": "Mint Aura"
+    },
+    {
+      "id": "aura_indigo",
+      "avatarId": null,
+      "kind": "aura",
+      "name": "Indigo Aura"
+    },
+    {
+      "id": "headband_grid",
+      "avatarId": null,
+      "kind": "headband",
+      "name": "Grid Headband"
+    },
+    {
+      "id": "color_coral",
+      "avatarId": null,
+      "kind": "colour",
+      "name": "Coral Accent"
+    },
+    {
+      "id": "room_plant",
+      "avatarId": null,
+      "kind": "decoration",
+      "name": "Training Plant"
+    }
+  ]
+}
