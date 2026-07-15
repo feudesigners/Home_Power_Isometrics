@@ -275,6 +275,10 @@ class WorkoutController extends ChangeNotifier {
   }
 
   Future<bool> useEasierVariant() async {
+    if (_machine.phase == WorkoutPhase.paused ||
+        _machine.phase == WorkoutPhase.interrupted) {
+      return false;
+    }
     final current = _machine.currentItem;
     final easierId = current?.easierVariantId;
     if (current == null || !current.isHold || easierId == null) return false;
@@ -295,6 +299,10 @@ class WorkoutController extends ChangeNotifier {
   }
 
   Future<void> skip() async {
+    if (_machine.phase == WorkoutPhase.paused ||
+        _machine.phase == WorkoutPhase.interrupted) {
+      return;
+    }
     if (_machine.currentItem?.isHold == true) {
       skippedHolds += 1;
       await _recordCurrentHold(HoldResult.skipped);
