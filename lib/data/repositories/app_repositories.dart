@@ -215,8 +215,14 @@ class AppRepositories {
         continue;
       }
       if (item.variantId == null) continue;
-      final v = await variantById(item.variantId!);
+      final baseVariantId = item.variantId!;
+      final acceptedVariantId =
+          await db.getMeta('progression_variant_$baseVariantId');
+      final v = await variantById(acceptedVariantId ?? baseVariantId);
       if (v == null) continue;
+      final acceptedHoldMs = int.tryParse(
+        await db.getMeta('progression_hold_${v.id}') ?? '',
+      );
       final cues = await formCuesFor(v.id);
       final media = await mediaById(v.staticAssetId);
       final animatedMedia = await mediaById(v.animatedAssetId);
@@ -225,7 +231,9 @@ class AppRepositories {
           variantId: v.id,
           exerciseId: v.exerciseId,
           displayName: v.displayName,
-          holdDuration: Duration(milliseconds: v.targetHoldMs),
+          holdDuration: Duration(
+            milliseconds: acceptedHoldMs ?? v.targetHoldMs,
+          ),
           setupDuration: Duration(milliseconds: v.setupDurationMs),
           restDuration: Duration(milliseconds: v.restDurationMs),
           unilateralMode: unilateralModeFromString(v.unilateralMode),
@@ -623,7 +631,7 @@ class AppRepositories {
 
     if (changed) await _recalcLevel();
     await _evaluateAchievements(sessionId);
-    await _evaluateChallenges(sessionId);
+    if (base > 0) await _evaluateChallenges(sessionId);
   }
 
   Future<void> _recalcLevel() async {
@@ -662,9 +670,13 @@ class AppRepositories {
       final v = await variantById(h.variantId);
       if (v != null) cats.add(v.categoryId);
     }
-    final totalHoldMs = holds
+    final completedHolds = holds
         .where((h) => h.result == HoldResult.completed.name)
-        .fold<int>(0, (a, h) => a + h.completedMs);
+        .toList();
+    final totalHoldMs = completedHolds.fold<int>(
+      0,
+      (a, h) => a + h.completedMs,
+    );
 
     DateTime? previous;
     for (final s in sessions) {
@@ -680,15 +692,30 @@ class AppRepositories {
     final newly = achievements.evaluate(
       AchievementContext(
         totalCompletedSessions: sessions.length,
-        totalHoldAttempts: holds.length,
+        totalHoldAttempts: completedHolds.length,
         totalControlledHoldMs: totalHoldMs,
         sessionsThisWeek: weekSessions.length,
+        weeklyTarget: (await profile()).weeklyWorkoutTarget,
         categoriesThisWeek: cats,
-        hadProgression: false,
+        hadProgression:
+            int.tryParse(await db.getMeta('accepted_progression_count') ?? '0') !=
+            0,
         daysSinceLastSession: daysSince,
         alreadyUnlocked: unlocked,
       ),
     );
+
+    final currentSession = sessions
+        .where((session) => session.id == sessionId)
+        .firstOrNull;
+    if (currentSession?.programId == 'core_control' &&
+        !unlocked.contains('core_control')) {
+      newly.add('core_control');
+    }
+    if (currentSession?.programId == 'lower_body_stability' &&
+        !unlocked.contains('lower_body_stability')) {
+      newly.add('lower_body_stability');
+    }
 
     for (final id in newly) {
       await db
@@ -780,13 +807,25 @@ class AppRepositories {
       if (!seen.add(attempt.variantId)) continue;
       final variant = await variantById(attempt.variantId);
       if (variant == null) continue;
+      final cutoff = (session.completedAt ?? session.startedAt).subtract(
+        const Duration(days: 28),
+      );
       final successes =
-          await (db.select(db.holdAttempts)..where(
-                (t) =>
-                    t.variantId.equals(attempt.variantId) &
-                    t.result.equals(HoldResult.completed.name),
-              ))
-              .get();
+          (await (db.select(db.holdAttempts)..where(
+                    (t) =>
+                        t.variantId.equals(attempt.variantId) &
+                        t.result.equals(HoldResult.completed.name),
+                  ))
+                  .get())
+              .where(
+                (row) =>
+                    !row.endedAt.isBefore(cutoff) &&
+                    !row.endedAt.isAfter(
+                      session.completedAt ?? DateTime.now(),
+                    ),
+              )
+              .toList()
+            ..sort((a, b) => b.endedAt.compareTo(a.endedAt));
       final recommendation = progression.recommend(
         ProgressionInput(
           variantId: variant.id,
@@ -798,7 +837,7 @@ class AppRepositories {
           painReported: session.painFlag || attempt.painFlag,
           formMaintained: attempt.result == HoldResult.completed.name,
           result: holdResultFromString(attempt.result),
-          recentSuccessfulCompletions: successes.length,
+          recentSuccessfulCompletions: successes.take(2).length,
           limitationTags: careTags,
           variantLimitationTags:
               (jsonDecode(variant.limitationTagsJson) as List).cast<String>(),
@@ -813,6 +852,87 @@ class AppRepositories {
       );
     }
     return suggestions;
+  }
+
+  Future<void> acceptProgression({
+    required String sessionId,
+    required ProgressionSuggestion suggestion,
+  }) async {
+    final recommendation = suggestion.recommendation;
+    if (recommendation.action == ProgressionAction.maintain) return;
+    final targetVariant = recommendation.suggestedVariantId;
+    if (targetVariant != null && await variantById(targetVariant) == null) {
+      throw const FormatException('Suggested variation is unavailable.');
+    }
+
+    await db.transaction(() async {
+      if (targetVariant != null) {
+        await db.setMeta(
+          'progression_variant_${suggestion.variantId}',
+          targetVariant,
+        );
+      }
+      if (recommendation.suggestedHoldMs != null) {
+        await db.setMeta(
+          'progression_hold_${suggestion.variantId}',
+          recommendation.suggestedHoldMs.toString(),
+        );
+      }
+      final current =
+          int.tryParse(await db.getMeta('accepted_progression_count') ?? '0') ??
+          0;
+      await db.setMeta('accepted_progression_count', '${current + 1}');
+
+      final eventId = 'xp_progression_${sessionId}_${suggestion.variantId}';
+      final existing = (await db.select(db.xpEvents).get())
+          .map((event) => event.id)
+          .toSet();
+      final amount = xpService.award(
+        existingEventIds: existing,
+        eventId: eventId,
+        amount: XpService.progressionAttemptBonus,
+        painReported: false,
+      );
+      if (amount > 0) {
+        await db.into(db.xpEvents).insert(
+          XpEventsCompanion.insert(
+            id: eventId,
+            sourceType: 'progression',
+            sourceId: suggestion.variantId,
+            amount: amount,
+          ),
+        );
+        await _recalcLevel();
+      }
+
+      final challenge = ChallengeEvaluator.definitions
+          .where((definition) => definition.id == 'progression_milestones')
+          .firstOrNull;
+      if (challenge != null) {
+        final existingProgress = await (db.select(
+          db.challengeProgress,
+        )..where(
+          (table) => table.challengeId.equals(challenge.id),
+        )).getSingleOrNull();
+        final next = challenges.apply(
+          def: challenge,
+          previousCount: existingProgress?.currentCount ?? 0,
+          alreadyCompleted: existingProgress?.completed ?? false,
+          increment: amount > 0 ? 1 : 0,
+        );
+        await db.into(db.challengeProgress).insertOnConflictUpdate(
+          ChallengeProgressCompanion.insert(
+            challengeId: challenge.id,
+            currentCount: Value(next.currentCount),
+            completed: Value(next.completed),
+            completedAt: next.completed
+                ? Value(DateTime.now())
+                : const Value.absent(),
+          ),
+        );
+      }
+      await _evaluateAchievements(sessionId);
+    });
   }
 
   Future<void> deleteAllUserData() async {
