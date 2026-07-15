@@ -299,8 +299,14 @@ class WorkoutController extends ChangeNotifier {
       skippedHolds += 1;
       await _recordCurrentHold(HoldResult.skipped);
     }
-    _machine.skipCurrent();
-    await _persistPhaseBoundary();
+    final completed = _machine.skipCurrent();
+    if (completed) {
+      await _finalizeSession();
+      await WakelockPlus.disable();
+      _uiTimer?.cancel();
+    } else {
+      await _persistPhaseBoundary();
+    }
     notifyListeners();
   }
 
