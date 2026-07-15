@@ -202,6 +202,14 @@ void main() {
 }
 
 Future<void> _seedTestContent(AppDatabase db) async {
+  await db.into(db.avatarDefinitions).insertOnConflictUpdate(
+    AvatarDefinitionsCompanion.insert(
+      id: 'pulse',
+      name: 'Pulse',
+      description: 'Test companion',
+      statesJson: '[]',
+    ),
+  );
   await db.into(db.exerciseCategories).insertOnConflictUpdate(
     ExerciseCategoriesCompanion.insert(
       id: 'C001',
