@@ -114,6 +114,9 @@ class _ProgramsTab extends ConsumerWidget {
                   final templates = await ref
                       .read(repositoriesProvider)
                       .templatesForProgram(p.id);
+                  final completedIds = await ref
+                      .read(repositoriesProvider)
+                      .completedTemplateIdsForProgram(p.id);
                   if (!context.mounted || templates.isEmpty) return;
                   templates.sort((a, b) => a.name.compareTo(b.name));
                   await showModalBottomSheet<void>(
@@ -132,12 +135,34 @@ class _ProgramsTab extends ConsumerWidget {
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            'Choose any scheduled session. Your accepted progressions are applied when the plan opens.',
+                            '${completedIds.length} of ${templates.length} scheduled sessions completed. Accepted progressions are applied when a plan opens.',
+                          ),
+                          const SizedBox(height: 8),
+                          FilledButton.tonalIcon(
+                            onPressed: () async {
+                              await ref
+                                  .read(repositoriesProvider)
+                                  .enrollProgram(p.id);
+                              if (!sheetContext.mounted) return;
+                              ScaffoldMessenger.of(sheetContext).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    '${p.name} is now your current program.',
+                                  ),
+                                ),
+                              );
+                            },
+                            icon: const Icon(Icons.flag_outlined),
+                            label: const Text('Use as current program'),
                           ),
                           const SizedBox(height: 12),
                           for (final template in templates)
                             ListTile(
-                              leading: const Icon(Icons.calendar_today_outlined),
+                              leading: Icon(
+                                completedIds.contains(template.id)
+                                    ? Icons.check_circle
+                                    : Icons.calendar_today_outlined,
+                              ),
                               title: Text(template.name),
                               subtitle: Text(
                                 '~${template.estimatedMinutes} minutes',
