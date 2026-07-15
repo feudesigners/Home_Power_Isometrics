@@ -261,6 +261,7 @@ class WorkoutController extends ChangeNotifier {
     } else {
       await _persistPhaseBoundary(paused: true);
     }
+    _uiTimer?.cancel();
     await WakelockPlus.disable();
     notifyListeners();
   }
