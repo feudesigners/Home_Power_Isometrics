@@ -1,10 +1,10 @@
 {
-  "version": 1,
+  "version": 2,
   "programs": [
     {
       "id": "quick_start",
       "name": "Quick Start",
-      "description": "About five minutes of accessible holds for habit formation.",
+      "description": "A repeatable short session for habit formation.",
       "weeks": 1,
       "sessionsPerWeek": 5,
       "estimatedMinutes": 5
@@ -15,7 +15,7 @@
       "description": "Four weeks, three sessions per week, balanced lower/core/upper work.",
       "weeks": 4,
       "sessionsPerWeek": 3,
-      "estimatedMinutes": 12
+      "estimatedMinutes": 6
     },
     {
       "id": "core_control",
@@ -23,7 +23,7 @@
       "description": "Progressive core and spinal stability with regressions.",
       "weeks": 3,
       "sessionsPerWeek": 3,
-      "estimatedMinutes": 10
+      "estimatedMinutes": 5
     },
     {
       "id": "lower_body_stability",
@@ -31,7 +31,7 @@
       "description": "Supported and progressive lower-body holds.",
       "weeks": 3,
       "sessionsPerWeek": 3,
-      "estimatedMinutes": 10
+      "estimatedMinutes": 5
     },
     {
       "id": "upper_body_posture",
@@ -39,7 +39,7 @@
       "description": "Balanced pressing, shoulder stability, and posterior-chain work.",
       "weeks": 3,
       "sessionsPerWeek": 3,
-      "estimatedMinutes": 10
+      "estimatedMinutes": 5
     }
   ],
   "programWeeks": [
@@ -136,8 +136,8 @@
       "id": "tpl_ffb_w1_a",
       "programId": "foundation_full_body",
       "programWeekId": "ffb_w1",
-      "name": "Foundation A",
-      "estimatedMinutes": 12,
+      "name": "Foundation Full Body · Week 1 · Session 1",
+      "estimatedMinutes": 6,
       "isQuickStart": false,
       "isDefaultRecommended": false
     },
@@ -145,35 +145,341 @@
       "id": "tpl_ffb_w1_b",
       "programId": "foundation_full_body",
       "programWeekId": "ffb_w1",
-      "name": "Foundation B",
-      "estimatedMinutes": 12,
+      "name": "Foundation Full Body · Week 1 · Session 2",
+      "estimatedMinutes": 5,
       "isQuickStart": false,
       "isDefaultRecommended": false
     },
     {
-      "id": "tpl_core_w1",
+      "id": "tpl_ffb_w1_c",
+      "programId": "foundation_full_body",
+      "programWeekId": "ffb_w1",
+      "name": "Foundation Full Body · Week 1 · Session 3",
+      "estimatedMinutes": 6,
+      "isQuickStart": false,
+      "isDefaultRecommended": false
+    },
+    {
+      "id": "tpl_ffb_w2_a",
+      "programId": "foundation_full_body",
+      "programWeekId": "ffb_w2",
+      "name": "Foundation Full Body · Week 2 · Session 1",
+      "estimatedMinutes": 6,
+      "isQuickStart": false,
+      "isDefaultRecommended": false
+    },
+    {
+      "id": "tpl_ffb_w2_b",
+      "programId": "foundation_full_body",
+      "programWeekId": "ffb_w2",
+      "name": "Foundation Full Body · Week 2 · Session 2",
+      "estimatedMinutes": 5,
+      "isQuickStart": false,
+      "isDefaultRecommended": false
+    },
+    {
+      "id": "tpl_ffb_w2_c",
+      "programId": "foundation_full_body",
+      "programWeekId": "ffb_w2",
+      "name": "Foundation Full Body · Week 2 · Session 3",
+      "estimatedMinutes": 6,
+      "isQuickStart": false,
+      "isDefaultRecommended": false
+    },
+    {
+      "id": "tpl_ffb_w3_a",
+      "programId": "foundation_full_body",
+      "programWeekId": "ffb_w3",
+      "name": "Foundation Full Body · Week 3 · Session 1",
+      "estimatedMinutes": 6,
+      "isQuickStart": false,
+      "isDefaultRecommended": false
+    },
+    {
+      "id": "tpl_ffb_w3_b",
+      "programId": "foundation_full_body",
+      "programWeekId": "ffb_w3",
+      "name": "Foundation Full Body · Week 3 · Session 2",
+      "estimatedMinutes": 5,
+      "isQuickStart": false,
+      "isDefaultRecommended": false
+    },
+    {
+      "id": "tpl_ffb_w3_c",
+      "programId": "foundation_full_body",
+      "programWeekId": "ffb_w3",
+      "name": "Foundation Full Body · Week 3 · Session 3",
+      "estimatedMinutes": 6,
+      "isQuickStart": false,
+      "isDefaultRecommended": false
+    },
+    {
+      "id": "tpl_ffb_w4_a",
+      "programId": "foundation_full_body",
+      "programWeekId": "ffb_w4",
+      "name": "Foundation Full Body · Week 4 · Session 1",
+      "estimatedMinutes": 6,
+      "isQuickStart": false,
+      "isDefaultRecommended": false
+    },
+    {
+      "id": "tpl_ffb_w4_b",
+      "programId": "foundation_full_body",
+      "programWeekId": "ffb_w4",
+      "name": "Foundation Full Body · Week 4 · Session 2",
+      "estimatedMinutes": 5,
+      "isQuickStart": false,
+      "isDefaultRecommended": false
+    },
+    {
+      "id": "tpl_ffb_w4_c",
+      "programId": "foundation_full_body",
+      "programWeekId": "ffb_w4",
+      "name": "Foundation Full Body · Week 4 · Session 3",
+      "estimatedMinutes": 6,
+      "isQuickStart": false,
+      "isDefaultRecommended": false
+    },
+    {
+      "id": "tpl_core_w1_a",
       "programId": "core_control",
       "programWeekId": "core_w1",
-      "name": "Core Control Intro",
-      "estimatedMinutes": 10,
+      "name": "Core Control · Week 1 · Session 1",
+      "estimatedMinutes": 5,
       "isQuickStart": false,
       "isDefaultRecommended": false
     },
     {
-      "id": "tpl_lower_w1",
+      "id": "tpl_core_w1_b",
+      "programId": "core_control",
+      "programWeekId": "core_w1",
+      "name": "Core Control · Week 1 · Session 2",
+      "estimatedMinutes": 5,
+      "isQuickStart": false,
+      "isDefaultRecommended": false
+    },
+    {
+      "id": "tpl_core_w1_c",
+      "programId": "core_control",
+      "programWeekId": "core_w1",
+      "name": "Core Control · Week 1 · Session 3",
+      "estimatedMinutes": 5,
+      "isQuickStart": false,
+      "isDefaultRecommended": false
+    },
+    {
+      "id": "tpl_core_w2_a",
+      "programId": "core_control",
+      "programWeekId": "core_w2",
+      "name": "Core Control · Week 2 · Session 1",
+      "estimatedMinutes": 5,
+      "isQuickStart": false,
+      "isDefaultRecommended": false
+    },
+    {
+      "id": "tpl_core_w2_b",
+      "programId": "core_control",
+      "programWeekId": "core_w2",
+      "name": "Core Control · Week 2 · Session 2",
+      "estimatedMinutes": 5,
+      "isQuickStart": false,
+      "isDefaultRecommended": false
+    },
+    {
+      "id": "tpl_core_w2_c",
+      "programId": "core_control",
+      "programWeekId": "core_w2",
+      "name": "Core Control · Week 2 · Session 3",
+      "estimatedMinutes": 5,
+      "isQuickStart": false,
+      "isDefaultRecommended": false
+    },
+    {
+      "id": "tpl_core_w3_a",
+      "programId": "core_control",
+      "programWeekId": "core_w3",
+      "name": "Core Control · Week 3 · Session 1",
+      "estimatedMinutes": 5,
+      "isQuickStart": false,
+      "isDefaultRecommended": false
+    },
+    {
+      "id": "tpl_core_w3_b",
+      "programId": "core_control",
+      "programWeekId": "core_w3",
+      "name": "Core Control · Week 3 · Session 2",
+      "estimatedMinutes": 5,
+      "isQuickStart": false,
+      "isDefaultRecommended": false
+    },
+    {
+      "id": "tpl_core_w3_c",
+      "programId": "core_control",
+      "programWeekId": "core_w3",
+      "name": "Core Control · Week 3 · Session 3",
+      "estimatedMinutes": 5,
+      "isQuickStart": false,
+      "isDefaultRecommended": false
+    },
+    {
+      "id": "tpl_lower_w1_a",
       "programId": "lower_body_stability",
       "programWeekId": "lower_w1",
-      "name": "Lower Stability Intro",
-      "estimatedMinutes": 10,
+      "name": "Lower Body Stability · Week 1 · Session 1",
+      "estimatedMinutes": 5,
       "isQuickStart": false,
       "isDefaultRecommended": false
     },
     {
-      "id": "tpl_upper_w1",
+      "id": "tpl_lower_w1_b",
+      "programId": "lower_body_stability",
+      "programWeekId": "lower_w1",
+      "name": "Lower Body Stability · Week 1 · Session 2",
+      "estimatedMinutes": 5,
+      "isQuickStart": false,
+      "isDefaultRecommended": false
+    },
+    {
+      "id": "tpl_lower_w1_c",
+      "programId": "lower_body_stability",
+      "programWeekId": "lower_w1",
+      "name": "Lower Body Stability · Week 1 · Session 3",
+      "estimatedMinutes": 5,
+      "isQuickStart": false,
+      "isDefaultRecommended": false
+    },
+    {
+      "id": "tpl_lower_w2_a",
+      "programId": "lower_body_stability",
+      "programWeekId": "lower_w2",
+      "name": "Lower Body Stability · Week 2 · Session 1",
+      "estimatedMinutes": 5,
+      "isQuickStart": false,
+      "isDefaultRecommended": false
+    },
+    {
+      "id": "tpl_lower_w2_b",
+      "programId": "lower_body_stability",
+      "programWeekId": "lower_w2",
+      "name": "Lower Body Stability · Week 2 · Session 2",
+      "estimatedMinutes": 5,
+      "isQuickStart": false,
+      "isDefaultRecommended": false
+    },
+    {
+      "id": "tpl_lower_w2_c",
+      "programId": "lower_body_stability",
+      "programWeekId": "lower_w2",
+      "name": "Lower Body Stability · Week 2 · Session 3",
+      "estimatedMinutes": 5,
+      "isQuickStart": false,
+      "isDefaultRecommended": false
+    },
+    {
+      "id": "tpl_lower_w3_a",
+      "programId": "lower_body_stability",
+      "programWeekId": "lower_w3",
+      "name": "Lower Body Stability · Week 3 · Session 1",
+      "estimatedMinutes": 5,
+      "isQuickStart": false,
+      "isDefaultRecommended": false
+    },
+    {
+      "id": "tpl_lower_w3_b",
+      "programId": "lower_body_stability",
+      "programWeekId": "lower_w3",
+      "name": "Lower Body Stability · Week 3 · Session 2",
+      "estimatedMinutes": 5,
+      "isQuickStart": false,
+      "isDefaultRecommended": false
+    },
+    {
+      "id": "tpl_lower_w3_c",
+      "programId": "lower_body_stability",
+      "programWeekId": "lower_w3",
+      "name": "Lower Body Stability · Week 3 · Session 3",
+      "estimatedMinutes": 5,
+      "isQuickStart": false,
+      "isDefaultRecommended": false
+    },
+    {
+      "id": "tpl_upper_w1_a",
       "programId": "upper_body_posture",
       "programWeekId": "upper_w1",
-      "name": "Upper Posture Intro",
-      "estimatedMinutes": 10,
+      "name": "Upper Body and Posture · Week 1 · Session 1",
+      "estimatedMinutes": 5,
+      "isQuickStart": false,
+      "isDefaultRecommended": false
+    },
+    {
+      "id": "tpl_upper_w1_b",
+      "programId": "upper_body_posture",
+      "programWeekId": "upper_w1",
+      "name": "Upper Body and Posture · Week 1 · Session 2",
+      "estimatedMinutes": 5,
+      "isQuickStart": false,
+      "isDefaultRecommended": false
+    },
+    {
+      "id": "tpl_upper_w1_c",
+      "programId": "upper_body_posture",
+      "programWeekId": "upper_w1",
+      "name": "Upper Body and Posture · Week 1 · Session 3",
+      "estimatedMinutes": 5,
+      "isQuickStart": false,
+      "isDefaultRecommended": false
+    },
+    {
+      "id": "tpl_upper_w2_a",
+      "programId": "upper_body_posture",
+      "programWeekId": "upper_w2",
+      "name": "Upper Body and Posture · Week 2 · Session 1",
+      "estimatedMinutes": 5,
+      "isQuickStart": false,
+      "isDefaultRecommended": false
+    },
+    {
+      "id": "tpl_upper_w2_b",
+      "programId": "upper_body_posture",
+      "programWeekId": "upper_w2",
+      "name": "Upper Body and Posture · Week 2 · Session 2",
+      "estimatedMinutes": 5,
+      "isQuickStart": false,
+      "isDefaultRecommended": false
+    },
+    {
+      "id": "tpl_upper_w2_c",
+      "programId": "upper_body_posture",
+      "programWeekId": "upper_w2",
+      "name": "Upper Body and Posture · Week 2 · Session 3",
+      "estimatedMinutes": 5,
+      "isQuickStart": false,
+      "isDefaultRecommended": false
+    },
+    {
+      "id": "tpl_upper_w3_a",
+      "programId": "upper_body_posture",
+      "programWeekId": "upper_w3",
+      "name": "Upper Body and Posture · Week 3 · Session 1",
+      "estimatedMinutes": 5,
+      "isQuickStart": false,
+      "isDefaultRecommended": false
+    },
+    {
+      "id": "tpl_upper_w3_b",
+      "programId": "upper_body_posture",
+      "programWeekId": "upper_w3",
+      "name": "Upper Body and Posture · Week 3 · Session 2",
+      "estimatedMinutes": 5,
+      "isQuickStart": false,
+      "isDefaultRecommended": false
+    },
+    {
+      "id": "tpl_upper_w3_c",
+      "programId": "upper_body_posture",
+      "programWeekId": "upper_w3",
+      "name": "Upper Body and Posture · Week 3 · Session 3",
+      "estimatedMinutes": 5,
       "isQuickStart": false,
       "isDefaultRecommended": false
     }
@@ -302,14 +608,6 @@
     {
       "templateId": "tpl_ffb_w1_b",
       "sortOrder": 1,
-      "variantId": "horse_stance_easier",
-      "itemType": "hold",
-      "label": "",
-      "durationMs": 0
-    },
-    {
-      "templateId": "tpl_ffb_w1_b",
-      "sortOrder": 2,
       "variantId": "calf_raise_easier",
       "itemType": "hold",
       "label": "",
@@ -317,7 +615,7 @@
     },
     {
       "templateId": "tpl_ffb_w1_b",
-      "sortOrder": 3,
+      "sortOrder": 2,
       "variantId": "side_plank_easier",
       "itemType": "hold",
       "label": "",
@@ -325,7 +623,7 @@
     },
     {
       "templateId": "tpl_ffb_w1_b",
-      "sortOrder": 4,
+      "sortOrder": 3,
       "variantId": "superman_easier",
       "itemType": "hold",
       "label": "",
@@ -333,8 +631,16 @@
     },
     {
       "templateId": "tpl_ffb_w1_b",
-      "sortOrder": 5,
+      "sortOrder": 4,
       "variantId": "pushup_hold_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_ffb_w1_b",
+      "sortOrder": 5,
+      "variantId": "horse_stance_easier",
       "itemType": "hold",
       "label": "",
       "durationMs": 0
@@ -348,7 +654,7 @@
       "durationMs": 60000
     },
     {
-      "templateId": "tpl_core_w1",
+      "templateId": "tpl_ffb_w1_c",
       "sortOrder": 0,
       "variantId": null,
       "itemType": "warmup",
@@ -356,7 +662,7 @@
       "durationMs": 60000
     },
     {
-      "templateId": "tpl_core_w1",
+      "templateId": "tpl_ffb_w1_c",
       "sortOrder": 1,
       "variantId": "forearm_plank_easier",
       "itemType": "hold",
@@ -364,39 +670,55 @@
       "durationMs": 0
     },
     {
-      "templateId": "tpl_core_w1",
+      "templateId": "tpl_ffb_w1_c",
       "sortOrder": 2,
-      "variantId": "side_plank_easier",
-      "itemType": "hold",
-      "label": "",
-      "durationMs": 0
-    },
-    {
-      "templateId": "tpl_core_w1",
-      "sortOrder": 3,
       "variantId": "bird_dog_easier",
       "itemType": "hold",
       "label": "",
       "durationMs": 0
     },
     {
-      "templateId": "tpl_core_w1",
-      "sortOrder": 4,
-      "variantId": "hollow_body_easier",
+      "templateId": "tpl_ffb_w1_c",
+      "sortOrder": 3,
+      "variantId": "reverse_plank_easier",
       "itemType": "hold",
       "label": "",
       "durationMs": 0
     },
     {
-      "templateId": "tpl_core_w1",
+      "templateId": "tpl_ffb_w1_c",
+      "sortOrder": 4,
+      "variantId": "prone_w_foundation",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_ffb_w1_c",
       "sortOrder": 5,
+      "variantId": "wall_sit_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_ffb_w1_c",
+      "sortOrder": 6,
+      "variantId": "glute_bridge_foundation",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_ffb_w1_c",
+      "sortOrder": 7,
       "variantId": null,
       "itemType": "cooldown",
       "label": "Easy mobility cooldown (cat-cow, open books, gentle walk)",
       "durationMs": 60000
     },
     {
-      "templateId": "tpl_lower_w1",
+      "templateId": "tpl_ffb_w2_a",
       "sortOrder": 0,
       "variantId": null,
       "itemType": "warmup",
@@ -404,7 +726,7 @@
       "durationMs": 60000
     },
     {
-      "templateId": "tpl_lower_w1",
+      "templateId": "tpl_ffb_w2_a",
       "sortOrder": 1,
       "variantId": "wall_sit_easier",
       "itemType": "hold",
@@ -412,39 +734,55 @@
       "durationMs": 0
     },
     {
-      "templateId": "tpl_lower_w1",
+      "templateId": "tpl_ffb_w2_a",
       "sortOrder": 2,
-      "variantId": "static_lunge_easier",
-      "itemType": "hold",
-      "label": "",
-      "durationMs": 0
-    },
-    {
-      "templateId": "tpl_lower_w1",
-      "sortOrder": 3,
       "variantId": "glute_bridge_foundation",
       "itemType": "hold",
       "label": "",
       "durationMs": 0
     },
     {
-      "templateId": "tpl_lower_w1",
-      "sortOrder": 4,
-      "variantId": "horse_stance_easier",
+      "templateId": "tpl_ffb_w2_a",
+      "sortOrder": 3,
+      "variantId": "forearm_plank_easier",
       "itemType": "hold",
       "label": "",
       "durationMs": 0
     },
     {
-      "templateId": "tpl_lower_w1",
+      "templateId": "tpl_ffb_w2_a",
+      "sortOrder": 4,
+      "variantId": "bird_dog_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_ffb_w2_a",
       "sortOrder": 5,
+      "variantId": "reverse_plank_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_ffb_w2_a",
+      "sortOrder": 6,
+      "variantId": "prone_w_foundation",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_ffb_w2_a",
+      "sortOrder": 7,
       "variantId": null,
       "itemType": "cooldown",
       "label": "Easy mobility cooldown (cat-cow, open books, gentle walk)",
       "durationMs": 60000
     },
     {
-      "templateId": "tpl_upper_w1",
+      "templateId": "tpl_ffb_w2_b",
       "sortOrder": 0,
       "variantId": null,
       "itemType": "warmup",
@@ -452,7 +790,1359 @@
       "durationMs": 60000
     },
     {
-      "templateId": "tpl_upper_w1",
+      "templateId": "tpl_ffb_w2_b",
+      "sortOrder": 1,
+      "variantId": "calf_raise_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_ffb_w2_b",
+      "sortOrder": 2,
+      "variantId": "side_plank_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_ffb_w2_b",
+      "sortOrder": 3,
+      "variantId": "superman_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_ffb_w2_b",
+      "sortOrder": 4,
+      "variantId": "pushup_hold_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_ffb_w2_b",
+      "sortOrder": 5,
+      "variantId": "horse_stance_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_ffb_w2_b",
+      "sortOrder": 6,
+      "variantId": null,
+      "itemType": "cooldown",
+      "label": "Easy mobility cooldown (cat-cow, open books, gentle walk)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_ffb_w2_c",
+      "sortOrder": 0,
+      "variantId": null,
+      "itemType": "warmup",
+      "label": "Dynamic warm-up (arm circles, hip hinges, marches)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_ffb_w2_c",
+      "sortOrder": 1,
+      "variantId": "forearm_plank_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_ffb_w2_c",
+      "sortOrder": 2,
+      "variantId": "bird_dog_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_ffb_w2_c",
+      "sortOrder": 3,
+      "variantId": "reverse_plank_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_ffb_w2_c",
+      "sortOrder": 4,
+      "variantId": "prone_w_foundation",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_ffb_w2_c",
+      "sortOrder": 5,
+      "variantId": "wall_sit_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_ffb_w2_c",
+      "sortOrder": 6,
+      "variantId": "glute_bridge_foundation",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_ffb_w2_c",
+      "sortOrder": 7,
+      "variantId": null,
+      "itemType": "cooldown",
+      "label": "Easy mobility cooldown (cat-cow, open books, gentle walk)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_ffb_w3_a",
+      "sortOrder": 0,
+      "variantId": null,
+      "itemType": "warmup",
+      "label": "Dynamic warm-up (arm circles, hip hinges, marches)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_ffb_w3_a",
+      "sortOrder": 1,
+      "variantId": "wall_sit_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_ffb_w3_a",
+      "sortOrder": 2,
+      "variantId": "glute_bridge_foundation",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_ffb_w3_a",
+      "sortOrder": 3,
+      "variantId": "forearm_plank_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_ffb_w3_a",
+      "sortOrder": 4,
+      "variantId": "bird_dog_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_ffb_w3_a",
+      "sortOrder": 5,
+      "variantId": "reverse_plank_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_ffb_w3_a",
+      "sortOrder": 6,
+      "variantId": "prone_w_foundation",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_ffb_w3_a",
+      "sortOrder": 7,
+      "variantId": null,
+      "itemType": "cooldown",
+      "label": "Easy mobility cooldown (cat-cow, open books, gentle walk)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_ffb_w3_b",
+      "sortOrder": 0,
+      "variantId": null,
+      "itemType": "warmup",
+      "label": "Dynamic warm-up (arm circles, hip hinges, marches)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_ffb_w3_b",
+      "sortOrder": 1,
+      "variantId": "calf_raise_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_ffb_w3_b",
+      "sortOrder": 2,
+      "variantId": "side_plank_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_ffb_w3_b",
+      "sortOrder": 3,
+      "variantId": "superman_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_ffb_w3_b",
+      "sortOrder": 4,
+      "variantId": "pushup_hold_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_ffb_w3_b",
+      "sortOrder": 5,
+      "variantId": "horse_stance_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_ffb_w3_b",
+      "sortOrder": 6,
+      "variantId": null,
+      "itemType": "cooldown",
+      "label": "Easy mobility cooldown (cat-cow, open books, gentle walk)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_ffb_w3_c",
+      "sortOrder": 0,
+      "variantId": null,
+      "itemType": "warmup",
+      "label": "Dynamic warm-up (arm circles, hip hinges, marches)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_ffb_w3_c",
+      "sortOrder": 1,
+      "variantId": "forearm_plank_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_ffb_w3_c",
+      "sortOrder": 2,
+      "variantId": "bird_dog_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_ffb_w3_c",
+      "sortOrder": 3,
+      "variantId": "reverse_plank_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_ffb_w3_c",
+      "sortOrder": 4,
+      "variantId": "prone_w_foundation",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_ffb_w3_c",
+      "sortOrder": 5,
+      "variantId": "wall_sit_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_ffb_w3_c",
+      "sortOrder": 6,
+      "variantId": "glute_bridge_foundation",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_ffb_w3_c",
+      "sortOrder": 7,
+      "variantId": null,
+      "itemType": "cooldown",
+      "label": "Easy mobility cooldown (cat-cow, open books, gentle walk)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_ffb_w4_a",
+      "sortOrder": 0,
+      "variantId": null,
+      "itemType": "warmup",
+      "label": "Dynamic warm-up (arm circles, hip hinges, marches)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_ffb_w4_a",
+      "sortOrder": 1,
+      "variantId": "wall_sit_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_ffb_w4_a",
+      "sortOrder": 2,
+      "variantId": "glute_bridge_foundation",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_ffb_w4_a",
+      "sortOrder": 3,
+      "variantId": "forearm_plank_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_ffb_w4_a",
+      "sortOrder": 4,
+      "variantId": "bird_dog_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_ffb_w4_a",
+      "sortOrder": 5,
+      "variantId": "reverse_plank_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_ffb_w4_a",
+      "sortOrder": 6,
+      "variantId": "prone_w_foundation",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_ffb_w4_a",
+      "sortOrder": 7,
+      "variantId": null,
+      "itemType": "cooldown",
+      "label": "Easy mobility cooldown (cat-cow, open books, gentle walk)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_ffb_w4_b",
+      "sortOrder": 0,
+      "variantId": null,
+      "itemType": "warmup",
+      "label": "Dynamic warm-up (arm circles, hip hinges, marches)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_ffb_w4_b",
+      "sortOrder": 1,
+      "variantId": "calf_raise_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_ffb_w4_b",
+      "sortOrder": 2,
+      "variantId": "side_plank_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_ffb_w4_b",
+      "sortOrder": 3,
+      "variantId": "superman_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_ffb_w4_b",
+      "sortOrder": 4,
+      "variantId": "pushup_hold_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_ffb_w4_b",
+      "sortOrder": 5,
+      "variantId": "horse_stance_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_ffb_w4_b",
+      "sortOrder": 6,
+      "variantId": null,
+      "itemType": "cooldown",
+      "label": "Easy mobility cooldown (cat-cow, open books, gentle walk)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_ffb_w4_c",
+      "sortOrder": 0,
+      "variantId": null,
+      "itemType": "warmup",
+      "label": "Dynamic warm-up (arm circles, hip hinges, marches)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_ffb_w4_c",
+      "sortOrder": 1,
+      "variantId": "forearm_plank_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_ffb_w4_c",
+      "sortOrder": 2,
+      "variantId": "bird_dog_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_ffb_w4_c",
+      "sortOrder": 3,
+      "variantId": "reverse_plank_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_ffb_w4_c",
+      "sortOrder": 4,
+      "variantId": "prone_w_foundation",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_ffb_w4_c",
+      "sortOrder": 5,
+      "variantId": "wall_sit_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_ffb_w4_c",
+      "sortOrder": 6,
+      "variantId": "glute_bridge_foundation",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_ffb_w4_c",
+      "sortOrder": 7,
+      "variantId": null,
+      "itemType": "cooldown",
+      "label": "Easy mobility cooldown (cat-cow, open books, gentle walk)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_core_w1_a",
+      "sortOrder": 0,
+      "variantId": null,
+      "itemType": "warmup",
+      "label": "Dynamic warm-up (arm circles, hip hinges, marches)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_core_w1_a",
+      "sortOrder": 1,
+      "variantId": "forearm_plank_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_core_w1_a",
+      "sortOrder": 2,
+      "variantId": "side_plank_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_core_w1_a",
+      "sortOrder": 3,
+      "variantId": "bird_dog_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_core_w1_a",
+      "sortOrder": 4,
+      "variantId": "hollow_body_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_core_w1_a",
+      "sortOrder": 5,
+      "variantId": null,
+      "itemType": "cooldown",
+      "label": "Easy mobility cooldown (cat-cow, open books, gentle walk)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_core_w1_b",
+      "sortOrder": 0,
+      "variantId": null,
+      "itemType": "warmup",
+      "label": "Dynamic warm-up (arm circles, hip hinges, marches)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_core_w1_b",
+      "sortOrder": 1,
+      "variantId": "side_plank_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_core_w1_b",
+      "sortOrder": 2,
+      "variantId": "bird_dog_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_core_w1_b",
+      "sortOrder": 3,
+      "variantId": "hollow_body_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_core_w1_b",
+      "sortOrder": 4,
+      "variantId": "forearm_plank_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_core_w1_b",
+      "sortOrder": 5,
+      "variantId": null,
+      "itemType": "cooldown",
+      "label": "Easy mobility cooldown (cat-cow, open books, gentle walk)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_core_w1_c",
+      "sortOrder": 0,
+      "variantId": null,
+      "itemType": "warmup",
+      "label": "Dynamic warm-up (arm circles, hip hinges, marches)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_core_w1_c",
+      "sortOrder": 1,
+      "variantId": "bird_dog_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_core_w1_c",
+      "sortOrder": 2,
+      "variantId": "hollow_body_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_core_w1_c",
+      "sortOrder": 3,
+      "variantId": "forearm_plank_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_core_w1_c",
+      "sortOrder": 4,
+      "variantId": "side_plank_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_core_w1_c",
+      "sortOrder": 5,
+      "variantId": null,
+      "itemType": "cooldown",
+      "label": "Easy mobility cooldown (cat-cow, open books, gentle walk)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_core_w2_a",
+      "sortOrder": 0,
+      "variantId": null,
+      "itemType": "warmup",
+      "label": "Dynamic warm-up (arm circles, hip hinges, marches)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_core_w2_a",
+      "sortOrder": 1,
+      "variantId": "forearm_plank_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_core_w2_a",
+      "sortOrder": 2,
+      "variantId": "side_plank_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_core_w2_a",
+      "sortOrder": 3,
+      "variantId": "bird_dog_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_core_w2_a",
+      "sortOrder": 4,
+      "variantId": "hollow_body_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_core_w2_a",
+      "sortOrder": 5,
+      "variantId": null,
+      "itemType": "cooldown",
+      "label": "Easy mobility cooldown (cat-cow, open books, gentle walk)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_core_w2_b",
+      "sortOrder": 0,
+      "variantId": null,
+      "itemType": "warmup",
+      "label": "Dynamic warm-up (arm circles, hip hinges, marches)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_core_w2_b",
+      "sortOrder": 1,
+      "variantId": "side_plank_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_core_w2_b",
+      "sortOrder": 2,
+      "variantId": "bird_dog_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_core_w2_b",
+      "sortOrder": 3,
+      "variantId": "hollow_body_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_core_w2_b",
+      "sortOrder": 4,
+      "variantId": "forearm_plank_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_core_w2_b",
+      "sortOrder": 5,
+      "variantId": null,
+      "itemType": "cooldown",
+      "label": "Easy mobility cooldown (cat-cow, open books, gentle walk)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_core_w2_c",
+      "sortOrder": 0,
+      "variantId": null,
+      "itemType": "warmup",
+      "label": "Dynamic warm-up (arm circles, hip hinges, marches)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_core_w2_c",
+      "sortOrder": 1,
+      "variantId": "bird_dog_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_core_w2_c",
+      "sortOrder": 2,
+      "variantId": "hollow_body_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_core_w2_c",
+      "sortOrder": 3,
+      "variantId": "forearm_plank_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_core_w2_c",
+      "sortOrder": 4,
+      "variantId": "side_plank_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_core_w2_c",
+      "sortOrder": 5,
+      "variantId": null,
+      "itemType": "cooldown",
+      "label": "Easy mobility cooldown (cat-cow, open books, gentle walk)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_core_w3_a",
+      "sortOrder": 0,
+      "variantId": null,
+      "itemType": "warmup",
+      "label": "Dynamic warm-up (arm circles, hip hinges, marches)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_core_w3_a",
+      "sortOrder": 1,
+      "variantId": "forearm_plank_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_core_w3_a",
+      "sortOrder": 2,
+      "variantId": "side_plank_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_core_w3_a",
+      "sortOrder": 3,
+      "variantId": "bird_dog_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_core_w3_a",
+      "sortOrder": 4,
+      "variantId": "hollow_body_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_core_w3_a",
+      "sortOrder": 5,
+      "variantId": null,
+      "itemType": "cooldown",
+      "label": "Easy mobility cooldown (cat-cow, open books, gentle walk)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_core_w3_b",
+      "sortOrder": 0,
+      "variantId": null,
+      "itemType": "warmup",
+      "label": "Dynamic warm-up (arm circles, hip hinges, marches)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_core_w3_b",
+      "sortOrder": 1,
+      "variantId": "side_plank_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_core_w3_b",
+      "sortOrder": 2,
+      "variantId": "bird_dog_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_core_w3_b",
+      "sortOrder": 3,
+      "variantId": "hollow_body_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_core_w3_b",
+      "sortOrder": 4,
+      "variantId": "forearm_plank_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_core_w3_b",
+      "sortOrder": 5,
+      "variantId": null,
+      "itemType": "cooldown",
+      "label": "Easy mobility cooldown (cat-cow, open books, gentle walk)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_core_w3_c",
+      "sortOrder": 0,
+      "variantId": null,
+      "itemType": "warmup",
+      "label": "Dynamic warm-up (arm circles, hip hinges, marches)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_core_w3_c",
+      "sortOrder": 1,
+      "variantId": "bird_dog_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_core_w3_c",
+      "sortOrder": 2,
+      "variantId": "hollow_body_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_core_w3_c",
+      "sortOrder": 3,
+      "variantId": "forearm_plank_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_core_w3_c",
+      "sortOrder": 4,
+      "variantId": "side_plank_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_core_w3_c",
+      "sortOrder": 5,
+      "variantId": null,
+      "itemType": "cooldown",
+      "label": "Easy mobility cooldown (cat-cow, open books, gentle walk)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_lower_w1_a",
+      "sortOrder": 0,
+      "variantId": null,
+      "itemType": "warmup",
+      "label": "Dynamic warm-up (arm circles, hip hinges, marches)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_lower_w1_a",
+      "sortOrder": 1,
+      "variantId": "wall_sit_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_lower_w1_a",
+      "sortOrder": 2,
+      "variantId": "static_lunge_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_lower_w1_a",
+      "sortOrder": 3,
+      "variantId": "glute_bridge_foundation",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_lower_w1_a",
+      "sortOrder": 4,
+      "variantId": "horse_stance_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_lower_w1_a",
+      "sortOrder": 5,
+      "variantId": null,
+      "itemType": "cooldown",
+      "label": "Easy mobility cooldown (cat-cow, open books, gentle walk)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_lower_w1_b",
+      "sortOrder": 0,
+      "variantId": null,
+      "itemType": "warmup",
+      "label": "Dynamic warm-up (arm circles, hip hinges, marches)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_lower_w1_b",
+      "sortOrder": 1,
+      "variantId": "static_lunge_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_lower_w1_b",
+      "sortOrder": 2,
+      "variantId": "glute_bridge_foundation",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_lower_w1_b",
+      "sortOrder": 3,
+      "variantId": "horse_stance_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_lower_w1_b",
+      "sortOrder": 4,
+      "variantId": "wall_sit_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_lower_w1_b",
+      "sortOrder": 5,
+      "variantId": null,
+      "itemType": "cooldown",
+      "label": "Easy mobility cooldown (cat-cow, open books, gentle walk)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_lower_w1_c",
+      "sortOrder": 0,
+      "variantId": null,
+      "itemType": "warmup",
+      "label": "Dynamic warm-up (arm circles, hip hinges, marches)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_lower_w1_c",
+      "sortOrder": 1,
+      "variantId": "glute_bridge_foundation",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_lower_w1_c",
+      "sortOrder": 2,
+      "variantId": "horse_stance_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_lower_w1_c",
+      "sortOrder": 3,
+      "variantId": "wall_sit_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_lower_w1_c",
+      "sortOrder": 4,
+      "variantId": "static_lunge_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_lower_w1_c",
+      "sortOrder": 5,
+      "variantId": null,
+      "itemType": "cooldown",
+      "label": "Easy mobility cooldown (cat-cow, open books, gentle walk)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_lower_w2_a",
+      "sortOrder": 0,
+      "variantId": null,
+      "itemType": "warmup",
+      "label": "Dynamic warm-up (arm circles, hip hinges, marches)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_lower_w2_a",
+      "sortOrder": 1,
+      "variantId": "wall_sit_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_lower_w2_a",
+      "sortOrder": 2,
+      "variantId": "static_lunge_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_lower_w2_a",
+      "sortOrder": 3,
+      "variantId": "glute_bridge_foundation",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_lower_w2_a",
+      "sortOrder": 4,
+      "variantId": "horse_stance_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_lower_w2_a",
+      "sortOrder": 5,
+      "variantId": null,
+      "itemType": "cooldown",
+      "label": "Easy mobility cooldown (cat-cow, open books, gentle walk)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_lower_w2_b",
+      "sortOrder": 0,
+      "variantId": null,
+      "itemType": "warmup",
+      "label": "Dynamic warm-up (arm circles, hip hinges, marches)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_lower_w2_b",
+      "sortOrder": 1,
+      "variantId": "static_lunge_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_lower_w2_b",
+      "sortOrder": 2,
+      "variantId": "glute_bridge_foundation",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_lower_w2_b",
+      "sortOrder": 3,
+      "variantId": "horse_stance_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_lower_w2_b",
+      "sortOrder": 4,
+      "variantId": "wall_sit_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_lower_w2_b",
+      "sortOrder": 5,
+      "variantId": null,
+      "itemType": "cooldown",
+      "label": "Easy mobility cooldown (cat-cow, open books, gentle walk)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_lower_w2_c",
+      "sortOrder": 0,
+      "variantId": null,
+      "itemType": "warmup",
+      "label": "Dynamic warm-up (arm circles, hip hinges, marches)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_lower_w2_c",
+      "sortOrder": 1,
+      "variantId": "glute_bridge_foundation",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_lower_w2_c",
+      "sortOrder": 2,
+      "variantId": "horse_stance_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_lower_w2_c",
+      "sortOrder": 3,
+      "variantId": "wall_sit_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_lower_w2_c",
+      "sortOrder": 4,
+      "variantId": "static_lunge_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_lower_w2_c",
+      "sortOrder": 5,
+      "variantId": null,
+      "itemType": "cooldown",
+      "label": "Easy mobility cooldown (cat-cow, open books, gentle walk)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_lower_w3_a",
+      "sortOrder": 0,
+      "variantId": null,
+      "itemType": "warmup",
+      "label": "Dynamic warm-up (arm circles, hip hinges, marches)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_lower_w3_a",
+      "sortOrder": 1,
+      "variantId": "wall_sit_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_lower_w3_a",
+      "sortOrder": 2,
+      "variantId": "static_lunge_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_lower_w3_a",
+      "sortOrder": 3,
+      "variantId": "glute_bridge_foundation",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_lower_w3_a",
+      "sortOrder": 4,
+      "variantId": "horse_stance_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_lower_w3_a",
+      "sortOrder": 5,
+      "variantId": null,
+      "itemType": "cooldown",
+      "label": "Easy mobility cooldown (cat-cow, open books, gentle walk)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_lower_w3_b",
+      "sortOrder": 0,
+      "variantId": null,
+      "itemType": "warmup",
+      "label": "Dynamic warm-up (arm circles, hip hinges, marches)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_lower_w3_b",
+      "sortOrder": 1,
+      "variantId": "static_lunge_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_lower_w3_b",
+      "sortOrder": 2,
+      "variantId": "glute_bridge_foundation",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_lower_w3_b",
+      "sortOrder": 3,
+      "variantId": "horse_stance_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_lower_w3_b",
+      "sortOrder": 4,
+      "variantId": "wall_sit_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_lower_w3_b",
+      "sortOrder": 5,
+      "variantId": null,
+      "itemType": "cooldown",
+      "label": "Easy mobility cooldown (cat-cow, open books, gentle walk)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_lower_w3_c",
+      "sortOrder": 0,
+      "variantId": null,
+      "itemType": "warmup",
+      "label": "Dynamic warm-up (arm circles, hip hinges, marches)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_lower_w3_c",
+      "sortOrder": 1,
+      "variantId": "glute_bridge_foundation",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_lower_w3_c",
+      "sortOrder": 2,
+      "variantId": "horse_stance_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_lower_w3_c",
+      "sortOrder": 3,
+      "variantId": "wall_sit_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_lower_w3_c",
+      "sortOrder": 4,
+      "variantId": "static_lunge_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_lower_w3_c",
+      "sortOrder": 5,
+      "variantId": null,
+      "itemType": "cooldown",
+      "label": "Easy mobility cooldown (cat-cow, open books, gentle walk)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_upper_w1_a",
+      "sortOrder": 0,
+      "variantId": null,
+      "itemType": "warmup",
+      "label": "Dynamic warm-up (arm circles, hip hinges, marches)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_upper_w1_a",
       "sortOrder": 1,
       "variantId": "pushup_hold_easier",
       "itemType": "hold",
@@ -460,7 +2150,7 @@
       "durationMs": 0
     },
     {
-      "templateId": "tpl_upper_w1",
+      "templateId": "tpl_upper_w1_a",
       "sortOrder": 2,
       "variantId": "reverse_plank_easier",
       "itemType": "hold",
@@ -468,7 +2158,7 @@
       "durationMs": 0
     },
     {
-      "templateId": "tpl_upper_w1",
+      "templateId": "tpl_upper_w1_a",
       "sortOrder": 3,
       "variantId": "prone_w_foundation",
       "itemType": "hold",
@@ -476,7 +2166,7 @@
       "durationMs": 0
     },
     {
-      "templateId": "tpl_upper_w1",
+      "templateId": "tpl_upper_w1_a",
       "sortOrder": 4,
       "variantId": "superman_easier",
       "itemType": "hold",
@@ -484,7 +2174,391 @@
       "durationMs": 0
     },
     {
-      "templateId": "tpl_upper_w1",
+      "templateId": "tpl_upper_w1_a",
+      "sortOrder": 5,
+      "variantId": null,
+      "itemType": "cooldown",
+      "label": "Easy mobility cooldown (cat-cow, open books, gentle walk)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_upper_w1_b",
+      "sortOrder": 0,
+      "variantId": null,
+      "itemType": "warmup",
+      "label": "Dynamic warm-up (arm circles, hip hinges, marches)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_upper_w1_b",
+      "sortOrder": 1,
+      "variantId": "reverse_plank_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_upper_w1_b",
+      "sortOrder": 2,
+      "variantId": "prone_w_foundation",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_upper_w1_b",
+      "sortOrder": 3,
+      "variantId": "superman_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_upper_w1_b",
+      "sortOrder": 4,
+      "variantId": "pushup_hold_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_upper_w1_b",
+      "sortOrder": 5,
+      "variantId": null,
+      "itemType": "cooldown",
+      "label": "Easy mobility cooldown (cat-cow, open books, gentle walk)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_upper_w1_c",
+      "sortOrder": 0,
+      "variantId": null,
+      "itemType": "warmup",
+      "label": "Dynamic warm-up (arm circles, hip hinges, marches)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_upper_w1_c",
+      "sortOrder": 1,
+      "variantId": "prone_w_foundation",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_upper_w1_c",
+      "sortOrder": 2,
+      "variantId": "superman_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_upper_w1_c",
+      "sortOrder": 3,
+      "variantId": "pushup_hold_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_upper_w1_c",
+      "sortOrder": 4,
+      "variantId": "reverse_plank_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_upper_w1_c",
+      "sortOrder": 5,
+      "variantId": null,
+      "itemType": "cooldown",
+      "label": "Easy mobility cooldown (cat-cow, open books, gentle walk)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_upper_w2_a",
+      "sortOrder": 0,
+      "variantId": null,
+      "itemType": "warmup",
+      "label": "Dynamic warm-up (arm circles, hip hinges, marches)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_upper_w2_a",
+      "sortOrder": 1,
+      "variantId": "pushup_hold_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_upper_w2_a",
+      "sortOrder": 2,
+      "variantId": "reverse_plank_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_upper_w2_a",
+      "sortOrder": 3,
+      "variantId": "prone_w_foundation",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_upper_w2_a",
+      "sortOrder": 4,
+      "variantId": "superman_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_upper_w2_a",
+      "sortOrder": 5,
+      "variantId": null,
+      "itemType": "cooldown",
+      "label": "Easy mobility cooldown (cat-cow, open books, gentle walk)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_upper_w2_b",
+      "sortOrder": 0,
+      "variantId": null,
+      "itemType": "warmup",
+      "label": "Dynamic warm-up (arm circles, hip hinges, marches)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_upper_w2_b",
+      "sortOrder": 1,
+      "variantId": "reverse_plank_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_upper_w2_b",
+      "sortOrder": 2,
+      "variantId": "prone_w_foundation",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_upper_w2_b",
+      "sortOrder": 3,
+      "variantId": "superman_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_upper_w2_b",
+      "sortOrder": 4,
+      "variantId": "pushup_hold_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_upper_w2_b",
+      "sortOrder": 5,
+      "variantId": null,
+      "itemType": "cooldown",
+      "label": "Easy mobility cooldown (cat-cow, open books, gentle walk)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_upper_w2_c",
+      "sortOrder": 0,
+      "variantId": null,
+      "itemType": "warmup",
+      "label": "Dynamic warm-up (arm circles, hip hinges, marches)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_upper_w2_c",
+      "sortOrder": 1,
+      "variantId": "prone_w_foundation",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_upper_w2_c",
+      "sortOrder": 2,
+      "variantId": "superman_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_upper_w2_c",
+      "sortOrder": 3,
+      "variantId": "pushup_hold_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_upper_w2_c",
+      "sortOrder": 4,
+      "variantId": "reverse_plank_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_upper_w2_c",
+      "sortOrder": 5,
+      "variantId": null,
+      "itemType": "cooldown",
+      "label": "Easy mobility cooldown (cat-cow, open books, gentle walk)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_upper_w3_a",
+      "sortOrder": 0,
+      "variantId": null,
+      "itemType": "warmup",
+      "label": "Dynamic warm-up (arm circles, hip hinges, marches)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_upper_w3_a",
+      "sortOrder": 1,
+      "variantId": "pushup_hold_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_upper_w3_a",
+      "sortOrder": 2,
+      "variantId": "reverse_plank_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_upper_w3_a",
+      "sortOrder": 3,
+      "variantId": "prone_w_foundation",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_upper_w3_a",
+      "sortOrder": 4,
+      "variantId": "superman_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_upper_w3_a",
+      "sortOrder": 5,
+      "variantId": null,
+      "itemType": "cooldown",
+      "label": "Easy mobility cooldown (cat-cow, open books, gentle walk)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_upper_w3_b",
+      "sortOrder": 0,
+      "variantId": null,
+      "itemType": "warmup",
+      "label": "Dynamic warm-up (arm circles, hip hinges, marches)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_upper_w3_b",
+      "sortOrder": 1,
+      "variantId": "reverse_plank_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_upper_w3_b",
+      "sortOrder": 2,
+      "variantId": "prone_w_foundation",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_upper_w3_b",
+      "sortOrder": 3,
+      "variantId": "superman_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_upper_w3_b",
+      "sortOrder": 4,
+      "variantId": "pushup_hold_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_upper_w3_b",
+      "sortOrder": 5,
+      "variantId": null,
+      "itemType": "cooldown",
+      "label": "Easy mobility cooldown (cat-cow, open books, gentle walk)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_upper_w3_c",
+      "sortOrder": 0,
+      "variantId": null,
+      "itemType": "warmup",
+      "label": "Dynamic warm-up (arm circles, hip hinges, marches)",
+      "durationMs": 60000
+    },
+    {
+      "templateId": "tpl_upper_w3_c",
+      "sortOrder": 1,
+      "variantId": "prone_w_foundation",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_upper_w3_c",
+      "sortOrder": 2,
+      "variantId": "superman_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_upper_w3_c",
+      "sortOrder": 3,
+      "variantId": "pushup_hold_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_upper_w3_c",
+      "sortOrder": 4,
+      "variantId": "reverse_plank_easier",
+      "itemType": "hold",
+      "label": "",
+      "durationMs": 0
+    },
+    {
+      "templateId": "tpl_upper_w3_c",
       "sortOrder": 5,
       "variantId": null,
       "itemType": "cooldown",
