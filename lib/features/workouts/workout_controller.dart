@@ -35,9 +35,19 @@ class WorkoutController extends ChangeNotifier {
   WorkoutStateMachine get machine => _machine;
   WorkoutPhase get phase => _machine.phase;
 
-  Future<void> startFromTemplate(String tplId, {String? progId}) async {
+  Future<void> startFromTemplate(
+    String tplId, {
+    String? progId,
+    Map<String, String> variantOverrides = const {},
+  }) async {
     final repos = _ref.read(repositoriesProvider);
     final plan = await repos.planFromTemplate(tplId);
+    for (var index = 0; index < plan.length; index++) {
+      final replacementId = variantOverrides[plan[index].variantId];
+      if (replacementId == null) continue;
+      final replacement = await repos.planForPractice(replacementId);
+      if (replacement.isNotEmpty) plan[index] = replacement.single;
+    }
     templateId = tplId;
     programId = progId;
     await _begin(plan, tplId);
