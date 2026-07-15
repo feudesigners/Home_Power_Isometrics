@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:collection/collection.dart';
 import 'package:drift/drift.dart';
 import 'package:uuid/uuid.dart';
 
