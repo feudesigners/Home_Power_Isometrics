@@ -192,6 +192,17 @@ class AppRepositories {
     )..where((t) => t.id.equals(id))).getSingleOrNull();
   }
 
+  Future<ExerciseVariant?> _resolvedVariantForPlan(String baseId) async {
+    var currentId = baseId;
+    final visited = <String>{};
+    for (var depth = 0; depth < 5 && visited.add(currentId); depth++) {
+      final next = await db.getMeta('progression_variant_$currentId');
+      if (next == null || next.isEmpty || visited.contains(next)) break;
+      currentId = next;
+    }
+    return variantById(currentId);
+  }
+
   Future<List<ExerciseVariant>> allVariants() =>
       db.select(db.exerciseVariants).get();
 
@@ -247,9 +258,7 @@ class AppRepositories {
       }
       if (item.variantId == null) continue;
       final baseVariantId = item.variantId!;
-      final acceptedVariantId =
-          await db.getMeta('progression_variant_$baseVariantId');
-      final v = await variantById(acceptedVariantId ?? baseVariantId);
+      final v = await _resolvedVariantForPlan(baseVariantId);
       if (v == null) continue;
       final acceptedHoldMs = int.tryParse(
         await db.getMeta('progression_hold_${v.id}') ?? '',
@@ -948,6 +957,17 @@ class AppRepositories {
 
     await db.transaction(() async {
       if (targetVariant != null) {
+        if (recommendation.action == ProgressionAction.regress) {
+          final mappings = await (db.select(db.metaEntries)..where(
+                (entry) => entry.key.like('progression_variant_%'),
+              ))
+              .get();
+          for (final mapping in mappings.where(
+            (entry) => entry.value == suggestion.variantId,
+          )) {
+            await db.setMeta(mapping.key, targetVariant);
+          }
+        }
         await db.setMeta(
           'progression_variant_${suggestion.variantId}',
           targetVariant,
