@@ -72,7 +72,9 @@ class WorkoutStateMachine {
     if (total.inMilliseconds <= 0) return 1;
     final rem = remaining(at);
     final done = total - rem;
-    return (done.inMilliseconds / total.inMilliseconds).clamp(0.0, 1.0);
+    return (done.inMilliseconds / total.inMilliseconds)
+        .clamp(0.0, 1.0)
+        .toDouble();
   }
 
   void start() {
