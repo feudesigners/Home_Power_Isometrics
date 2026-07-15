@@ -1003,6 +1003,20 @@ class AppRepositories {
       await db.delete(db.progressSnapshots).go();
       await db.delete(db.avatarUnlocks).go();
       await db.delete(db.healthCautionPreferences).go();
+      await (db.delete(db.metaEntries)..where(
+            (table) =>
+                table.key.like('progression_%') |
+                table.key.equals('accepted_progression_count'),
+          ))
+          .go();
+      final reminders = await db.select(db.reminderSchedules).get();
+      for (final reminder in reminders) {
+        await (db.update(
+          db.reminderSchedules,
+        )..where((table) => table.id.equals(reminder.id))).write(
+          const ReminderSchedulesCompanion(enabled: Value(false)),
+        );
+      }
       final levels = await db.select(db.userLevels).get();
       for (final l in levels) {
         await (db.update(db.userLevels)..where((t) => t.id.equals(l.id))).write(
