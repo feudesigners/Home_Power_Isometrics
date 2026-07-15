@@ -1,0 +1,5 @@
+Bundled fonts (OFL):
+- Bebas Neue (Google Fonts / Fontsource)
+- DM Sans (Google Fonts / Fontsource)
+- JetBrains Mono (JetBrains / Fontsource)
+See respective SIL Open Font License texts.

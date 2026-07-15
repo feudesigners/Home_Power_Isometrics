@@ -23,3 +23,4 @@ android/key.properties
 *.apk
 *.aab
 coverage/
+.tmp/
