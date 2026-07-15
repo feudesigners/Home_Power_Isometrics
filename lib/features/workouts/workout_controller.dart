@@ -157,7 +157,7 @@ class WorkoutController extends ChangeNotifier {
     final target = item.holdDuration.inMilliseconds;
     final completed = full
         ? target
-        : (target - lastRemaining.inMilliseconds).clamp(0, target);
+        : (target - lastRemaining.inMilliseconds).clamp(0, target).toInt();
     await _ref
         .read(repositoriesProvider)
         .recordHoldAttempt(
