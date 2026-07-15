@@ -136,6 +136,9 @@ class _WorkoutRunnerScreenState extends ConsumerState<WorkoutRunnerScreen>
     }
 
     final progress = machine.progressFraction(null);
+    final controlsPaused =
+        machine.phase == WorkoutPhase.paused ||
+        machine.phase == WorkoutPhase.interrupted;
     final sideLabel = switch (machine.currentSide) {
       HoldSide.left => 'Left side',
       HoldSide.right => 'Right side',
@@ -283,11 +286,12 @@ class _WorkoutRunnerScreenState extends ConsumerState<WorkoutRunnerScreen>
                       child: const Text('Pause'),
                     ),
                   OutlinedButton(
-                    onPressed: ctrl.skip,
+                    onPressed: controlsPaused ? null : ctrl.skip,
                     child: const Text('Skip'),
                   ),
                   OutlinedButton(
-                    onPressed: item?.easierVariantId == null
+                    onPressed:
+                        controlsPaused || item?.easierVariantId == null
                         ? null
                         : () async {
                             final changed = await ctrl.useEasierVariant();
