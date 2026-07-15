@@ -403,6 +403,7 @@ Future<void> _configureReminders(
   if (shouldSave != true || !context.mounted) return;
 
   final scheduler = ref.read(reminderSchedulerProvider);
+  final selectedDays = weekdays.toList()..sort();
   if (enabled) {
     final allowed = await scheduler.ensurePermission();
     if (!allowed) {
@@ -410,7 +411,7 @@ Future<void> _configureReminders(
     } else {
       await scheduler.scheduleWeekly(
         id: 100,
-        weekdays: weekdays.toList()..sort(),
+        weekdays: selectedDays,
         hour: time.hour,
         minute: time.minute,
         title: 'IsometriX',
@@ -421,7 +422,7 @@ Future<void> _configureReminders(
   if (!enabled) await scheduler.cancelAll();
   await repositories.saveReminderSchedule(
     enabled: enabled,
-    weekdays: weekdays.isEmpty ? const [1, 3, 5] : weekdays.toList()..sort(),
+    weekdays: selectedDays.isEmpty ? const [1, 3, 5] : selectedDays,
     hour: time.hour,
     minute: time.minute,
   );
