@@ -766,35 +766,80 @@ class AppRepositories {
   }
 
   Future<void> _evaluateChallenges(String sessionId) async {
-    final defs = ChallengeEvaluator.definitions;
-    for (final def in defs) {
+    final now = DateTime.now();
+    final completedSessions = await (db.select(
+      db.workoutSessions,
+    )..where((table) => table.status.equals(SessionStatus.completed.name))).get();
+    final weekCutoff = now.subtract(const Duration(days: 7));
+    final consistencyCutoff = now.subtract(const Duration(days: 21));
+    final weekSessions = completedSessions
+        .where((session) => !session.startedAt.isBefore(weekCutoff))
+        .toList();
+    String dayKey(DateTime value) =>
+        '${value.year}-${value.month}-${value.day}';
+    final starterDays = weekSessions
+        .map((session) => dayKey(session.startedAt))
+        .toSet()
+        .length;
+    final consistencyDays = completedSessions
+        .where((session) => !session.startedAt.isBefore(consistencyCutoff))
+        .map((session) => dayKey(session.startedAt))
+        .toSet()
+        .length;
+
+    final weekIds = weekSessions.map((session) => session.id).toSet();
+    final categories = <String>{};
+    for (final hold in await db.select(db.holdAttempts).get()) {
+      if (!weekIds.contains(hold.sessionId) ||
+          hold.result != HoldResult.completed.name) {
+        continue;
+      }
+      final variant = await variantById(hold.variantId);
+      if (variant != null) categories.add(variant.categoryId);
+    }
+
+    var mobilitySessions = 0;
+    for (final session in completedSessions) {
+      final templateId = session.templateId;
+      if (templateId == null) continue;
+      final items = await templateItems(templateId);
+      final types = items.map((item) => item.itemType).toSet();
+      if (types.contains('warmup') && types.contains('cooldown')) {
+        mobilitySessions += 1;
+      }
+    }
+    final progressionCount =
+        int.tryParse(await db.getMeta('accepted_progression_count') ?? '0') ??
+        0;
+
+    for (final definition in ChallengeEvaluator.definitions) {
+      final count = switch (definition.id) {
+        'first_workout' => completedSessions.length,
+        'three_sessions_week' => weekSessions.length,
+        'balanced_week' => categories.length,
+        'seven_day_starter' => starterDays,
+        'twenty_one_day_consistency' => consistencyDays,
+        'progression_milestones' => progressionCount,
+        'recovery_mobility' => mobilitySessions,
+        _ => 0,
+      };
       final existing = await (db.select(
         db.challengeProgress,
-      )..where((t) => t.challengeId.equals(def.id))).getSingleOrNull();
-      final snap = challenges.apply(
-        def: def,
-        previousCount: existing?.currentCount ?? 0,
-        alreadyCompleted: existing?.completed ?? false,
-        increment:
-            def.id == 'first_workout' ||
-                def.id == 'three_sessions_week' ||
-                def.id == 'seven_day_starter' ||
-                def.id == 'twenty_one_day_consistency'
-            ? 1
-            : 0,
+      )..where(
+        (table) => table.challengeId.equals(definition.id),
+      )).getSingleOrNull();
+      final completed = existing?.completed == true ||
+          count >= definition.targetCount;
+      await db.into(db.challengeProgress).insertOnConflictUpdate(
+        ChallengeProgressCompanion.insert(
+          challengeId: definition.id,
+          currentCount: Value(count.clamp(0, definition.targetCount)),
+          completed: Value(completed),
+          completedAt: completed
+              ? Value(existing?.completedAt ?? now)
+              : const Value.absent(),
+        ),
       );
-      await db
-          .into(db.challengeProgress)
-          .insertOnConflictUpdate(
-            ChallengeProgressCompanion.insert(
-              challengeId: def.id,
-              currentCount: Value(snap.currentCount),
-              completed: Value(snap.completed),
-              completedAt: snap.completed
-                  ? Value(DateTime.now())
-                  : const Value.absent(),
-            ),
-          );
     }
   }
 
