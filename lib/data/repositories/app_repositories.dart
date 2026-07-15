@@ -1002,8 +1002,17 @@ class AppRepositories {
   Future<Map<String, dynamic>> exportUserData() async {
     final p = await profile();
     final pref = await preferences();
-    final sessions = await db.select(db.workoutSessions).get();
-    final holds = await db.select(db.holdAttempts).get();
+    final sessions = (await db.select(db.workoutSessions).get())
+        .where(
+          (session) =>
+              session.status == SessionStatus.completed.name ||
+              session.status == SessionStatus.abandoned.name,
+        )
+        .toList();
+    final sessionIds = sessions.map((session) => session.id).toSet();
+    final holds = (await db.select(db.holdAttempts).get())
+        .where((hold) => sessionIds.contains(hold.sessionId))
+        .toList();
     final xp = await db.select(db.xpEvents).get();
     final ach = await db.select(db.achievementProgress).get();
     return {
@@ -1100,6 +1109,45 @@ class AppRepositories {
         .cast<Map<String, dynamic>>();
     final achievementRows = (data['achievements'] as List? ?? const [])
         .cast<Map<String, dynamic>>();
+
+    final importedSessionIds = sessions
+        .map((session) => session['id'] as String)
+        .toSet();
+    final knownSessionIds = {
+      ...(await db.select(db.workoutSessions).get()).map(
+        (session) => session.id,
+      ),
+      ...importedSessionIds,
+    };
+    final knownExercises = {
+      for (final exercise in await allExercises()) exercise.id: exercise,
+    };
+    final knownVariants = {
+      for (final variant in await allVariants()) variant.id: variant,
+    };
+    for (final hold in holds) {
+      final sessionId = hold['sessionId'] as String;
+      final exerciseId = hold['exerciseId'] as String;
+      final variantId = hold['variantId'] as String;
+      final variant = knownVariants[variantId];
+      if (!knownSessionIds.contains(sessionId)) {
+        throw FormatException(
+          'Hold attempt references unknown session $sessionId.',
+        );
+      }
+      if (!knownExercises.containsKey(exerciseId) ||
+          variant == null ||
+          variant.exerciseId != exerciseId) {
+        throw FormatException(
+          'Hold attempt references inconsistent exercise content.',
+        );
+      }
+    }
+    final selectedAvatar = profileData?['selectedAvatarId'];
+    if (selectedAvatar is String &&
+        !(await avatars()).any((avatar) => avatar.id == selectedAvatar)) {
+      throw const FormatException('Selected avatar is unavailable.');
+    }
 
     await db.transaction(() async {
       if (profileData != null) {
