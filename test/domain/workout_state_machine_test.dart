@@ -251,4 +251,22 @@ void main() {
     expect(machine.remaining(clock.now()), const Duration(seconds: 3));
   });
 
+
+  test('skipping the final item reports session completion', () {
+    machine.loadPlan([
+      const WorkoutPlanItem(
+        variantId: 'a',
+        exerciseId: 'E001',
+        displayName: 'A',
+        holdDuration: Duration(seconds: 5),
+        setupDuration: Duration(seconds: 1),
+        restDuration: Duration(seconds: 1),
+      ),
+    ]);
+    machine.start();
+
+    expect(machine.skipCurrent(), isTrue);
+    expect(machine.phase, WorkoutPhase.completed);
+  });
+
 }
