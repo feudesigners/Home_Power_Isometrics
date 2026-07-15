@@ -833,7 +833,9 @@ class AppRepositories {
       await db.into(db.challengeProgress).insertOnConflictUpdate(
         ChallengeProgressCompanion.insert(
           challengeId: definition.id,
-          currentCount: Value(count.clamp(0, definition.targetCount)),
+          currentCount: Value(
+            count.clamp(0, definition.targetCount).toInt(),
+          ),
           completed: Value(completed),
           completedAt: completed
               ? Value(existing?.completedAt ?? now)
@@ -984,32 +986,7 @@ class AppRepositories {
         await _recalcLevel();
       }
 
-      final challenge = ChallengeEvaluator.definitions
-          .where((definition) => definition.id == 'progression_milestones')
-          .firstOrNull;
-      if (challenge != null) {
-        final existingProgress = await (db.select(
-          db.challengeProgress,
-        )..where(
-          (table) => table.challengeId.equals(challenge.id),
-        )).getSingleOrNull();
-        final next = challenges.apply(
-          def: challenge,
-          previousCount: existingProgress?.currentCount ?? 0,
-          alreadyCompleted: existingProgress?.completed ?? false,
-          increment: amount > 0 ? 1 : 0,
-        );
-        await db.into(db.challengeProgress).insertOnConflictUpdate(
-          ChallengeProgressCompanion.insert(
-            challengeId: challenge.id,
-            currentCount: Value(next.currentCount),
-            completed: Value(next.completed),
-            completedAt: next.completed
-                ? Value(DateTime.now())
-                : const Value.absent(),
-          ),
-        );
-      }
+      await _evaluateChallenges(sessionId);
       await _evaluateAchievements(sessionId);
     });
   }
