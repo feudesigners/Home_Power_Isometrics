@@ -142,8 +142,36 @@ class _WorkoutRunnerScreenState extends ConsumerState<WorkoutRunnerScreen>
       HoldSide.none => 'Both / centered',
     };
 
-    return Scaffold(
-      body: SafeArea(
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, _) async {
+        if (didPop) return;
+        final leave = await showDialog<bool>(
+          context: context,
+          builder: (dialogContext) => AlertDialog(
+            title: const Text('Stop this workout?'),
+            content: const Text(
+              'Your completed holds remain in history, and this session will be marked partial.',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(dialogContext, false),
+                child: const Text('Keep training'),
+              ),
+              FilledButton(
+                onPressed: () => Navigator.pop(dialogContext, true),
+                child: const Text('Stop workout'),
+              ),
+            ],
+          ),
+        );
+        if (leave == true) {
+          await ctrl.stop();
+          if (context.mounted) context.go('/today');
+        }
+      },
+      child: Scaffold(
+        body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: Column(
@@ -305,6 +333,7 @@ class _WorkoutRunnerScreenState extends ConsumerState<WorkoutRunnerScreen>
               ),
             ],
           ),
+        ),
         ),
       ),
     );
