@@ -17,7 +17,7 @@ void main() {
   };
 
   Map<String, dynamic> payload({
-    List<Map<String, dynamic>> sessions = const [validSession],
+    List<Map<String, dynamic>>? sessions,
     List<Map<String, dynamic>> holds = const [],
   }) =>
       {
@@ -35,7 +35,8 @@ void main() {
           'hapticsEnabled': true,
           'reducedMotion': false,
         },
-        'sessions': sessions,
+        'sessions':
+            sessions ?? [Map<String, dynamic>.from(validSession)],
         'holdAttempts': holds,
         'xpEvents': <Map<String, dynamic>>[],
         'achievements': <Map<String, dynamic>>[],
