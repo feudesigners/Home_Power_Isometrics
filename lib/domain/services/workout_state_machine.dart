@@ -338,15 +338,6 @@ class WorkoutStateMachine {
     }
   }
 
-  void useEasierDuration(Duration easierHold) {
-    if (phase != WorkoutPhase.holding) return;
-    final rem = remaining(_clock.now());
-    final next = easierHold < rem ? easierHold : rem;
-    remainingWhenPaused = next;
-    phaseStartedAt = _clock.now();
-    deadlineAt = phaseStartedAt!.add(next);
-  }
-
   void _enterPhase(WorkoutPhase next, Duration duration) {
     phase = next;
     phaseStartedAt = _clock.now();
