@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:collection/collection.dart';
 import 'package:drift/drift.dart';
 import 'package:uuid/uuid.dart';
 
@@ -30,6 +31,36 @@ class AppRepositories {
 
   Future<UserPreference> preferences() async {
     return (await db.select(db.userPreferences).get()).first;
+  }
+
+  Future<ReminderSchedule> reminderSchedule() async {
+    return (await db.select(db.reminderSchedules).get()).first;
+  }
+
+  Future<void> saveReminderSchedule({
+    required bool enabled,
+    required List<int> weekdays,
+    required int hour,
+    required int minute,
+  }) async {
+    if (weekdays.any((day) => day < 1 || day > 7) ||
+        hour < 0 ||
+        hour > 23 ||
+        minute < 0 ||
+        minute > 59) {
+      throw const FormatException('Reminder schedule is invalid.');
+    }
+    final schedule = await reminderSchedule();
+    await (db.update(
+      db.reminderSchedules,
+    )..where((table) => table.id.equals(schedule.id))).write(
+      ReminderSchedulesCompanion(
+        enabled: Value(enabled),
+        weekdaysCsv: Value(weekdays.join(',')),
+        hour: Value(hour),
+        minute: Value(minute),
+      ),
+    );
   }
 
   Future<void> updateTheme(String theme) async {
@@ -135,10 +166,46 @@ class AppRepositories {
   }
 
   Future<WorkoutTemplate?> recommendedTemplate() async {
+    final enrolledProgramId = await db.getMeta('enrolled_program_id');
+    if (enrolledProgramId != null) {
+      final templates = await templatesForProgram(enrolledProgramId);
+      templates.sort((a, b) => a.name.compareTo(b.name));
+      final completedIds = await completedTemplateIdsForProgram(
+        enrolledProgramId,
+      );
+      for (final template in templates) {
+        if (!completedIds.contains(template.id)) return template;
+      }
+    }
     final rows = await (db.select(
       db.workoutTemplates,
     )..where((t) => t.isDefaultRecommended.equals(true))).get();
     return rows.isEmpty ? null : rows.first;
+  }
+
+  Future<void> enrollProgram(String programId) async {
+    final exists = await (db.select(
+      db.programs,
+    )..where((table) => table.id.equals(programId))).getSingleOrNull();
+    if (exists == null) {
+      throw const FormatException('Program is unavailable.');
+    }
+    await db.setMeta('enrolled_program_id', programId);
+  }
+
+  Future<Set<String>> completedTemplateIdsForProgram(
+    String programId,
+  ) async {
+    final sessions = await (db.select(db.workoutSessions)..where(
+          (table) =>
+              table.programId.equals(programId) &
+              table.status.equals(SessionStatus.completed.name),
+        ))
+        .get();
+    return sessions
+        .map((session) => session.templateId)
+        .whereType<String>()
+        .toSet();
   }
 
   Future<WorkoutTemplate?> quickStartTemplate() async {
@@ -159,6 +226,17 @@ class AppRepositories {
     return (db.select(
       db.exerciseVariants,
     )..where((t) => t.id.equals(id))).getSingleOrNull();
+  }
+
+  Future<ExerciseVariant?> _resolvedVariantForPlan(String baseId) async {
+    var currentId = baseId;
+    final visited = <String>{};
+    for (var depth = 0; depth < 5 && visited.add(currentId); depth++) {
+      final next = await db.getMeta('progression_variant_$currentId');
+      if (next == null || next.isEmpty || visited.contains(next)) break;
+      currentId = next;
+    }
+    return variantById(currentId);
   }
 
   Future<List<ExerciseVariant>> allVariants() =>
@@ -215,23 +293,35 @@ class AppRepositories {
         continue;
       }
       if (item.variantId == null) continue;
-      final v = await variantById(item.variantId!);
+      final baseVariantId = item.variantId!;
+      final v = await _resolvedVariantForPlan(baseVariantId);
       if (v == null) continue;
+      final acceptedHoldMs = int.tryParse(
+        await db.getMeta('progression_hold_${v.id}') ?? '',
+      );
       final cues = await formCuesFor(v.id);
       final media = await mediaById(v.staticAssetId);
+      final animatedMedia = await mediaById(v.animatedAssetId);
       plan.add(
         WorkoutPlanItem(
           variantId: v.id,
           exerciseId: v.exerciseId,
           displayName: v.displayName,
-          holdDuration: Duration(milliseconds: v.targetHoldMs),
+          holdDuration: Duration(
+            milliseconds: acceptedHoldMs ?? v.targetHoldMs,
+          ),
           setupDuration: Duration(milliseconds: v.setupDurationMs),
           restDuration: Duration(milliseconds: v.restDurationMs),
           unilateralMode: unilateralModeFromString(v.unilateralMode),
           formCues: cues.map((c) => c.cue).toList(),
           breathingCue: v.breathingCue,
           staticAssetPath: media?.assetPath,
+          animatedAssetPath: animatedMedia?.assetPath,
           mediaAccessibilityLabel: media?.accessibilityLabel,
+          animatedMediaAccessibilityLabel:
+              animatedMedia?.accessibilityLabel,
+          easierVariantId: v.easierVariantId,
+          harderVariantId: v.harderVariantId,
         ),
       );
     }
@@ -243,6 +333,7 @@ class AppRepositories {
     if (v == null) return const [];
     final cues = await formCuesFor(v.id);
     final media = await mediaById(v.staticAssetId);
+      final animatedMedia = await mediaById(v.animatedAssetId);
     return [
       WorkoutPlanItem(
         variantId: v.id,
@@ -255,7 +346,12 @@ class AppRepositories {
         formCues: cues.map((c) => c.cue).toList(),
         breathingCue: v.breathingCue,
         staticAssetPath: media?.assetPath,
-        mediaAccessibilityLabel: media?.accessibilityLabel,
+          animatedAssetPath: animatedMedia?.assetPath,
+          mediaAccessibilityLabel: media?.accessibilityLabel,
+          animatedMediaAccessibilityLabel:
+              animatedMedia?.accessibilityLabel,
+          easierVariantId: v.easierVariantId,
+          harderVariantId: v.harderVariantId,
       ),
     ];
   }
@@ -290,6 +386,20 @@ class AppRepositories {
     )..where((t) => t.id.equals(sessionId))).write(
       WorkoutSessionsCompanion(
         status: Value(SessionStatus.interrupted.name),
+        recoveryJson: Value(jsonEncode(snap)),
+      ),
+    );
+  }
+
+  Future<void> markSessionActive(
+    String sessionId,
+    Map<String, dynamic> snap,
+  ) async {
+    await (db.update(
+      db.workoutSessions,
+    )..where((table) => table.id.equals(sessionId))).write(
+      WorkoutSessionsCompanion(
+        status: Value(SessionStatus.active.name),
         recoveryJson: Value(jsonEncode(snap)),
       ),
     );
@@ -334,6 +444,7 @@ class AppRepositories {
     required int pauseMs,
     required HoldResult result,
     required bool painFlag,
+    DateTime? startedAt,
     int? effort,
   }) async {
     final id = _uuid.v4();
@@ -356,7 +467,9 @@ class AppRepositories {
             result: result.name,
             perceivedEffort: Value(effort),
             painFlag: Value(painFlag),
-            startedAt: now.subtract(Duration(milliseconds: completedMs)),
+            startedAt:
+                startedAt ??
+                now.subtract(Duration(milliseconds: completedMs)),
             endedAt: now,
           ),
         );
@@ -413,16 +526,21 @@ class AppRepositories {
     return row?.bestMs;
   }
 
-  Future<void> completeSession({
+  Future<void> finalizeSession({
     required String sessionId,
     required int actualDurationMs,
     required int completedCount,
     required int skippedCount,
-    required int? effort,
     required bool pain,
-    String? note,
   }) async {
     await db.transaction(() async {
+      final existing = await (db.select(
+        db.workoutSessions,
+      )..where((t) => t.id.equals(sessionId))).getSingleOrNull();
+      if (existing == null ||
+          existing.status == SessionStatus.completed.name) {
+        return;
+      }
       await (db.update(
         db.workoutSessions,
       )..where((t) => t.id.equals(sessionId))).write(
@@ -432,30 +550,102 @@ class AppRepositories {
           actualDurationMs: Value(actualDurationMs),
           completedExerciseCount: Value(completedCount),
           skippedExerciseCount: Value(skippedCount),
-          perceivedEffort: Value(effort),
           painFlag: Value(pain),
-          note: Value(note),
           recoveryJson: const Value(null),
         ),
       );
-
-      await db
-          .into(db.sessionFeedback)
-          .insert(
-            SessionFeedbackCompanion.insert(
-              sessionId: sessionId,
-              perceivedEffort: Value(effort),
-              painFlag: Value(pain),
-              note: Value(note),
-            ),
-          );
-
       await _awardCompletionRewards(
         sessionId: sessionId,
         pain: pain,
+        effort: null,
+      );
+    });
+  }
+
+  Future<void> saveSessionFeedback({
+    required String sessionId,
+    required int effort,
+    required bool pain,
+    String? note,
+  }) async {
+    if (effort < 1 || effort > 10) {
+      throw const FormatException('Effort must be between 1 and 10.');
+    }
+    await db.transaction(() async {
+      final session = await (db.select(
+        db.workoutSessions,
+      )..where((t) => t.id.equals(sessionId))).getSingleOrNull();
+      if (session == null ||
+          session.status != SessionStatus.completed.name) {
+        throw const FormatException(
+          'Feedback can only be saved for a completed session.',
+        );
+      }
+      await (db.update(
+        db.workoutSessions,
+      )..where((t) => t.id.equals(sessionId))).write(
+        WorkoutSessionsCompanion(
+          perceivedEffort: Value(effort),
+          painFlag: Value(pain || session.painFlag),
+          note: Value(note),
+        ),
+      );
+
+      final existing = await (db.select(
+        db.sessionFeedback,
+      )..where((t) => t.sessionId.equals(sessionId))).getSingleOrNull();
+      if (existing == null) {
+        await db.into(db.sessionFeedback).insert(
+          SessionFeedbackCompanion.insert(
+            sessionId: sessionId,
+            perceivedEffort: Value(effort),
+            painFlag: Value(pain || session.painFlag),
+            note: Value(note),
+          ),
+        );
+      } else {
+        await (db.update(
+          db.sessionFeedback,
+        )..where((t) => t.id.equals(existing.id))).write(
+          SessionFeedbackCompanion(
+            perceivedEffort: Value(effort),
+            painFlag: Value(pain || session.painFlag),
+            note: Value(note),
+          ),
+        );
+      }
+      await _awardCompletionRewards(
+        sessionId: sessionId,
+        pain: pain || session.painFlag,
         effort: effort,
       );
     });
+  }
+
+  Future<void> completeSession({
+    required String sessionId,
+    required int actualDurationMs,
+    required int completedCount,
+    required int skippedCount,
+    required int? effort,
+    required bool pain,
+    String? note,
+  }) async {
+    await finalizeSession(
+      sessionId: sessionId,
+      actualDurationMs: actualDurationMs,
+      completedCount: completedCount,
+      skippedCount: skippedCount,
+      pain: pain,
+    );
+    if (effort != null) {
+      await saveSessionFeedback(
+        sessionId: sessionId,
+        effort: effort,
+        pain: pain,
+        note: note,
+      );
+    }
   }
 
   Future<void> abandonSession(String sessionId, {bool partial = true}) async {
@@ -489,50 +679,52 @@ class AppRepositories {
     final existingXp = (await db.select(db.xpEvents).get())
         .map((e) => e.id)
         .toSet();
+    var changed = false;
+
     final xpId = 'xp_session_$sessionId';
-    final granted = xpService.award(
+    final base = xpService.award(
       existingEventIds: existingXp,
       eventId: xpId,
       amount: XpService.sessionCompleteBase,
-      painReported: pain,
+      painReported: false,
     );
-    if (granted > 0) {
-      await db
-          .into(db.xpEvents)
-          .insert(
-            XpEventsCompanion.insert(
-              id: xpId,
-              sourceType: 'session',
-              sourceId: sessionId,
-              amount: granted,
-            ),
-          );
-      if (effort != null) {
-        final fbId = 'xp_feedback_$sessionId';
-        final fb = xpService.award(
-          existingEventIds: {...existingXp, xpId},
-          eventId: fbId,
-          amount: XpService.feedbackBonus,
-          painReported: pain,
-        );
-        if (fb > 0) {
-          await db
-              .into(db.xpEvents)
-              .insert(
-                XpEventsCompanion.insert(
-                  id: fbId,
-                  sourceType: 'feedback',
-                  sourceId: sessionId,
-                  amount: fb,
-                ),
-              );
-        }
-      }
-      await _recalcLevel();
+    if (base > 0) {
+      await db.into(db.xpEvents).insert(
+        XpEventsCompanion.insert(
+          id: xpId,
+          sourceType: 'session',
+          sourceId: sessionId,
+          amount: base,
+        ),
+      );
+      existingXp.add(xpId);
+      changed = true;
     }
 
+    if (effort != null) {
+      final feedbackId = 'xp_feedback_$sessionId';
+      final bonus = xpService.award(
+        existingEventIds: existingXp,
+        eventId: feedbackId,
+        amount: XpService.feedbackBonus,
+        painReported: pain,
+      );
+      if (bonus > 0) {
+        await db.into(db.xpEvents).insert(
+          XpEventsCompanion.insert(
+            id: feedbackId,
+            sourceType: 'feedback',
+            sourceId: sessionId,
+            amount: bonus,
+          ),
+        );
+        changed = true;
+      }
+    }
+
+    if (changed) await _recalcLevel();
     await _evaluateAchievements(sessionId);
-    await _evaluateChallenges(sessionId);
+    if (base > 0) await _evaluateChallenges(sessionId);
   }
 
   Future<void> _recalcLevel() async {
@@ -571,9 +763,13 @@ class AppRepositories {
       final v = await variantById(h.variantId);
       if (v != null) cats.add(v.categoryId);
     }
-    final totalHoldMs = holds
+    final completedHolds = holds
         .where((h) => h.result == HoldResult.completed.name)
-        .fold<int>(0, (a, h) => a + h.completedMs);
+        .toList();
+    final totalHoldMs = completedHolds.fold<int>(
+      0,
+      (a, h) => a + h.completedMs,
+    );
 
     DateTime? previous;
     for (final s in sessions) {
@@ -589,15 +785,30 @@ class AppRepositories {
     final newly = achievements.evaluate(
       AchievementContext(
         totalCompletedSessions: sessions.length,
-        totalHoldAttempts: holds.length,
+        totalHoldAttempts: completedHolds.length,
         totalControlledHoldMs: totalHoldMs,
         sessionsThisWeek: weekSessions.length,
+        weeklyTarget: (await profile()).weeklyWorkoutTarget,
         categoriesThisWeek: cats,
-        hadProgression: false,
+        hadProgression:
+            int.tryParse(await db.getMeta('accepted_progression_count') ?? '0') !=
+            0,
         daysSinceLastSession: daysSince,
         alreadyUnlocked: unlocked,
       ),
     );
+
+    final currentSession = sessions
+        .where((session) => session.id == sessionId)
+        .firstOrNull;
+    if (currentSession?.programId == 'core_control' &&
+        !unlocked.contains('core_control')) {
+      newly.add('core_control');
+    }
+    if (currentSession?.programId == 'lower_body_stability' &&
+        !unlocked.contains('lower_body_stability')) {
+      newly.add('lower_body_stability');
+    }
 
     for (final id in newly) {
       await db
@@ -614,35 +825,82 @@ class AppRepositories {
   }
 
   Future<void> _evaluateChallenges(String sessionId) async {
-    final defs = ChallengeEvaluator.definitions;
-    for (final def in defs) {
+    final now = DateTime.now();
+    final completedSessions = await (db.select(
+      db.workoutSessions,
+    )..where((table) => table.status.equals(SessionStatus.completed.name))).get();
+    final weekCutoff = now.subtract(const Duration(days: 7));
+    final consistencyCutoff = now.subtract(const Duration(days: 21));
+    final weekSessions = completedSessions
+        .where((session) => !session.startedAt.isBefore(weekCutoff))
+        .toList();
+    String dayKey(DateTime value) =>
+        '${value.year}-${value.month}-${value.day}';
+    final starterDays = weekSessions
+        .map((session) => dayKey(session.startedAt))
+        .toSet()
+        .length;
+    final consistencyDays = completedSessions
+        .where((session) => !session.startedAt.isBefore(consistencyCutoff))
+        .map((session) => dayKey(session.startedAt))
+        .toSet()
+        .length;
+
+    final weekIds = weekSessions.map((session) => session.id).toSet();
+    final categories = <String>{};
+    for (final hold in await db.select(db.holdAttempts).get()) {
+      if (!weekIds.contains(hold.sessionId) ||
+          hold.result != HoldResult.completed.name) {
+        continue;
+      }
+      final variant = await variantById(hold.variantId);
+      if (variant != null) categories.add(variant.categoryId);
+    }
+
+    var mobilitySessions = 0;
+    for (final session in completedSessions) {
+      final templateId = session.templateId;
+      if (templateId == null) continue;
+      final items = await templateItems(templateId);
+      final types = items.map((item) => item.itemType).toSet();
+      if (types.contains('warmup') && types.contains('cooldown')) {
+        mobilitySessions += 1;
+      }
+    }
+    final progressionCount =
+        int.tryParse(await db.getMeta('accepted_progression_count') ?? '0') ??
+        0;
+
+    for (final definition in ChallengeEvaluator.definitions) {
+      final count = switch (definition.id) {
+        'first_workout' => completedSessions.length,
+        'three_sessions_week' => weekSessions.length,
+        'balanced_week' => categories.length,
+        'seven_day_starter' => starterDays,
+        'twenty_one_day_consistency' => consistencyDays,
+        'progression_milestones' => progressionCount,
+        'recovery_mobility' => mobilitySessions,
+        _ => 0,
+      };
       final existing = await (db.select(
         db.challengeProgress,
-      )..where((t) => t.challengeId.equals(def.id))).getSingleOrNull();
-      final snap = challenges.apply(
-        def: def,
-        previousCount: existing?.currentCount ?? 0,
-        alreadyCompleted: existing?.completed ?? false,
-        increment:
-            def.id == 'first_workout' ||
-                def.id == 'three_sessions_week' ||
-                def.id == 'seven_day_starter' ||
-                def.id == 'twenty_one_day_consistency'
-            ? 1
-            : 0,
+      )..where(
+        (table) => table.challengeId.equals(definition.id),
+      )).getSingleOrNull();
+      final completed = existing?.completed == true ||
+          count >= definition.targetCount;
+      await db.into(db.challengeProgress).insertOnConflictUpdate(
+        ChallengeProgressCompanion.insert(
+          challengeId: definition.id,
+          currentCount: Value(
+            count.clamp(0, definition.targetCount).toInt(),
+          ),
+          completed: Value(completed),
+          completedAt: completed
+              ? Value(existing?.completedAt ?? now)
+              : const Value.absent(),
+        ),
       );
-      await db
-          .into(db.challengeProgress)
-          .insertOnConflictUpdate(
-            ChallengeProgressCompanion.insert(
-              challengeId: def.id,
-              currentCount: Value(snap.currentCount),
-              completed: Value(snap.completed),
-              completedAt: snap.completed
-                  ? Value(DateTime.now())
-                  : const Value.absent(),
-            ),
-          );
     }
   }
 
@@ -689,13 +947,25 @@ class AppRepositories {
       if (!seen.add(attempt.variantId)) continue;
       final variant = await variantById(attempt.variantId);
       if (variant == null) continue;
+      final cutoff = (session.completedAt ?? session.startedAt).subtract(
+        const Duration(days: 28),
+      );
       final successes =
-          await (db.select(db.holdAttempts)..where(
-                (t) =>
-                    t.variantId.equals(attempt.variantId) &
-                    t.result.equals(HoldResult.completed.name),
-              ))
-              .get();
+          (await (db.select(db.holdAttempts)..where(
+                    (t) =>
+                        t.variantId.equals(attempt.variantId) &
+                        t.result.equals(HoldResult.completed.name),
+                  ))
+                  .get())
+              .where(
+                (row) =>
+                    !row.endedAt.isBefore(cutoff) &&
+                    !row.endedAt.isAfter(
+                      session.completedAt ?? DateTime.now(),
+                    ),
+              )
+              .toList()
+            ..sort((a, b) => b.endedAt.compareTo(a.endedAt));
       final recommendation = progression.recommend(
         ProgressionInput(
           variantId: variant.id,
@@ -707,7 +977,7 @@ class AppRepositories {
           painReported: session.painFlag || attempt.painFlag,
           formMaintained: attempt.result == HoldResult.completed.name,
           result: holdResultFromString(attempt.result),
-          recentSuccessfulCompletions: successes.length,
+          recentSuccessfulCompletions: successes.take(2).length,
           limitationTags: careTags,
           variantLimitationTags:
               (jsonDecode(variant.limitationTagsJson) as List).cast<String>(),
@@ -724,6 +994,73 @@ class AppRepositories {
     return suggestions;
   }
 
+  Future<void> acceptProgression({
+    required String sessionId,
+    required ProgressionSuggestion suggestion,
+  }) async {
+    final recommendation = suggestion.recommendation;
+    if (recommendation.action == ProgressionAction.maintain) return;
+    final targetVariant = recommendation.suggestedVariantId;
+    if (targetVariant != null && await variantById(targetVariant) == null) {
+      throw const FormatException('Suggested variation is unavailable.');
+    }
+
+    await db.transaction(() async {
+      if (targetVariant != null) {
+        if (recommendation.action == ProgressionAction.regress) {
+          final mappings = await (db.select(db.metaEntries)..where(
+                (entry) => entry.key.like('progression_variant_%'),
+              ))
+              .get();
+          for (final mapping in mappings.where(
+            (entry) => entry.value == suggestion.variantId,
+          )) {
+            await db.setMeta(mapping.key, targetVariant);
+          }
+        }
+        await db.setMeta(
+          'progression_variant_${suggestion.variantId}',
+          targetVariant,
+        );
+      }
+      if (recommendation.suggestedHoldMs != null) {
+        await db.setMeta(
+          'progression_hold_${suggestion.variantId}',
+          recommendation.suggestedHoldMs.toString(),
+        );
+      }
+      final current =
+          int.tryParse(await db.getMeta('accepted_progression_count') ?? '0') ??
+          0;
+      await db.setMeta('accepted_progression_count', '${current + 1}');
+
+      final eventId = 'xp_progression_${sessionId}_${suggestion.variantId}';
+      final existing = (await db.select(db.xpEvents).get())
+          .map((event) => event.id)
+          .toSet();
+      final amount = xpService.award(
+        existingEventIds: existing,
+        eventId: eventId,
+        amount: XpService.progressionAttemptBonus,
+        painReported: false,
+      );
+      if (amount > 0) {
+        await db.into(db.xpEvents).insert(
+          XpEventsCompanion.insert(
+            id: eventId,
+            sourceType: 'progression',
+            sourceId: suggestion.variantId,
+            amount: amount,
+          ),
+        );
+        await _recalcLevel();
+      }
+
+      await _evaluateChallenges(sessionId);
+      await _evaluateAchievements(sessionId);
+    });
+  }
+
   Future<void> deleteAllUserData() async {
     await db.transaction(() async {
       await db.delete(db.holdAttempts).go();
@@ -736,6 +1073,21 @@ class AppRepositories {
       await db.delete(db.progressSnapshots).go();
       await db.delete(db.avatarUnlocks).go();
       await db.delete(db.healthCautionPreferences).go();
+      await (db.delete(db.metaEntries)..where(
+            (table) =>
+                table.key.like('progression_%') |
+                table.key.equals('accepted_progression_count') |
+                table.key.equals('enrolled_program_id'),
+          ))
+          .go();
+      final reminders = await db.select(db.reminderSchedules).get();
+      for (final reminder in reminders) {
+        await (db.update(
+          db.reminderSchedules,
+        )..where((table) => table.id.equals(reminder.id))).write(
+          const ReminderSchedulesCompanion(enabled: Value(false)),
+        );
+      }
       final levels = await db.select(db.userLevels).get();
       for (final l in levels) {
         await (db.update(db.userLevels)..where((t) => t.id.equals(l.id))).write(
@@ -760,8 +1112,17 @@ class AppRepositories {
   Future<Map<String, dynamic>> exportUserData() async {
     final p = await profile();
     final pref = await preferences();
-    final sessions = await db.select(db.workoutSessions).get();
-    final holds = await db.select(db.holdAttempts).get();
+    final sessions = (await db.select(db.workoutSessions).get())
+        .where(
+          (session) =>
+              session.status == SessionStatus.completed.name ||
+              session.status == SessionStatus.abandoned.name,
+        )
+        .toList();
+    final sessionIds = sessions.map((session) => session.id).toSet();
+    final holds = (await db.select(db.holdAttempts).get())
+        .where((hold) => sessionIds.contains(hold.sessionId))
+        .toList();
     final xp = await db.select(db.xpEvents).get();
     final ach = await db.select(db.achievementProgress).get();
     return {
@@ -858,6 +1219,45 @@ class AppRepositories {
         .cast<Map<String, dynamic>>();
     final achievementRows = (data['achievements'] as List? ?? const [])
         .cast<Map<String, dynamic>>();
+
+    final importedSessionIds = sessions
+        .map((session) => session['id'] as String)
+        .toSet();
+    final knownSessionIds = {
+      ...(await db.select(db.workoutSessions).get()).map(
+        (session) => session.id,
+      ),
+      ...importedSessionIds,
+    };
+    final knownExercises = {
+      for (final exercise in await allExercises()) exercise.id: exercise,
+    };
+    final knownVariants = {
+      for (final variant in await allVariants()) variant.id: variant,
+    };
+    for (final hold in holds) {
+      final sessionId = hold['sessionId'] as String;
+      final exerciseId = hold['exerciseId'] as String;
+      final variantId = hold['variantId'] as String;
+      final variant = knownVariants[variantId];
+      if (!knownSessionIds.contains(sessionId)) {
+        throw FormatException(
+          'Hold attempt references unknown session $sessionId.',
+        );
+      }
+      if (!knownExercises.containsKey(exerciseId) ||
+          variant == null ||
+          variant.exerciseId != exerciseId) {
+        throw FormatException(
+          'Hold attempt references inconsistent exercise content.',
+        );
+      }
+    }
+    final selectedAvatar = profileData?['selectedAvatarId'];
+    if (selectedAvatar is String &&
+        !(await avatars()).any((avatar) => avatar.id == selectedAvatar)) {
+      throw const FormatException('Selected avatar is unavailable.');
+    }
 
     await db.transaction(() async {
       if (profileData != null) {

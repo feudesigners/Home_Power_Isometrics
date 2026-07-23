@@ -29,13 +29,27 @@ class WorkoutController extends ChangeNotifier {
   bool awaitingResumeConfirm = false;
   static const _recovery = SessionRecoveryService();
   int? _lastCountdownCue;
+  bool _tickInFlight = false;
+  bool _sessionFinalized = false;
+  DateTime? _holdStartedAt;
+  Duration _pausedAtHoldStart = Duration.zero;
 
   WorkoutStateMachine get machine => _machine;
   WorkoutPhase get phase => _machine.phase;
 
-  Future<void> startFromTemplate(String tplId, {String? progId}) async {
+  Future<void> startFromTemplate(
+    String tplId, {
+    String? progId,
+    Map<String, String> variantOverrides = const {},
+  }) async {
     final repos = _ref.read(repositoriesProvider);
     final plan = await repos.planFromTemplate(tplId);
+    for (var index = 0; index < plan.length; index++) {
+      final replacementId = variantOverrides[plan[index].variantId];
+      if (replacementId == null) continue;
+      final replacement = await repos.planForPractice(replacementId);
+      if (replacement.isNotEmpty) plan[index] = replacement.single;
+    }
     templateId = tplId;
     programId = progId;
     await _begin(plan, tplId);
@@ -53,15 +67,11 @@ class WorkoutController extends ChangeNotifier {
     painDuringSession = false;
     completedHolds = 0;
     skippedHolds = 0;
+    _sessionFinalized = false;
+    _holdStartedAt = null;
+    _pausedAtHoldStart = Duration.zero;
     _machine.loadPlan(plan);
-    final plannedMs = plan.fold<int>(
-      0,
-      (a, i) =>
-          a +
-          i.setupDuration.inMilliseconds +
-          i.holdDuration.inMilliseconds +
-          i.restDuration.inMilliseconds,
-    );
+    final plannedMs = plannedWorkoutDurationMs(plan);
     sessionId = await _ref
         .read(repositoriesProvider)
         .startSession(
@@ -88,41 +98,55 @@ class WorkoutController extends ChangeNotifier {
   }
 
   Future<void> _onTick() async {
-    final before = _machine.phase;
-    final result = _machine.evaluate();
-    lastRemaining = result.remaining;
-
-    if (_machine.phase == WorkoutPhase.holding) {
-      final seconds =
-          result.remaining.inSeconds +
-          (result.remaining.inMilliseconds.remainder(1000) > 0 ? 1 : 0);
-      if (seconds >= 1 && seconds <= 3 && seconds != _lastCountdownCue) {
-        _lastCountdownCue = seconds;
-        await _playCountdownCue(seconds);
+    if (_tickInFlight) return;
+    _tickInFlight = true;
+    try {
+      final before = _machine.phase;
+      final result = _machine.evaluate();
+      lastRemaining = result.remaining;
+      if (before != WorkoutPhase.holding &&
+          result.phase == WorkoutPhase.holding) {
+        _holdStartedAt = _ref.read(appClockProvider).now();
+        _pausedAtHoldStart = _machine.pausedAccumulated;
       }
-    }
 
-    if (result.holdCompletedFully) {
-      final completedItem = _machine.currentItem;
-      if (completedItem?.isHold == true) {
-        completedHolds += 1;
-        await _recordCurrentHold(
-          HoldResult.completed,
-          full: true,
-          side: result.holdCompletedSide,
-        );
+      if (_machine.phase == WorkoutPhase.holding) {
+        final seconds =
+            result.remaining.inSeconds +
+            (result.remaining.inMilliseconds.remainder(1000) > 0 ? 1 : 0);
+        if (seconds >= 1 && seconds <= 3 && seconds != _lastCountdownCue) {
+          _lastCountdownCue = seconds;
+          await _playCountdownCue(seconds);
+        }
       }
+
+      if (result.holdCompletedFully) {
+        final completedItem = _machine.currentItem;
+        if (completedItem?.isHold == true) {
+          completedHolds += 1;
+          await _recordCurrentHold(
+            HoldResult.completed,
+            full: true,
+            side: result.holdCompletedSide,
+          );
+        }
+      }
+      if (result.sessionCompleted) {
+        await _finalizeSession();
+        await WakelockPlus.disable();
+        _uiTimer?.cancel();
+      }
+      if (before != result.phase || result.phaseCompleted != null) {
+        _lastCountdownCue = null;
+        await _playPhaseCue(result.phase);
+        if (!result.sessionCompleted) {
+          await _persistPhaseBoundary();
+        }
+      }
+      notifyListeners();
+    } finally {
+      _tickInFlight = false;
     }
-    if (result.sessionCompleted) {
-      await WakelockPlus.disable();
-      _uiTimer?.cancel();
-    }
-    if (before != result.phase || result.phaseCompleted != null) {
-      _lastCountdownCue = null;
-      await _playPhaseCue(result.phase);
-      await _persistPhaseBoundary();
-    }
-    notifyListeners();
   }
 
   Future<void> _recordCurrentHold(
@@ -136,7 +160,7 @@ class WorkoutController extends ChangeNotifier {
     final target = item.holdDuration.inMilliseconds;
     final completed = full
         ? target
-        : (target - lastRemaining.inMilliseconds).clamp(0, target);
+        : (target - lastRemaining.inMilliseconds).clamp(0, target).toInt();
     await _ref
         .read(repositoriesProvider)
         .recordHoldAttempt(
@@ -149,9 +173,12 @@ class WorkoutController extends ChangeNotifier {
           completedMs: completed,
           preparationMs: item.setupDuration.inMilliseconds,
           restMs: item.restDuration.inMilliseconds,
-          pauseMs: _machine.pausedAccumulated.inMilliseconds,
+          pauseMs:
+              (_machine.pausedAccumulated - _pausedAtHoldStart)
+                  .inMilliseconds,
           result: result,
           painFlag: painDuringSession,
+          startedAt: _holdStartedAt,
         );
   }
 
@@ -159,12 +186,16 @@ class WorkoutController extends ChangeNotifier {
     'sessionId': sessionId,
     'templateId': templateId,
     'programId': programId,
+    'sessionStartedAt': sessionStartedAt?.toIso8601String(),
+    'holdStartedAt': _holdStartedAt?.toIso8601String(),
+    'pausedAtHoldStartMs': _pausedAtHoldStart.inMilliseconds,
     'phase': _machine.phase.name,
     'phaseBeforePause': _machine.phaseBeforePause?.name,
     'phaseStartedAt': _machine.phaseStartedAt?.toIso8601String(),
     'deadlineAt': _machine.deadlineAt?.toIso8601String(),
     'remainingWhenPausedMs': _machine.remainingWhenPaused.inMilliseconds,
     'pausedAccumulatedMs': _machine.pausedAccumulated.inMilliseconds,
+    'pauseStartedAt': _machine.pauseStartedAt?.toIso8601String(),
     'currentItemIndex': _machine.currentItemIndex,
     'currentSet': _machine.currentSet,
     'currentSide': _machine.currentSide.name,
@@ -181,21 +212,33 @@ class WorkoutController extends ChangeNotifier {
             'holdMs': i.holdDuration.inMilliseconds,
             'setupMs': i.setupDuration.inMilliseconds,
             'restMs': i.restDuration.inMilliseconds,
+            'sideSwitchMs': i.sideSwitchDuration.inMilliseconds,
+            'sets': i.sets,
             'unilateralMode': i.unilateralMode.name,
             'formCues': i.formCues,
             'breathingCue': i.breathingCue,
             'kind': i.kind.name,
             'staticAssetPath': i.staticAssetPath,
+            'animatedAssetPath': i.animatedAssetPath,
             'mediaAccessibilityLabel': i.mediaAccessibilityLabel,
+            'animatedMediaAccessibilityLabel':
+                i.animatedMediaAccessibilityLabel,
+            'easierVariantId': i.easierVariantId,
+            'harderVariantId': i.harderVariantId,
           },
         )
         .toList(),
   };
 
-  Future<void> _persistPhaseBoundary() async {
+  Future<void> _persistPhaseBoundary({bool paused = false}) async {
     final sid = sessionId;
-    if (sid == null) return;
-    await _ref.read(repositoriesProvider).markSessionPaused(sid, snapshot());
+    if (sid == null || _sessionFinalized) return;
+    final repositories = _ref.read(repositoriesProvider);
+    if (paused) {
+      await repositories.markSessionPaused(sid, snapshot());
+    } else {
+      await repositories.markSessionActive(sid, snapshot());
+    }
   }
 
   Future<void> _playPhaseCue(WorkoutPhase phase) async {
@@ -223,8 +266,9 @@ class WorkoutController extends ChangeNotifier {
         await _ref.read(repositoriesProvider).persistRecovery(sid, snapshot());
       }
     } else {
-      await _persistPhaseBoundary();
+      await _persistPhaseBoundary(paused: true);
     }
+    _uiTimer?.cancel();
     await WakelockPlus.disable();
     notifyListeners();
   }
@@ -238,13 +282,47 @@ class WorkoutController extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<bool> useEasierVariant() async {
+    if (_machine.phase == WorkoutPhase.paused ||
+        _machine.phase == WorkoutPhase.interrupted) {
+      return false;
+    }
+    final current = _machine.currentItem;
+    final easierId = current?.easierVariantId;
+    if (current == null || !current.isHold || easierId == null) return false;
+    if (_machine.phase == WorkoutPhase.holding) {
+      await _recordCurrentHold(HoldResult.partial);
+    }
+    final easierPlan = await _ref
+        .read(repositoriesProvider)
+        .planForPractice(easierId);
+    if (easierPlan.isEmpty) return false;
+    _machine.replaceCurrentItem(easierPlan.single);
+    lastRemaining = _machine.remaining(null);
+    _lastCountdownCue = null;
+    await _playPhaseCue(_machine.phase);
+    await _persistPhaseBoundary();
+    notifyListeners();
+    return true;
+  }
+
   Future<void> skip() async {
+    if (_machine.phase == WorkoutPhase.paused ||
+        _machine.phase == WorkoutPhase.interrupted) {
+      return;
+    }
     if (_machine.currentItem?.isHold == true) {
       skippedHolds += 1;
       await _recordCurrentHold(HoldResult.skipped);
     }
-    _machine.skipCurrent();
-    await _persistPhaseBoundary();
+    final completed = _machine.skipCurrent();
+    if (completed) {
+      await _finalizeSession();
+      await WakelockPlus.disable();
+      _uiTimer?.cancel();
+    } else {
+      await _persistPhaseBoundary();
+    }
     notifyListeners();
   }
 
@@ -265,6 +343,23 @@ class WorkoutController extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> _finalizeSession() async {
+    final sid = sessionId;
+    if (sid == null || _sessionFinalized) return;
+    final now = _ref.read(appClockProvider).now();
+    final started = sessionStartedAt ?? now;
+    final elapsed = now.difference(started) - _machine.pausedAccumulated;
+    final actual = elapsed.isNegative ? 0 : elapsed.inMilliseconds;
+    await _ref.read(repositoriesProvider).finalizeSession(
+      sessionId: sid,
+      actualDurationMs: actual,
+      completedCount: completedHolds,
+      skippedCount: skippedHolds,
+      pain: painDuringSession,
+    );
+    _sessionFinalized = true;
+  }
+
   Future<void> submitFeedback({
     required int effort,
     required bool pain,
@@ -272,20 +367,13 @@ class WorkoutController extends ChangeNotifier {
   }) async {
     final sid = sessionId;
     if (sid == null) return;
-    final now = _ref.read(appClockProvider).now();
-    final started = sessionStartedAt ?? now;
-    final actual = now.difference(started).inMilliseconds;
-    await _ref
-        .read(repositoriesProvider)
-        .completeSession(
-          sessionId: sid,
-          actualDurationMs: actual,
-          completedCount: completedHolds,
-          skippedCount: skippedHolds,
-          effort: effort,
-          pain: pain || painDuringSession,
-          note: note,
-        );
+    await _finalizeSession();
+    await _ref.read(repositoriesProvider).saveSessionFeedback(
+      sessionId: sid,
+      effort: effort,
+      pain: pain || painDuringSession,
+      note: note,
+    );
   }
 
   Future<bool> tryRestoreInterrupted() async {
@@ -309,6 +397,10 @@ class WorkoutController extends ChangeNotifier {
             holdDuration: Duration(milliseconds: i['holdMs'] as int),
             setupDuration: Duration(milliseconds: i['setupMs'] as int),
             restDuration: Duration(milliseconds: i['restMs'] as int),
+            sideSwitchDuration: Duration(
+              milliseconds: i['sideSwitchMs'] as int? ?? 5000,
+            ),
+            sets: i['sets'] as int? ?? 1,
             unilateralMode: unilateralModeFromString(
               i['unilateralMode'] as String? ?? 'none',
             ),
@@ -319,7 +411,12 @@ class WorkoutController extends ChangeNotifier {
               orElse: () => WorkoutItemKind.hold,
             ),
             staticAssetPath: i['staticAssetPath'] as String?,
+            animatedAssetPath: i['animatedAssetPath'] as String?,
             mediaAccessibilityLabel: i['mediaAccessibilityLabel'] as String?,
+            animatedMediaAccessibilityLabel:
+                i['animatedMediaAccessibilityLabel'] as String?,
+            easierVariantId: i['easierVariantId'] as String?,
+            harderVariantId: i['harderVariantId'] as String?,
           ),
         )
         .toList();
@@ -327,6 +424,16 @@ class WorkoutController extends ChangeNotifier {
     sessionId = session.id;
     templateId = map['templateId'] as String?;
     programId = map['programId'] as String?;
+    sessionStartedAt = map['sessionStartedAt'] != null
+        ? DateTime.parse(map['sessionStartedAt'] as String)
+        : session.startedAt;
+    _sessionFinalized = false;
+    _holdStartedAt = map['holdStartedAt'] != null
+        ? DateTime.parse(map['holdStartedAt'] as String)
+        : null;
+    _pausedAtHoldStart = Duration(
+      milliseconds: map['pausedAtHoldStartMs'] as int? ?? 0,
+    );
     completedHolds = map['completedHolds'] as int? ?? 0;
     skippedHolds = map['skippedHolds'] as int? ?? 0;
     painDuringSession = map['painDuringSession'] as bool? ?? false;
@@ -345,6 +452,9 @@ class WorkoutController extends ChangeNotifier {
       pausedAccumulated: Duration(
         milliseconds: map['pausedAccumulatedMs'] as int? ?? 0,
       ),
+      pauseStartedAt: map['pauseStartedAt'] != null
+          ? DateTime.parse(map['pauseStartedAt'] as String)
+          : session.startedAt,
       currentItemIndex: map['currentItemIndex'] as int? ?? 0,
       currentSet: map['currentSet'] as int? ?? 1,
       currentSide: holdSideFromString(map['currentSide'] as String? ?? 'none'),

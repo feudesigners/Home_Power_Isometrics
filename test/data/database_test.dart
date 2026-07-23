@@ -43,6 +43,7 @@ void main() {
   test('multiple holds belong to one session', () async {
     final db = AppDatabase.memory();
     addTearDown(db.close);
+    await _seedTestContent(db);
     await db
         .into(db.workoutSessions)
         .insert(
@@ -92,6 +93,7 @@ void main() {
 
   test('JSON export imports validated session and hold history', () async {
     final source = AppDatabase.memory();
+    await _seedTestContent(source);
     await source
         .into(source.userProfiles)
         .insert(UserProfilesCompanion.insert());
@@ -130,6 +132,7 @@ void main() {
 
     final target = AppDatabase.memory();
     addTearDown(target.close);
+    await _seedTestContent(target);
     await target
         .into(target.userProfiles)
         .insert(UserProfilesCompanion.insert());
@@ -146,4 +149,103 @@ void main() {
     expect(await target.select(target.workoutSessions).get(), hasLength(1));
     expect(await target.select(target.holdAttempts).get(), hasLength(1));
   });
+
+
+  test('completion persists before optional feedback and rewards once', () async {
+    final db = AppDatabase.memory();
+    addTearDown(db.close);
+    await _seedTestContent(db);
+    await db.into(db.userProfiles).insert(UserProfilesCompanion.insert());
+    await db.into(db.userPreferences).insert(UserPreferencesCompanion.insert());
+    await db.into(db.userLevels).insert(UserLevelsCompanion.insert());
+    await db.into(db.workoutSessions).insert(
+      WorkoutSessionsCompanion.insert(
+        id: 'finalize-me',
+        startedAt: DateTime.utc(2026, 5, 1, 10),
+        status: 'active',
+      ),
+    );
+    final repositories = AppRepositories(db);
+
+    await repositories.finalizeSession(
+      sessionId: 'finalize-me',
+      actualDurationMs: 60000,
+      completedCount: 2,
+      skippedCount: 0,
+      pain: false,
+    );
+
+    final finalized = await (db.select(
+      db.workoutSessions,
+    )..where((table) => table.id.equals('finalize-me'))).getSingle();
+    expect(finalized.status, 'completed');
+    expect(await db.select(db.sessionFeedback).get(), isEmpty);
+
+    await repositories.saveSessionFeedback(
+      sessionId: 'finalize-me',
+      effort: 6,
+      pain: false,
+      note: 'Controlled',
+    );
+    await repositories.saveSessionFeedback(
+      sessionId: 'finalize-me',
+      effort: 7,
+      pain: false,
+      note: 'Updated',
+    );
+
+    expect(await db.select(db.sessionFeedback).get(), hasLength(1));
+    final xp = await db.select(db.xpEvents).get();
+    expect(xp.where((event) => event.id == 'xp_session_finalize-me'), hasLength(1));
+    expect(xp.where((event) => event.id == 'xp_feedback_finalize-me'), hasLength(1));
+  });
+}
+
+Future<void> _seedTestContent(AppDatabase db) async {
+  await db.into(db.avatarDefinitions).insertOnConflictUpdate(
+    AvatarDefinitionsCompanion.insert(
+      id: 'pulse',
+      name: 'Pulse',
+      description: 'Test companion',
+      statesJson: '[]',
+    ),
+  );
+  await db.into(db.exerciseCategories).insertOnConflictUpdate(
+    ExerciseCategoriesCompanion.insert(
+      id: 'C001',
+      name: 'Test',
+      colorHex: '#000000',
+    ),
+  );
+  for (final exercise in const {
+    'E001': 'Wall Sit',
+    'E006': 'Forearm Plank',
+    'wall_sit': 'Wall Sit Legacy',
+  }.entries) {
+    await db.into(db.exercises).insertOnConflictUpdate(
+      ExercisesCompanion.insert(
+        id: exercise.key,
+        categoryId: 'C001',
+        name: exercise.value,
+        primaryMusclesJson: '[]',
+      ),
+    );
+  }
+  for (final variant in const {
+    'wall_sit_easier': 'E001',
+    'forearm_plank_easier': 'E006',
+    'wall_sit_foundation': 'wall_sit',
+  }.entries) {
+    await db.into(db.exerciseVariants).insertOnConflictUpdate(
+      ExerciseVariantsCompanion.insert(
+        id: variant.key,
+        exerciseId: variant.value,
+        displayName: variant.key,
+        difficultyRank: 1,
+        categoryId: 'C001',
+        primaryMusclesJson: '[]',
+        targetHoldMs: 15000,
+      ),
+    );
+  }
 }

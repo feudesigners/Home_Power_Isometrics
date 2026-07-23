@@ -1,18 +1,18 @@
 /// Injectable clock so timer logic never depends on wall-clock UI ticks.
 abstract class AppClock {
   DateTime now();
-  Duration get elapsedSinceEpoch;
 }
 
 class SystemAppClock implements AppClock {
-  const SystemAppClock();
+  SystemAppClock()
+    : _wallAnchor = DateTime.now(),
+      _stopwatch = Stopwatch()..start();
+
+  final DateTime _wallAnchor;
+  final Stopwatch _stopwatch;
 
   @override
-  DateTime now() => DateTime.now();
-
-  @override
-  Duration get elapsedSinceEpoch =>
-      Duration(milliseconds: DateTime.now().millisecondsSinceEpoch);
+  DateTime now() => _wallAnchor.add(_stopwatch.elapsed);
 }
 
 /// Deterministic clock for unit tests. Advance manually — never waits.
@@ -24,10 +24,6 @@ class FakeAppClock implements AppClock {
 
   @override
   DateTime now() => _now;
-
-  @override
-  Duration get elapsedSinceEpoch =>
-      Duration(milliseconds: _now.millisecondsSinceEpoch);
 
   void advance(Duration by) {
     _now = _now.add(by);

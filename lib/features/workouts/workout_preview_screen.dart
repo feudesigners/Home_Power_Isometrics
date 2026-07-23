@@ -1,126 +1,106 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../app/bootstrap/providers.dart';
-import '../workouts/workout_controller.dart';
+import '../../domain/services/workout_state_machine.dart';
+import 'workout_controller.dart';
 
-class WorkoutPreviewScreen extends ConsumerWidget {
+class WorkoutPreviewScreen extends ConsumerStatefulWidget {
   const WorkoutPreviewScreen({super.key, required this.templateId});
 
   final String templateId;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return FutureBuilder(
-      future: Future.wait([
-        ref.read(repositoriesProvider).planFromTemplate(templateId),
-        ref.read(repositoriesProvider).templateItems(templateId),
-        ref.read(repositoriesProvider).allTemplates(),
-        ref.read(repositoriesProvider).limitationTags(),
-        ref.read(repositoriesProvider).allVariants(),
-      ]),
-      builder: (context, snap) {
-        if (!snap.hasData) {
+  ConsumerState<WorkoutPreviewScreen> createState() =>
+      _WorkoutPreviewScreenState();
+}
+
+class _WorkoutPreviewScreenState extends ConsumerState<WorkoutPreviewScreen> {
+  final Map<String, String> _variantOverrides = {};
+
+  Future<_PreviewData> _load() async {
+    final repositories = ref.read(repositoriesProvider);
+    final plan = await repositories.planFromTemplate(widget.templateId);
+    for (var index = 0; index < plan.length; index++) {
+      final replacementId = _variantOverrides[plan[index].variantId];
+      if (replacementId == null) continue;
+      final replacement = await repositories.planForPractice(replacementId);
+      if (replacement.isNotEmpty) plan[index] = replacement.single;
+    }
+    final templates = await repositories.allTemplates();
+    final limitations = await repositories.limitationTags();
+    final template = templates.firstWhere(
+      (candidate) => candidate.id == widget.templateId,
+    );
+    return _PreviewData(
+      plan: plan,
+      template: template,
+      limitations: limitations,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<_PreviewData>(
+      future: _load(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
           return const Scaffold(
             body: Center(child: CircularProgressIndicator()),
           );
         }
-        var plan = List.of(snap.data![0] as List);
-        final items = snap.data![1] as List;
-        final templates = snap.data![2] as List;
-        final limitations = (snap.data![3] as List).cast<String>();
-        final variants = snap.data![4] as List;
-        final tpl = templates.cast<dynamic>().firstWhere(
-          (t) => t.id == templateId,
-        );
-
-        // Auto-suggest regressions for limitation conflicts.
-        plan = plan.map((item) {
-          final v = variants.cast<dynamic>().firstWhere(
-            (x) => x.id == item.variantId,
-            orElse: () => null,
-          );
-          if (v == null) return item;
-          // parsed later in UI note
-          return item;
-        }).toList();
-
-        final holdMinutes =
-            (plan.fold<int>(
-                      0,
-                      (a, i) =>
-                          a +
-                          (i.holdDuration.inSeconds as int) +
-                          (i.setupDuration.inSeconds as int) +
-                          (i.restDuration.inSeconds as int),
-                    ) /
-                    60)
-                .ceil();
+        final data = snapshot.data!;
+        final plan = data.plan;
+        final estimatedMinutes =
+            (plannedWorkoutDurationMs(plan) / 60000).ceil();
 
         return Scaffold(
-          appBar: AppBar(title: Text(tpl.name as String)),
+          appBar: AppBar(title: Text(data.template.name)),
           body: ListView(
             padding: const EdgeInsets.all(20),
             children: [
-              Text('Estimated time ~$holdMinutes min'),
+              Text('Estimated time ~$estimatedMinutes min'),
               Text(
-                'Includes warm-up/cooldown blocks where configured. Hold times are provisional.',
+                'Includes preparation, both sides, side changes, rests, warm-up, and cooldown.',
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
               const SizedBox(height: 12),
-              for (final item in items.cast<dynamic>())
+              for (final item in plan)
                 ListTile(
                   leading: Icon(
-                    item.itemType == 'hold'
+                    item.isHold
                         ? Icons.timer_outlined
                         : Icons.self_improvement_outlined,
                   ),
-                  title: Text(
-                    item.itemType == 'hold'
-                        ? (plan
-                                      .cast<dynamic>()
-                                      .firstWhere(
-                                        (p) => p.variantId == item.variantId,
-                                        orElse: () => null,
-                                      )
-                                      ?.displayName
-                                  as String? ??
-                              item.label as String? ??
-                              'Hold')
-                        : item.label as String,
-                  ),
-                  subtitle: item.itemType == 'hold'
-                      ? Builder(
-                          builder: (_) {
-                            final v = variants.cast<dynamic>().firstWhere(
-                              (x) => x.id == item.variantId,
-                              orElse: () => null,
-                            );
-                            if (v == null) return const Text('');
-                            return Text(
-                              '${(v.targetHoldMs / 1000).round()}s · equipment noted in content',
-                            );
-                          },
+                  title: Text(item.displayName),
+                  subtitle: item.isHold
+                      ? Text(
+                          '${item.holdDuration.inSeconds}s'
+                          '${item.sideCount > 1 ? ' per side' : ''}'
+                          ' · ${item.sets} set${item.sets == 1 ? '' : 's'}',
                         )
-                      : Text(
-                          '${((item.durationMs as int) / 1000).round()}s mobility',
-                        ),
-                  trailing: item.itemType == 'hold'
+                      : Text('${item.holdDuration.inSeconds}s mobility'),
+                  trailing: item.isHold && item.easierVariantId != null
                       ? IconButton(
                           tooltip: 'Use easier variation',
                           icon: const Icon(Icons.trending_down),
-                          onPressed: () async {
-                            final v = variants.cast<dynamic>().firstWhere(
-                              (x) => x.id == item.variantId,
-                            );
-                            final easier = v.easierVariantId as String?;
-                            if (easier == null) return;
-                            // Visual only note — full swap persistence deferred to session start override
+                          onPressed: () {
+                            final originalId = _variantOverrides.entries
+                                .where(
+                                  (entry) => entry.value == item.variantId,
+                                )
+                                .map((entry) => entry.key)
+                                .firstOrNull;
+                            setState(() {
+                              _variantOverrides[originalId ?? item.variantId] =
+                                  item.easierVariantId!;
+                            });
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
+                              const SnackBar(
                                 content: Text(
-                                  'Suggested regression: $easier (applied when you choose Use easier in the runner).',
+                                  'Safer variation selected for this session.',
                                 ),
                               ),
                             );
@@ -128,11 +108,12 @@ class WorkoutPreviewScreen extends ConsumerWidget {
                         )
                       : null,
                 ),
-              if (limitations.isNotEmpty && !limitations.contains('none'))
+              if (data.limitations.isNotEmpty &&
+                  !data.limitations.contains('none'))
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   child: Text(
-                    'Care filters active: ${limitations.join(', ')}. Unsuitable holds can be regressed in-runner.',
+                    'Care filters active: ${data.limitations.join(', ')}. Review each setup and use a supported variation whenever needed.',
                   ),
                 ),
               const SizedBox(height: 16),
@@ -141,8 +122,9 @@ class WorkoutPreviewScreen extends ConsumerWidget {
                   await ref
                       .read(workoutControllerProvider)
                       .startFromTemplate(
-                        templateId,
-                        progId: tpl.programId as String?,
+                        widget.templateId,
+                        progId: data.template.programId,
+                        variantOverrides: _variantOverrides,
                       );
                   if (context.mounted) context.push('/workout/run');
                 },
@@ -155,4 +137,16 @@ class WorkoutPreviewScreen extends ConsumerWidget {
       },
     );
   }
+}
+
+class _PreviewData {
+  const _PreviewData({
+    required this.plan,
+    required this.template,
+    required this.limitations,
+  });
+
+  final List<WorkoutPlanItem> plan;
+  final dynamic template;
+  final List<String> limitations;
 }

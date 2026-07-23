@@ -14,7 +14,9 @@ class OnboardingScreen extends ConsumerStatefulWidget {
 
 class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   int step = 0;
-  String name = 'Athlete';
+  final TextEditingController _nameController = TextEditingController(
+    text: 'Athlete',
+  );
   String goal = 'Build consistent strength';
   String level = 'foundation';
   int minutes = 10;
@@ -24,6 +26,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   bool audio = true;
   bool haptics = true;
   bool reminders = false;
+  bool reducedMotion = false;
   bool disclaimer = false;
 
   static const careOptions = [
@@ -38,13 +41,36 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final p = await ref.read(repositoriesProvider).profile();
+      final repositories = ref.read(repositoriesProvider);
+      final profile = await repositories.profile();
+      final preferences = await repositories.preferences();
+      final limitations = await repositories.limitationTags();
+      final reminder = await repositories.reminderSchedule();
+      if (!mounted) return;
       setState(() {
-        step = p.onboardingStep.clamp(0, 8);
-        name = p.displayName;
-        avatar = p.selectedAvatarId;
+        step = profile.onboardingStep.clamp(0, 8).toInt();
+        _nameController.text = profile.displayName;
+        goal = profile.goal ?? goal;
+        level = profile.startingLevel;
+        minutes = profile.preferredSessionMinutes;
+        weekly = profile.weeklyWorkoutTarget;
+        avatar = profile.selectedAvatarId;
+        disclaimer = profile.disclaimerAccepted;
+        audio = preferences.audioEnabled;
+        haptics = preferences.hapticsEnabled;
+        reducedMotion = preferences.reducedMotion;
+        reminders = reminder.enabled;
+        care
+          ..clear()
+          ..addAll(limitations.where((tag) => tag != 'none'));
       });
     });
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    super.dispose();
   }
 
   Future<void> _persist({bool complete = false}) async {
@@ -53,7 +79,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         .saveOnboarding(
           step: complete ? 9 : step,
           complete: complete,
-          displayName: name,
+          displayName: _nameController.text.trim(),
           goal: goal,
           startingLevel: level,
           sessionMinutes: minutes,
@@ -63,10 +89,21 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
           disclaimer: disclaimer,
           audio: audio,
           haptics: haptics,
+          reducedMotion: reducedMotion,
         );
   }
 
   Future<void> _next() async {
+    if (step == 1 &&
+        (_nameController.text.trim().isEmpty ||
+            _nameController.text.trim().length > 40)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Enter a display name between 1 and 40 characters.'),
+        ),
+      );
+      return;
+    }
     if (step == 5 && !disclaimer) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -77,7 +114,35 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     }
     if (step >= 8) {
       await _persist(complete: true);
+      final repositories = ref.read(repositoriesProvider);
+      final scheduler = ref.read(reminderSchedulerProvider);
+      if (reminders && await scheduler.ensurePermission()) {
+        const weekdays = [DateTime.monday, DateTime.wednesday, DateTime.friday];
+        await scheduler.scheduleWeekly(
+          id: 100,
+          weekdays: weekdays,
+          hour: 9,
+          minute: 0,
+          title: 'IsometriX',
+          body: 'Your short strength session is ready.',
+        );
+        await repositories.saveReminderSchedule(
+          enabled: true,
+          weekdays: weekdays,
+          hour: 9,
+          minute: 0,
+        );
+      } else {
+        await scheduler.cancelAll();
+        await repositories.saveReminderSchedule(
+          enabled: false,
+          weekdays: const [1, 3, 5],
+          hour: 9,
+          minute: 0,
+        );
+      }
       ref.invalidate(profileProvider);
+      ref.invalidate(preferencesProvider);
       // GoRouter redirect sends completed profiles to /today.
       return;
     }
@@ -85,9 +150,10 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     await _persist();
   }
 
-  void _back() {
+  Future<void> _back() async {
     if (step == 0) return;
     setState(() => step -= 1);
+    await _persist();
   }
 
   @override
@@ -138,9 +204,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
             children: [
               TextField(
                 decoration: const InputDecoration(labelText: 'Display name'),
-                controller: TextEditingController(text: name)
-                  ..selection = TextSelection.collapsed(offset: name.length),
-                onChanged: (v) => name = v,
+                controller: _nameController,
+                maxLength: 40,
               ),
               const SizedBox(height: 12),
               Wrap(
@@ -310,6 +375,14 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                 title: const Text('Haptic cues'),
                 value: haptics,
                 onChanged: (v) => setState(() => haptics = v),
+              ),
+              SwitchListTile(
+                title: const Text('Reduce motion'),
+                subtitle: const Text(
+                  'Use static posture art instead of animated demonstrations.',
+                ),
+                value: reducedMotion,
+                onChanged: (v) => setState(() => reducedMotion = v),
               ),
               SwitchListTile(
                 title: const Text('Optional local reminders'),

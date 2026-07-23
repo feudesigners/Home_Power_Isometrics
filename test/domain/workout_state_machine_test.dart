@@ -111,4 +111,162 @@ void main() {
     machine.markInterrupted();
     expect(machine.phase, WorkoutPhase.interrupted);
   });
+
+  test('interrupted workout resumes from its preserved deadline', () {
+    machine.loadPlan([
+      WorkoutPlanItem(
+        variantId: 'a',
+        exerciseId: 'E001',
+        displayName: 'A',
+        holdDuration: const Duration(seconds: 10),
+        setupDuration: const Duration(seconds: 1),
+        restDuration: const Duration(seconds: 1),
+      ),
+    ]);
+    machine.start();
+    clock.advance(const Duration(seconds: 1));
+    machine.evaluate();
+    clock.advance(const Duration(seconds: 4));
+    machine.pause();
+    final remainingBeforeInterrupt = machine.remaining(clock.now());
+    machine.markInterrupted();
+
+    clock.advance(const Duration(seconds: 30));
+    machine.resume();
+
+    expect(machine.phase, WorkoutPhase.holding);
+    expect(machine.remaining(clock.now()), remainingBeforeInterrupt);
+  });
+
+  test('alternating unilateral work completes both sides', () {
+    machine.loadPlan([
+      WorkoutPlanItem(
+        variantId: 'bird_dog',
+        exerciseId: 'E010',
+        displayName: 'Bird Dog',
+        holdDuration: const Duration(seconds: 5),
+        setupDuration: const Duration(seconds: 1),
+        restDuration: const Duration(seconds: 1),
+        sideSwitchDuration: const Duration(seconds: 2),
+        unilateralMode: UnilateralMode.alternating,
+      ),
+    ]);
+    machine.start();
+    clock.advance(const Duration(seconds: 1));
+    machine.evaluate();
+    expect(machine.currentSide, HoldSide.left);
+
+    clock.advance(const Duration(seconds: 5));
+    final result = machine.evaluate();
+
+    expect(result.phase, WorkoutPhase.switchingSide);
+    expect(result.holdCompletedSide, HoldSide.left);
+    expect(machine.currentSide, HoldSide.right);
+  });
+
+  test('multiple sets repeat the current item before advancing', () {
+    machine.loadPlan([
+      WorkoutPlanItem(
+        variantId: 'a',
+        exerciseId: 'E001',
+        displayName: 'A',
+        holdDuration: const Duration(seconds: 2),
+        setupDuration: const Duration(seconds: 1),
+        restDuration: const Duration(seconds: 3),
+        sets: 2,
+      ),
+    ]);
+    machine.start();
+    clock.advance(const Duration(seconds: 1));
+    machine.evaluate();
+    clock.advance(const Duration(seconds: 2));
+    machine.evaluate();
+
+    expect(machine.phase, WorkoutPhase.resting);
+    expect(machine.currentSet, 1);
+    expect(machine.currentItemIndex, 0);
+
+    clock.advance(const Duration(seconds: 3));
+    machine.evaluate();
+
+    expect(machine.phase, WorkoutPhase.preparing);
+    expect(machine.currentSet, 2);
+    expect(machine.currentItemIndex, 0);
+
+    clock.advance(const Duration(seconds: 1));
+    machine.evaluate();
+    clock.advance(const Duration(seconds: 2));
+    final completed = machine.evaluate();
+
+    expect(completed.sessionCompleted, isTrue);
+    expect(machine.phase, WorkoutPhase.completed);
+  });
+
+
+  test('planned duration includes sets both sides switches and real rests', () {
+    final duration = plannedWorkoutDurationMs([
+      WorkoutPlanItem(
+        variantId: 'a',
+        exerciseId: 'E001',
+        displayName: 'A',
+        holdDuration: const Duration(seconds: 10),
+        setupDuration: const Duration(seconds: 2),
+        restDuration: const Duration(seconds: 4),
+        sideSwitchDuration: const Duration(seconds: 3),
+        unilateralMode: UnilateralMode.leftRight,
+        sets: 2,
+      ),
+    ]);
+
+    // Two sets of (2 setup + 20 holds + 3 switch), plus one inter-set rest.
+    expect(duration, 54000);
+  });
+
+  test('replacing current item restarts preparation with safer metadata', () {
+    machine.loadPlan([
+      WorkoutPlanItem(
+        variantId: 'hard',
+        exerciseId: 'E001',
+        displayName: 'Hard',
+        holdDuration: const Duration(seconds: 10),
+        setupDuration: const Duration(seconds: 2),
+        restDuration: const Duration(seconds: 4),
+        easierVariantId: 'easy',
+      ),
+    ]);
+    machine.start();
+    machine.replaceCurrentItem(
+      const WorkoutPlanItem(
+        variantId: 'easy',
+        exerciseId: 'E001',
+        displayName: 'Easy',
+        holdDuration: Duration(seconds: 6),
+        setupDuration: Duration(seconds: 3),
+        restDuration: Duration(seconds: 4),
+      ),
+    );
+
+    expect(machine.currentItem?.variantId, 'easy');
+    expect(machine.phase, WorkoutPhase.preparing);
+    expect(machine.remaining(clock.now()), const Duration(seconds: 3));
+  });
+
+
+  test('skipping the final item reports session completion', () {
+    machine.loadPlan([
+      const WorkoutPlanItem(
+        variantId: 'a',
+        exerciseId: 'E001',
+        displayName: 'A',
+        holdDuration: Duration(seconds: 5),
+        setupDuration: Duration(seconds: 1),
+        restDuration: Duration(seconds: 1),
+      ),
+    ]);
+    machine.start();
+
+    expect(machine.skipCurrent(), isTrue);
+    expect(machine.phase, WorkoutPhase.completed);
+  });
+
 }

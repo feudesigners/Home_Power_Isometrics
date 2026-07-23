@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "media": [
     {
       "id": "wall_sit_posture",
@@ -226,5 +226,5 @@
       "accessibilityLabel": "Prone W Hold demonstration loop (placeholder)"
     }
   ],
-  "note": "Placeholders \u2014 final anatomical art is an external gate"
+  "note": "Authoritative bundled media index. Placeholder paths must be replaced with professionally reviewed static and animated assets before release."
 }

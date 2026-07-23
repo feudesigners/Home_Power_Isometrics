@@ -44,12 +44,16 @@ The integration suite requires an Android device or AVD; this repository only de
 
 ```bash
 flutter build apk --debug
-flutter build appbundle --release   # uses debug signing locally — production keystore is an external gate
+cp android/key.properties.example android/key.properties
+# Edit key.properties to reference your upload keystore.
+flutter build appbundle --release
 ```
 
 ## Verification status
 
-Verified on this machine and a physical Samsung SM-S711B (Android 16, API 36):
+The end-to-end source implementation includes atomic workout completion, optional idempotent feedback, lifecycle recovery, real safer-variant switching, accepted progressions, 40 scheduled program sessions, schema-v2 integrity, validated data portability, device-timezone reminders, static/animated media selection, secure release-signing safeguards, and Android cold-start black-screen fixes.
+
+Verified on this machine and a physical Samsung SM-S711B (Android 16, API 36) for the pre-merge baseline:
 
 | Gate | Result |
 |------|--------|
@@ -62,13 +66,13 @@ Verified on this machine and a physical Samsung SM-S711B (Android 16, API 36):
 
 Emulator was not used (none installed). Secure Folder / secondary Android users can hide the package from default `am start` unless `--user 0` is used.
 
-Production exercise review, final anatomical media/audio, and Play App Signing remain external gates.
+Re-run formatting, analysis, tests, and Android builds after merging the stabilization branch. Production exercise review, final anatomical media/audio, and Play App Signing remain external gates.
 
 ## Assets
 
 - Seed content: `assets/content/*.json`
 - Fonts (OFL): `assets/fonts/` — see `FONT_LICENSES.txt`
-- Exercise media: placeholders only — see [`ASSET_GUIDE.md`](ASSET_GUIDE.md)
+- Exercise media: authoritative index in `assets/content/media_manifest.json`; current files remain release placeholders — see [`ASSET_GUIDE.md`](ASSET_GUIDE.md)
 
 ## Documentation
 

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -112,9 +114,71 @@ class _ProgramsTab extends ConsumerWidget {
                   final templates = await ref
                       .read(repositoriesProvider)
                       .templatesForProgram(p.id);
-                  if (!context.mounted) return;
-                  if (templates.isEmpty) return;
-                  context.push('/workout/preview/${templates.first.id}');
+                  final completedIds = await ref
+                      .read(repositoriesProvider)
+                      .completedTemplateIdsForProgram(p.id);
+                  if (!context.mounted || templates.isEmpty) return;
+                  templates.sort((a, b) => a.name.compareTo(b.name));
+                  await showModalBottomSheet<void>(
+                    context: context,
+                    isScrollControlled: true,
+                    builder: (sheetContext) => SafeArea(
+                      child: ListView(
+                        shrinkWrap: true,
+                        padding: const EdgeInsets.all(20),
+                        children: [
+                          Text(
+                            p.name,
+                            style: Theme.of(
+                              sheetContext,
+                            ).textTheme.headlineSmall,
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            '${completedIds.length} of ${templates.length} scheduled sessions completed. Accepted progressions are applied when a plan opens.',
+                          ),
+                          const SizedBox(height: 8),
+                          FilledButton.tonalIcon(
+                            onPressed: () async {
+                              await ref
+                                  .read(repositoriesProvider)
+                                  .enrollProgram(p.id);
+                              if (!sheetContext.mounted) return;
+                              ScaffoldMessenger.of(sheetContext).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    '${p.name} is now your current program.',
+                                  ),
+                                ),
+                              );
+                            },
+                            icon: const Icon(Icons.flag_outlined),
+                            label: const Text('Use as current program'),
+                          ),
+                          const SizedBox(height: 12),
+                          for (final template in templates)
+                            ListTile(
+                              leading: Icon(
+                                completedIds.contains(template.id)
+                                    ? Icons.check_circle
+                                    : Icons.calendar_today_outlined,
+                              ),
+                              title: Text(template.name),
+                              subtitle: Text(
+                                '~${template.estimatedMinutes} minutes',
+                              ),
+                              trailing: const Icon(Icons.chevron_right),
+                              onTap: () {
+                                Navigator.pop(sheetContext);
+                                context.push(
+                                  '/workout/preview/${template.id}',
+                                );
+                              },
+                            ),
+                        ],
+                      ),
+                    ),
+                  );
                 },
               ),
             );
@@ -176,6 +240,14 @@ class _LibraryTab extends ConsumerWidget {
             return false;
           }
           if (categoryFilter != null && cat != categoryFilter) return false;
+          if (difficultyFilter != null &&
+              !variants.any(
+                (variant) =>
+                    (variant as dynamic).exerciseId == e.id &&
+                    variant.difficultyRank == difficultyFilter,
+              )) {
+            return false;
+          }
           return true;
         }).toList();
 
@@ -242,7 +314,10 @@ class _LibraryTab extends ConsumerWidget {
                           .toList();
                       if (vs.isEmpty) return 'No variants';
                       final v = vs.first;
-                      return '${(v.targetHoldMs / 1000).round()}s provisional · ${(e.primaryMusclesJson as String)}';
+                      final muscles =
+                          (jsonDecode(e.primaryMusclesJson as String) as List)
+                              .join(', ');
+                      return '${(v.targetHoldMs / 1000).round()}s provisional · $muscles';
                     })(),
                   ),
                   trailing: const Icon(Icons.chevron_right),

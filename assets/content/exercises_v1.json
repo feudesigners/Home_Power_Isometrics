@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "categories": [
     {
       "id": "C001",
@@ -28,7 +28,8 @@
       ],
       "secondaryMuscles": [
         "Hamstrings"
-      ]
+      ],
+      "contentVersion": 2
     },
     {
       "id": "E002",
@@ -40,7 +41,8 @@
       ],
       "secondaryMuscles": [
         "Core"
-      ]
+      ],
+      "contentVersion": 2
     },
     {
       "id": "E003",
@@ -53,7 +55,8 @@
       "secondaryMuscles": [
         "Hamstrings",
         "Calves"
-      ]
+      ],
+      "contentVersion": 2
     },
     {
       "id": "E004",
@@ -62,7 +65,8 @@
       "primaryMuscles": [
         "Calves"
       ],
-      "secondaryMuscles": []
+      "secondaryMuscles": [],
+      "contentVersion": 2
     },
     {
       "id": "E005",
@@ -74,7 +78,8 @@
       ],
       "secondaryMuscles": [
         "Glutes"
-      ]
+      ],
+      "contentVersion": 2
     },
     {
       "id": "E006",
@@ -86,7 +91,8 @@
       "secondaryMuscles": [
         "Shoulders",
         "Glutes"
-      ]
+      ],
+      "contentVersion": 2
     },
     {
       "id": "E007",
@@ -98,7 +104,8 @@
       "secondaryMuscles": [
         "Shoulders",
         "Hip Abductors"
-      ]
+      ],
+      "contentVersion": 2
     },
     {
       "id": "E008",
@@ -109,7 +116,8 @@
       ],
       "secondaryMuscles": [
         "Hip Flexors"
-      ]
+      ],
+      "contentVersion": 2
     },
     {
       "id": "E009",
@@ -122,7 +130,8 @@
       "secondaryMuscles": [
         "Glutes",
         "Shoulders"
-      ]
+      ],
+      "contentVersion": 2
     },
     {
       "id": "E010",
@@ -133,7 +142,8 @@
       ],
       "secondaryMuscles": [
         "Hip Flexors"
-      ]
+      ],
+      "contentVersion": 2
     },
     {
       "id": "E011",
@@ -146,7 +156,8 @@
       "secondaryMuscles": [
         "Shoulders",
         "Core"
-      ]
+      ],
+      "contentVersion": 2
     },
     {
       "id": "E012",
@@ -158,7 +169,8 @@
       "secondaryMuscles": [
         "Chest",
         "Shoulders"
-      ]
+      ],
+      "contentVersion": 2
     },
     {
       "id": "E013",
@@ -171,7 +183,8 @@
       "secondaryMuscles": [
         "Shoulders",
         "Triceps"
-      ]
+      ],
+      "contentVersion": 2
     },
     {
       "id": "E014",
@@ -183,7 +196,8 @@
       ],
       "secondaryMuscles": [
         "Upper Back"
-      ]
+      ],
+      "contentVersion": 2
     },
     {
       "id": "E015",
@@ -195,7 +209,8 @@
       "secondaryMuscles": [
         "Triceps",
         "Upper Chest"
-      ]
+      ],
+      "contentVersion": 2
     },
     {
       "id": "E016",
@@ -207,7 +222,8 @@
       ],
       "secondaryMuscles": [
         "Rear Deltoids"
-      ]
+      ],
+      "contentVersion": 2
     }
   ],
   "variants": [
@@ -231,10 +247,10 @@
         "knees"
       ],
       "staticAssetId": "wall_sit_posture",
-      "animatedAssetId": null,
+      "animatedAssetId": "wall_sit_anim",
       "gatedForBeginners": false,
       "reviewStatus": "provisional",
-      "contentVersion": 1,
+      "contentVersion": 2,
       "primaryMuscles": [
         "Quadriceps",
         "Glutes"
@@ -266,10 +282,10 @@
         "knees"
       ],
       "staticAssetId": "wall_sit_posture",
-      "animatedAssetId": null,
+      "animatedAssetId": "wall_sit_anim",
       "gatedForBeginners": false,
       "reviewStatus": "provisional",
-      "contentVersion": 1,
+      "contentVersion": 2,
       "primaryMuscles": [
         "Quadriceps",
         "Glutes"
@@ -301,10 +317,10 @@
         "knees"
       ],
       "staticAssetId": "wall_sit_posture",
-      "animatedAssetId": null,
+      "animatedAssetId": "wall_sit_anim",
       "gatedForBeginners": false,
       "reviewStatus": "provisional",
-      "contentVersion": 1,
+      "contentVersion": 2,
       "primaryMuscles": [
         "Quadriceps",
         "Glutes"
@@ -336,10 +352,10 @@
         "lower_back"
       ],
       "staticAssetId": "glute_bridge_posture",
-      "animatedAssetId": null,
+      "animatedAssetId": "glute_bridge_anim",
       "gatedForBeginners": false,
       "reviewStatus": "provisional",
-      "contentVersion": 1,
+      "contentVersion": 2,
       "primaryMuscles": [
         "Glutes",
         "Hamstrings"
@@ -371,10 +387,10 @@
         "lower_back"
       ],
       "staticAssetId": "glute_bridge_posture",
-      "animatedAssetId": null,
+      "animatedAssetId": "glute_bridge_anim",
       "gatedForBeginners": false,
       "reviewStatus": "provisional",
-      "contentVersion": 1,
+      "contentVersion": 2,
       "primaryMuscles": [
         "Glutes",
         "Hamstrings"
@@ -406,10 +422,10 @@
         "lower_back"
       ],
       "staticAssetId": "glute_bridge_posture",
-      "animatedAssetId": null,
+      "animatedAssetId": "glute_bridge_anim",
       "gatedForBeginners": false,
       "reviewStatus": "provisional",
-      "contentVersion": 1,
+      "contentVersion": 2,
       "primaryMuscles": [
         "Glutes",
         "Hamstrings"
@@ -443,10 +459,10 @@
         "balance"
       ],
       "staticAssetId": "static_lunge_posture",
-      "animatedAssetId": null,
+      "animatedAssetId": "static_lunge_anim",
       "gatedForBeginners": false,
       "reviewStatus": "provisional",
-      "contentVersion": 1,
+      "contentVersion": 2,
       "primaryMuscles": [
         "Quadriceps",
         "Glutes"
@@ -479,10 +495,10 @@
         "balance"
       ],
       "staticAssetId": "static_lunge_posture",
-      "animatedAssetId": null,
+      "animatedAssetId": "static_lunge_anim",
       "gatedForBeginners": false,
       "reviewStatus": "provisional",
-      "contentVersion": 1,
+      "contentVersion": 2,
       "primaryMuscles": [
         "Quadriceps",
         "Glutes"
@@ -515,10 +531,10 @@
         "balance"
       ],
       "staticAssetId": "static_lunge_posture",
-      "animatedAssetId": null,
+      "animatedAssetId": "static_lunge_anim",
       "gatedForBeginners": false,
       "reviewStatus": "provisional",
-      "contentVersion": 1,
+      "contentVersion": 2,
       "primaryMuscles": [
         "Quadriceps",
         "Glutes"
@@ -550,10 +566,10 @@
         "balance"
       ],
       "staticAssetId": "calf_raise_posture",
-      "animatedAssetId": null,
+      "animatedAssetId": "calf_raise_anim",
       "gatedForBeginners": false,
       "reviewStatus": "provisional",
-      "contentVersion": 1,
+      "contentVersion": 2,
       "primaryMuscles": [
         "Calves"
       ],
@@ -584,10 +600,10 @@
         "balance"
       ],
       "staticAssetId": "calf_raise_posture",
-      "animatedAssetId": null,
+      "animatedAssetId": "calf_raise_anim",
       "gatedForBeginners": false,
       "reviewStatus": "provisional",
-      "contentVersion": 1,
+      "contentVersion": 2,
       "primaryMuscles": [
         "Calves"
       ],
@@ -618,10 +634,10 @@
         "balance"
       ],
       "staticAssetId": "calf_raise_posture",
-      "animatedAssetId": null,
+      "animatedAssetId": "calf_raise_anim",
       "gatedForBeginners": false,
       "reviewStatus": "provisional",
-      "contentVersion": 1,
+      "contentVersion": 2,
       "primaryMuscles": [
         "Calves"
       ],
@@ -652,10 +668,10 @@
         "knees"
       ],
       "staticAssetId": "horse_stance_posture",
-      "animatedAssetId": null,
+      "animatedAssetId": "horse_stance_anim",
       "gatedForBeginners": false,
       "reviewStatus": "provisional",
-      "contentVersion": 1,
+      "contentVersion": 2,
       "primaryMuscles": [
         "Quadriceps",
         "Adductors"
@@ -687,10 +703,10 @@
         "knees"
       ],
       "staticAssetId": "horse_stance_posture",
-      "animatedAssetId": null,
+      "animatedAssetId": "horse_stance_anim",
       "gatedForBeginners": false,
       "reviewStatus": "provisional",
-      "contentVersion": 1,
+      "contentVersion": 2,
       "primaryMuscles": [
         "Quadriceps",
         "Adductors"
@@ -722,10 +738,10 @@
         "knees"
       ],
       "staticAssetId": "horse_stance_posture",
-      "animatedAssetId": null,
+      "animatedAssetId": "horse_stance_anim",
       "gatedForBeginners": false,
       "reviewStatus": "provisional",
-      "contentVersion": 1,
+      "contentVersion": 2,
       "primaryMuscles": [
         "Quadriceps",
         "Adductors"
@@ -759,10 +775,10 @@
         "lower_back"
       ],
       "staticAssetId": "forearm_plank_posture",
-      "animatedAssetId": null,
+      "animatedAssetId": "forearm_plank_anim",
       "gatedForBeginners": false,
       "reviewStatus": "provisional",
-      "contentVersion": 1,
+      "contentVersion": 2,
       "primaryMuscles": [
         "Abdominals"
       ],
@@ -795,10 +811,10 @@
         "lower_back"
       ],
       "staticAssetId": "forearm_plank_posture",
-      "animatedAssetId": null,
+      "animatedAssetId": "forearm_plank_anim",
       "gatedForBeginners": false,
       "reviewStatus": "provisional",
-      "contentVersion": 1,
+      "contentVersion": 2,
       "primaryMuscles": [
         "Abdominals"
       ],
@@ -831,10 +847,10 @@
         "lower_back"
       ],
       "staticAssetId": "forearm_plank_posture",
-      "animatedAssetId": null,
+      "animatedAssetId": "forearm_plank_anim",
       "gatedForBeginners": false,
       "reviewStatus": "provisional",
-      "contentVersion": 1,
+      "contentVersion": 2,
       "primaryMuscles": [
         "Abdominals"
       ],
@@ -866,10 +882,10 @@
         "wrists"
       ],
       "staticAssetId": "side_plank_posture",
-      "animatedAssetId": null,
+      "animatedAssetId": "side_plank_anim",
       "gatedForBeginners": false,
       "reviewStatus": "provisional",
-      "contentVersion": 1,
+      "contentVersion": 2,
       "primaryMuscles": [
         "Obliques"
       ],
@@ -901,10 +917,10 @@
         "wrists"
       ],
       "staticAssetId": "side_plank_posture",
-      "animatedAssetId": null,
+      "animatedAssetId": "side_plank_anim",
       "gatedForBeginners": false,
       "reviewStatus": "provisional",
-      "contentVersion": 1,
+      "contentVersion": 2,
       "primaryMuscles": [
         "Obliques"
       ],
@@ -936,10 +952,10 @@
         "wrists"
       ],
       "staticAssetId": "side_plank_posture",
-      "animatedAssetId": null,
+      "animatedAssetId": "side_plank_anim",
       "gatedForBeginners": false,
       "reviewStatus": "provisional",
-      "contentVersion": 1,
+      "contentVersion": 2,
       "primaryMuscles": [
         "Obliques"
       ],
@@ -970,10 +986,10 @@
         "lower_back"
       ],
       "staticAssetId": "hollow_body_posture",
-      "animatedAssetId": null,
+      "animatedAssetId": "hollow_body_anim",
       "gatedForBeginners": false,
       "reviewStatus": "provisional",
-      "contentVersion": 1,
+      "contentVersion": 2,
       "primaryMuscles": [
         "Abdominals"
       ],
@@ -1004,10 +1020,10 @@
         "lower_back"
       ],
       "staticAssetId": "hollow_body_posture",
-      "animatedAssetId": null,
+      "animatedAssetId": "hollow_body_anim",
       "gatedForBeginners": true,
       "reviewStatus": "provisional",
-      "contentVersion": 1,
+      "contentVersion": 2,
       "primaryMuscles": [
         "Abdominals"
       ],
@@ -1038,10 +1054,10 @@
         "lower_back"
       ],
       "staticAssetId": "hollow_body_posture",
-      "animatedAssetId": null,
+      "animatedAssetId": "hollow_body_anim",
       "gatedForBeginners": true,
       "reviewStatus": "provisional",
-      "contentVersion": 1,
+      "contentVersion": 2,
       "primaryMuscles": [
         "Abdominals"
       ],
@@ -1073,10 +1089,10 @@
         "balance"
       ],
       "staticAssetId": "bird_dog_posture",
-      "animatedAssetId": null,
+      "animatedAssetId": "bird_dog_anim",
       "gatedForBeginners": false,
       "reviewStatus": "provisional",
-      "contentVersion": 1,
+      "contentVersion": 2,
       "primaryMuscles": [
         "Core",
         "Lower Back"
@@ -1109,10 +1125,10 @@
         "balance"
       ],
       "staticAssetId": "bird_dog_posture",
-      "animatedAssetId": null,
+      "animatedAssetId": "bird_dog_anim",
       "gatedForBeginners": false,
       "reviewStatus": "provisional",
-      "contentVersion": 1,
+      "contentVersion": 2,
       "primaryMuscles": [
         "Core",
         "Lower Back"
@@ -1145,10 +1161,10 @@
         "balance"
       ],
       "staticAssetId": "bird_dog_posture",
-      "animatedAssetId": null,
+      "animatedAssetId": "bird_dog_anim",
       "gatedForBeginners": false,
       "reviewStatus": "provisional",
-      "contentVersion": 1,
+      "contentVersion": 2,
       "primaryMuscles": [
         "Core",
         "Lower Back"
@@ -1180,10 +1196,10 @@
         "lower_back"
       ],
       "staticAssetId": "v_sit_posture",
-      "animatedAssetId": null,
+      "animatedAssetId": "v_sit_anim",
       "gatedForBeginners": false,
       "reviewStatus": "provisional",
-      "contentVersion": 1,
+      "contentVersion": 2,
       "primaryMuscles": [
         "Abdominals"
       ],
@@ -1214,10 +1230,10 @@
         "lower_back"
       ],
       "staticAssetId": "v_sit_posture",
-      "animatedAssetId": null,
+      "animatedAssetId": "v_sit_anim",
       "gatedForBeginners": true,
       "reviewStatus": "provisional",
-      "contentVersion": 1,
+      "contentVersion": 2,
       "primaryMuscles": [
         "Abdominals"
       ],
@@ -1248,10 +1264,10 @@
         "lower_back"
       ],
       "staticAssetId": "v_sit_posture",
-      "animatedAssetId": null,
+      "animatedAssetId": "v_sit_anim",
       "gatedForBeginners": true,
       "reviewStatus": "provisional",
-      "contentVersion": 1,
+      "contentVersion": 2,
       "primaryMuscles": [
         "Abdominals"
       ],
@@ -1283,10 +1299,10 @@
         "shoulders"
       ],
       "staticAssetId": "pushup_hold_posture",
-      "animatedAssetId": null,
+      "animatedAssetId": "pushup_hold_anim",
       "gatedForBeginners": false,
       "reviewStatus": "provisional",
-      "contentVersion": 1,
+      "contentVersion": 2,
       "primaryMuscles": [
         "Chest",
         "Triceps"
@@ -1319,10 +1335,10 @@
         "shoulders"
       ],
       "staticAssetId": "pushup_hold_posture",
-      "animatedAssetId": null,
+      "animatedAssetId": "pushup_hold_anim",
       "gatedForBeginners": true,
       "reviewStatus": "provisional",
-      "contentVersion": 1,
+      "contentVersion": 2,
       "primaryMuscles": [
         "Chest",
         "Triceps"
@@ -1355,10 +1371,10 @@
         "shoulders"
       ],
       "staticAssetId": "pushup_hold_posture",
-      "animatedAssetId": null,
+      "animatedAssetId": "pushup_hold_anim",
       "gatedForBeginners": true,
       "reviewStatus": "provisional",
-      "contentVersion": 1,
+      "contentVersion": 2,
       "primaryMuscles": [
         "Chest",
         "Triceps"
@@ -1391,10 +1407,10 @@
         "wrists"
       ],
       "staticAssetId": "triceps_dip_posture",
-      "animatedAssetId": null,
+      "animatedAssetId": "triceps_dip_anim",
       "gatedForBeginners": false,
       "reviewStatus": "provisional",
-      "contentVersion": 1,
+      "contentVersion": 2,
       "primaryMuscles": [
         "Triceps"
       ],
@@ -1426,10 +1442,10 @@
         "wrists"
       ],
       "staticAssetId": "triceps_dip_posture",
-      "animatedAssetId": null,
+      "animatedAssetId": "triceps_dip_anim",
       "gatedForBeginners": true,
       "reviewStatus": "provisional",
-      "contentVersion": 1,
+      "contentVersion": 2,
       "primaryMuscles": [
         "Triceps"
       ],
@@ -1461,10 +1477,10 @@
         "wrists"
       ],
       "staticAssetId": "triceps_dip_posture",
-      "animatedAssetId": null,
+      "animatedAssetId": "triceps_dip_anim",
       "gatedForBeginners": true,
       "reviewStatus": "provisional",
-      "contentVersion": 1,
+      "contentVersion": 2,
       "primaryMuscles": [
         "Triceps"
       ],
@@ -1496,10 +1512,10 @@
         "wrists"
       ],
       "staticAssetId": "reverse_plank_posture",
-      "animatedAssetId": null,
+      "animatedAssetId": "reverse_plank_anim",
       "gatedForBeginners": false,
       "reviewStatus": "provisional",
-      "contentVersion": 1,
+      "contentVersion": 2,
       "primaryMuscles": [
         "Glutes",
         "Posterior Chain"
@@ -1532,10 +1548,10 @@
         "wrists"
       ],
       "staticAssetId": "reverse_plank_posture",
-      "animatedAssetId": null,
+      "animatedAssetId": "reverse_plank_anim",
       "gatedForBeginners": false,
       "reviewStatus": "provisional",
-      "contentVersion": 1,
+      "contentVersion": 2,
       "primaryMuscles": [
         "Glutes",
         "Posterior Chain"
@@ -1568,10 +1584,10 @@
         "wrists"
       ],
       "staticAssetId": "reverse_plank_posture",
-      "animatedAssetId": null,
+      "animatedAssetId": "reverse_plank_anim",
       "gatedForBeginners": false,
       "reviewStatus": "provisional",
-      "contentVersion": 1,
+      "contentVersion": 2,
       "primaryMuscles": [
         "Glutes",
         "Posterior Chain"
@@ -1603,10 +1619,10 @@
         "lower_back"
       ],
       "staticAssetId": "superman_posture",
-      "animatedAssetId": null,
+      "animatedAssetId": "superman_anim",
       "gatedForBeginners": false,
       "reviewStatus": "provisional",
-      "contentVersion": 1,
+      "contentVersion": 2,
       "primaryMuscles": [
         "Lower Back",
         "Glutes"
@@ -1638,10 +1654,10 @@
         "lower_back"
       ],
       "staticAssetId": "superman_posture",
-      "animatedAssetId": null,
+      "animatedAssetId": "superman_anim",
       "gatedForBeginners": false,
       "reviewStatus": "provisional",
-      "contentVersion": 1,
+      "contentVersion": 2,
       "primaryMuscles": [
         "Lower Back",
         "Glutes"
@@ -1673,10 +1689,10 @@
         "lower_back"
       ],
       "staticAssetId": "superman_posture",
-      "animatedAssetId": null,
+      "animatedAssetId": "superman_anim",
       "gatedForBeginners": false,
       "reviewStatus": "provisional",
-      "contentVersion": 1,
+      "contentVersion": 2,
       "primaryMuscles": [
         "Lower Back",
         "Glutes"
@@ -1709,10 +1725,10 @@
         "wrists"
       ],
       "staticAssetId": "pike_pushup_posture",
-      "animatedAssetId": null,
+      "animatedAssetId": "pike_pushup_anim",
       "gatedForBeginners": false,
       "reviewStatus": "provisional",
-      "contentVersion": 1,
+      "contentVersion": 2,
       "primaryMuscles": [
         "Shoulders"
       ],
@@ -1744,10 +1760,10 @@
         "wrists"
       ],
       "staticAssetId": "pike_pushup_posture",
-      "animatedAssetId": null,
+      "animatedAssetId": "pike_pushup_anim",
       "gatedForBeginners": true,
       "reviewStatus": "provisional",
-      "contentVersion": 1,
+      "contentVersion": 2,
       "primaryMuscles": [
         "Shoulders"
       ],
@@ -1779,10 +1795,10 @@
         "wrists"
       ],
       "staticAssetId": "pike_pushup_posture",
-      "animatedAssetId": null,
+      "animatedAssetId": "pike_pushup_anim",
       "gatedForBeginners": true,
       "reviewStatus": "provisional",
-      "contentVersion": 1,
+      "contentVersion": 2,
       "primaryMuscles": [
         "Shoulders"
       ],
@@ -1813,10 +1829,10 @@
         "shoulders"
       ],
       "staticAssetId": "prone_w_posture",
-      "animatedAssetId": null,
+      "animatedAssetId": "prone_w_anim",
       "gatedForBeginners": false,
       "reviewStatus": "provisional",
-      "contentVersion": 1,
+      "contentVersion": 2,
       "primaryMuscles": [
         "Upper Back",
         "Scapular Stabilizers"
@@ -1848,10 +1864,10 @@
         "shoulders"
       ],
       "staticAssetId": "prone_w_posture",
-      "animatedAssetId": null,
+      "animatedAssetId": "prone_w_anim",
       "gatedForBeginners": false,
       "reviewStatus": "provisional",
-      "contentVersion": 1,
+      "contentVersion": 2,
       "primaryMuscles": [
         "Upper Back",
         "Scapular Stabilizers"
@@ -1883,10 +1899,10 @@
         "shoulders"
       ],
       "staticAssetId": "prone_w_posture",
-      "animatedAssetId": null,
+      "animatedAssetId": "prone_w_anim",
       "gatedForBeginners": false,
       "reviewStatus": "provisional",
-      "contentVersion": 1,
+      "contentVersion": 2,
       "primaryMuscles": [
         "Upper Back",
         "Scapular Stabilizers"
@@ -2058,7 +2074,7 @@
     {
       "variantId": "pushup_hold_foundation",
       "sortOrder": 1,
-      "cue": "Elbows ~90\u00b0 at midpoint"
+      "cue": "Elbows ~90° at midpoint"
     },
     {
       "variantId": "pushup_hold_foundation",
@@ -2073,7 +2089,7 @@
     {
       "variantId": "triceps_dip_foundation",
       "sortOrder": 1,
-      "cue": "Elbows ~90\u00b0"
+      "cue": "Elbows ~90°"
     },
     {
       "variantId": "triceps_dip_foundation",
@@ -2118,7 +2134,7 @@
     {
       "variantId": "pike_pushup_foundation",
       "sortOrder": 1,
-      "cue": "Elbows ~90\u00b0"
+      "cue": "Elbows ~90°"
     },
     {
       "variantId": "pike_pushup_foundation",
@@ -2139,232 +2155,6 @@
       "variantId": "prone_w_foundation",
       "sortOrder": 2,
       "cue": "Forehead lightly on floor or towel"
-    }
-  ],
-  "media": [
-    {
-      "id": "wall_sit_posture",
-      "variantId": "wall_sit_foundation",
-      "kind": "posture",
-      "assetPath": "assets/images/wall_sit_posture.png",
-      "accessibilityLabel": "Wall Sit static posture illustration (placeholder)"
-    },
-    {
-      "id": "wall_sit_anim",
-      "variantId": "wall_sit_foundation",
-      "kind": "animation",
-      "assetPath": "assets/animations/wall_sit.webp",
-      "accessibilityLabel": "Wall Sit demonstration loop (placeholder)"
-    },
-    {
-      "id": "glute_bridge_posture",
-      "variantId": "glute_bridge_foundation",
-      "kind": "posture",
-      "assetPath": "assets/images/glute_bridge_posture.png",
-      "accessibilityLabel": "Glute Bridge Hold static posture illustration (placeholder)"
-    },
-    {
-      "id": "glute_bridge_anim",
-      "variantId": "glute_bridge_foundation",
-      "kind": "animation",
-      "assetPath": "assets/animations/glute_bridge.webp",
-      "accessibilityLabel": "Glute Bridge Hold demonstration loop (placeholder)"
-    },
-    {
-      "id": "static_lunge_posture",
-      "variantId": "static_lunge_foundation",
-      "kind": "posture",
-      "assetPath": "assets/images/static_lunge_posture.png",
-      "accessibilityLabel": "Static Lunge Hold static posture illustration (placeholder)"
-    },
-    {
-      "id": "static_lunge_anim",
-      "variantId": "static_lunge_foundation",
-      "kind": "animation",
-      "assetPath": "assets/animations/static_lunge.webp",
-      "accessibilityLabel": "Static Lunge Hold demonstration loop (placeholder)"
-    },
-    {
-      "id": "calf_raise_posture",
-      "variantId": "calf_raise_foundation",
-      "kind": "posture",
-      "assetPath": "assets/images/calf_raise_posture.png",
-      "accessibilityLabel": "Calf Raise Hold static posture illustration (placeholder)"
-    },
-    {
-      "id": "calf_raise_anim",
-      "variantId": "calf_raise_foundation",
-      "kind": "animation",
-      "assetPath": "assets/animations/calf_raise.webp",
-      "accessibilityLabel": "Calf Raise Hold demonstration loop (placeholder)"
-    },
-    {
-      "id": "horse_stance_posture",
-      "variantId": "horse_stance_foundation",
-      "kind": "posture",
-      "assetPath": "assets/images/horse_stance_posture.png",
-      "accessibilityLabel": "Horse Stance Hold static posture illustration (placeholder)"
-    },
-    {
-      "id": "horse_stance_anim",
-      "variantId": "horse_stance_foundation",
-      "kind": "animation",
-      "assetPath": "assets/animations/horse_stance.webp",
-      "accessibilityLabel": "Horse Stance Hold demonstration loop (placeholder)"
-    },
-    {
-      "id": "forearm_plank_posture",
-      "variantId": "forearm_plank_foundation",
-      "kind": "posture",
-      "assetPath": "assets/images/forearm_plank_posture.png",
-      "accessibilityLabel": "Forearm Plank static posture illustration (placeholder)"
-    },
-    {
-      "id": "forearm_plank_anim",
-      "variantId": "forearm_plank_foundation",
-      "kind": "animation",
-      "assetPath": "assets/animations/forearm_plank.webp",
-      "accessibilityLabel": "Forearm Plank demonstration loop (placeholder)"
-    },
-    {
-      "id": "side_plank_posture",
-      "variantId": "side_plank_foundation",
-      "kind": "posture",
-      "assetPath": "assets/images/side_plank_posture.png",
-      "accessibilityLabel": "Side Plank static posture illustration (placeholder)"
-    },
-    {
-      "id": "side_plank_anim",
-      "variantId": "side_plank_foundation",
-      "kind": "animation",
-      "assetPath": "assets/animations/side_plank.webp",
-      "accessibilityLabel": "Side Plank demonstration loop (placeholder)"
-    },
-    {
-      "id": "hollow_body_posture",
-      "variantId": "hollow_body_foundation",
-      "kind": "posture",
-      "assetPath": "assets/images/hollow_body_posture.png",
-      "accessibilityLabel": "Hollow Body Hold static posture illustration (placeholder)"
-    },
-    {
-      "id": "hollow_body_anim",
-      "variantId": "hollow_body_foundation",
-      "kind": "animation",
-      "assetPath": "assets/animations/hollow_body.webp",
-      "accessibilityLabel": "Hollow Body Hold demonstration loop (placeholder)"
-    },
-    {
-      "id": "bird_dog_posture",
-      "variantId": "bird_dog_foundation",
-      "kind": "posture",
-      "assetPath": "assets/images/bird_dog_posture.png",
-      "accessibilityLabel": "Bird Dog Hold static posture illustration (placeholder)"
-    },
-    {
-      "id": "bird_dog_anim",
-      "variantId": "bird_dog_foundation",
-      "kind": "animation",
-      "assetPath": "assets/animations/bird_dog.webp",
-      "accessibilityLabel": "Bird Dog Hold demonstration loop (placeholder)"
-    },
-    {
-      "id": "v_sit_posture",
-      "variantId": "v_sit_foundation",
-      "kind": "posture",
-      "assetPath": "assets/images/v_sit_posture.png",
-      "accessibilityLabel": "V-Sit Hold static posture illustration (placeholder)"
-    },
-    {
-      "id": "v_sit_anim",
-      "variantId": "v_sit_foundation",
-      "kind": "animation",
-      "assetPath": "assets/animations/v_sit.webp",
-      "accessibilityLabel": "V-Sit Hold demonstration loop (placeholder)"
-    },
-    {
-      "id": "pushup_hold_posture",
-      "variantId": "pushup_hold_foundation",
-      "kind": "posture",
-      "assetPath": "assets/images/pushup_hold_posture.png",
-      "accessibilityLabel": "Isometric Push-up Hold static posture illustration (placeholder)"
-    },
-    {
-      "id": "pushup_hold_anim",
-      "variantId": "pushup_hold_foundation",
-      "kind": "animation",
-      "assetPath": "assets/animations/pushup_hold.webp",
-      "accessibilityLabel": "Isometric Push-up Hold demonstration loop (placeholder)"
-    },
-    {
-      "id": "triceps_dip_posture",
-      "variantId": "triceps_dip_foundation",
-      "kind": "posture",
-      "assetPath": "assets/images/triceps_dip_posture.png",
-      "accessibilityLabel": "Triceps Dip Hold static posture illustration (placeholder)"
-    },
-    {
-      "id": "triceps_dip_anim",
-      "variantId": "triceps_dip_foundation",
-      "kind": "animation",
-      "assetPath": "assets/animations/triceps_dip.webp",
-      "accessibilityLabel": "Triceps Dip Hold demonstration loop (placeholder)"
-    },
-    {
-      "id": "reverse_plank_posture",
-      "variantId": "reverse_plank_foundation",
-      "kind": "posture",
-      "assetPath": "assets/images/reverse_plank_posture.png",
-      "accessibilityLabel": "Reverse Plank Hold static posture illustration (placeholder)"
-    },
-    {
-      "id": "reverse_plank_anim",
-      "variantId": "reverse_plank_foundation",
-      "kind": "animation",
-      "assetPath": "assets/animations/reverse_plank.webp",
-      "accessibilityLabel": "Reverse Plank Hold demonstration loop (placeholder)"
-    },
-    {
-      "id": "superman_posture",
-      "variantId": "superman_foundation",
-      "kind": "posture",
-      "assetPath": "assets/images/superman_posture.png",
-      "accessibilityLabel": "Prone Superman Hold static posture illustration (placeholder)"
-    },
-    {
-      "id": "superman_anim",
-      "variantId": "superman_foundation",
-      "kind": "animation",
-      "assetPath": "assets/animations/superman.webp",
-      "accessibilityLabel": "Prone Superman Hold demonstration loop (placeholder)"
-    },
-    {
-      "id": "pike_pushup_posture",
-      "variantId": "pike_pushup_foundation",
-      "kind": "posture",
-      "assetPath": "assets/images/pike_pushup_posture.png",
-      "accessibilityLabel": "Pike Push-up Hold static posture illustration (placeholder)"
-    },
-    {
-      "id": "pike_pushup_anim",
-      "variantId": "pike_pushup_foundation",
-      "kind": "animation",
-      "assetPath": "assets/animations/pike_pushup.webp",
-      "accessibilityLabel": "Pike Push-up Hold demonstration loop (placeholder)"
-    },
-    {
-      "id": "prone_w_posture",
-      "variantId": "prone_w_foundation",
-      "kind": "posture",
-      "assetPath": "assets/images/prone_w_posture.png",
-      "accessibilityLabel": "Prone W Hold static posture illustration (placeholder)"
-    },
-    {
-      "id": "prone_w_anim",
-      "variantId": "prone_w_foundation",
-      "kind": "animation",
-      "assetPath": "assets/animations/prone_w.webp",
-      "accessibilityLabel": "Prone W Hold demonstration loop (placeholder)"
     }
   ]
 }

@@ -84,6 +84,7 @@ class _WorkoutRunnerScreenState extends ConsumerState<WorkoutRunnerScreen>
     final machine = ctrl.machine;
     final item = machine.currentItem;
     final prefs = ref.watch(preferencesProvider);
+    final profile = ref.watch(profileProvider);
     _precacheCurrentAndNext(machine);
 
     if (machine.phase == WorkoutPhase.completed) {
@@ -135,14 +136,45 @@ class _WorkoutRunnerScreenState extends ConsumerState<WorkoutRunnerScreen>
     }
 
     final progress = machine.progressFraction(null);
+    final controlsPaused =
+        machine.phase == WorkoutPhase.paused ||
+        machine.phase == WorkoutPhase.interrupted;
     final sideLabel = switch (machine.currentSide) {
       HoldSide.left => 'Left side',
       HoldSide.right => 'Right side',
       HoldSide.none => 'Both / centered',
     };
 
-    return Scaffold(
-      body: SafeArea(
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, _) async {
+        if (didPop) return;
+        final leave = await showDialog<bool>(
+          context: context,
+          builder: (dialogContext) => AlertDialog(
+            title: const Text('Stop this workout?'),
+            content: const Text(
+              'Your completed holds remain in history, and this session will be marked partial.',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(dialogContext, false),
+                child: const Text('Keep training'),
+              ),
+              FilledButton(
+                onPressed: () => Navigator.pop(dialogContext, true),
+                child: const Text('Stop workout'),
+              ),
+            ],
+          ),
+        );
+        if (leave == true) {
+          await ctrl.stop();
+          if (context.mounted) context.go('/today');
+        }
+      },
+      child: Scaffold(
+        body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: Column(
@@ -150,7 +182,7 @@ class _WorkoutRunnerScreenState extends ConsumerState<WorkoutRunnerScreen>
               Row(
                 children: [
                   CompanionAvatar(
-                    avatarId: 'pulse',
+                    avatarId: profile.valueOrNull?.selectedAvatarId ?? 'pulse',
                     mood: switch (machine.phase) {
                       WorkoutPhase.holding => AvatarMood.holding,
                       WorkoutPhase.preparing => AvatarMood.preparing,
@@ -181,11 +213,17 @@ class _WorkoutRunnerScreenState extends ConsumerState<WorkoutRunnerScreen>
               const SizedBox(height: 8),
               ExerciseMediaView(
                 label:
-                    item?.mediaAccessibilityLabel ??
-                    '${item?.displayName ?? 'Exercise'} demonstration',
-                assetPath: item?.staticAssetPath,
+                    (prefs.valueOrNull?.reducedMotion ?? false)
+                    ? (item?.mediaAccessibilityLabel ??
+                          '${item?.displayName ?? 'Exercise'} posture')
+                    : (item?.animatedMediaAccessibilityLabel ??
+                          item?.mediaAccessibilityLabel ??
+                          '${item?.displayName ?? 'Exercise'} demonstration'),
+                assetPath: (prefs.valueOrNull?.reducedMotion ?? false)
+                    ? item?.staticAssetPath
+                    : (item?.animatedAssetPath ?? item?.staticAssetPath),
                 height: 120,
-                reducedMotion: prefs.valueOrNull?.reducedMotion ?? false,
+                reducedMotion: false,
               ),
               const SizedBox(height: 16),
               SizedBox(
@@ -248,19 +286,26 @@ class _WorkoutRunnerScreenState extends ConsumerState<WorkoutRunnerScreen>
                       child: const Text('Pause'),
                     ),
                   OutlinedButton(
-                    onPressed: ctrl.skip,
+                    onPressed: controlsPaused ? null : ctrl.skip,
                     child: const Text('Skip'),
                   ),
                   OutlinedButton(
-                    onPressed: () {
-                      ctrl.machine.useEasierDuration(
-                        Duration(
-                          milliseconds:
-                              (item?.holdDuration.inMilliseconds ?? 10000) ~/ 2,
-                        ),
-                      );
-                    },
-                    child: const Text('Easier'),
+                    onPressed:
+                        controlsPaused || item?.easierVariantId == null
+                        ? null
+                        : () async {
+                            final changed = await ctrl.useEasierVariant();
+                            if (context.mounted && changed) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                    'Switched to the supported variation. Preparation restarted.',
+                                  ),
+                                ),
+                              );
+                            }
+                          },
+                    child: const Text('Use easier variation'),
                   ),
                   OutlinedButton(
                     style: OutlinedButton.styleFrom(
@@ -292,6 +337,7 @@ class _WorkoutRunnerScreenState extends ConsumerState<WorkoutRunnerScreen>
               ),
             ],
           ),
+        ),
         ),
       ),
     );

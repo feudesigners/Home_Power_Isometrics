@@ -8,7 +8,7 @@ import '../../domain/services/reminder_scheduler.dart';
 import '../../core/services/android_reminder_scheduler.dart';
 import '../../core/services/workout_cue_service.dart';
 
-final appClockProvider = Provider<AppClock>((ref) => const SystemAppClock());
+final appClockProvider = Provider<AppClock>((ref) => SystemAppClock());
 
 final databaseProvider = Provider<AppDatabase>((ref) {
   final db = AppDatabase();

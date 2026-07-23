@@ -29,6 +29,9 @@ class ContentSeedService {
       final exercisesRaw = await rootBundle.loadString(
         '$assetPrefix/exercises_v1.json',
       );
+      final mediaRaw = await rootBundle.loadString(
+        '$assetPrefix/media_manifest.json',
+      );
       final programsRaw = await rootBundle.loadString(
         '$assetPrefix/programs_v1.json',
       );
@@ -39,7 +42,10 @@ class ContentSeedService {
         '$assetPrefix/avatars_v1.json',
       );
 
-      await _seedExercises(jsonDecode(exercisesRaw) as Map<String, dynamic>);
+      await _seedExercises(
+        jsonDecode(exercisesRaw) as Map<String, dynamic>,
+        jsonDecode(mediaRaw) as Map<String, dynamic>,
+      );
       await _seedPrograms(jsonDecode(programsRaw) as Map<String, dynamic>);
       await _seedAchievements(
         jsonDecode(achievementsRaw) as Map<String, dynamic>,
@@ -74,7 +80,10 @@ class ContentSeedService {
     }
   }
 
-  Future<void> _seedExercises(Map<String, dynamic> data) async {
+  Future<void> _seedExercises(
+    Map<String, dynamic> data,
+    Map<String, dynamic> mediaManifest,
+  ) async {
     for (final c in (data['categories'] as List).cast<Map<String, dynamic>>()) {
       await db
           .into(db.exerciseCategories)
@@ -97,6 +106,9 @@ class ContentSeedService {
               primaryMusclesJson: jsonEncode(e['primaryMuscles'] ?? []),
               secondaryMusclesJson: Value(
                 jsonEncode(e['secondaryMuscles'] ?? []),
+              ),
+              contentVersion: Value(
+                e['contentVersion'] as int? ?? data['version'] as int? ?? 1,
               ),
             ),
           );
@@ -134,6 +146,9 @@ class ContentSeedService {
               reviewStatus: Value(
                 v['reviewStatus'] as String? ?? 'provisional',
               ),
+              contentVersion: Value(
+                v['contentVersion'] as int? ?? data['version'] as int? ?? 1,
+              ),
             ),
           );
     }
@@ -149,7 +164,9 @@ class ContentSeedService {
             ),
           );
     }
-    for (final m in (data['media'] as List).cast<Map<String, dynamic>>()) {
+    await db.delete(db.exerciseMedia).go();
+    for (final m
+        in (mediaManifest['media'] as List).cast<Map<String, dynamic>>()) {
       await db
           .into(db.exerciseMedia)
           .insertOnConflictUpdate(
@@ -165,6 +182,12 @@ class ContentSeedService {
   }
 
   Future<void> _seedPrograms(Map<String, dynamic> data) async {
+    // Definitions are replaceable seed content; user history keeps textual IDs.
+    await db.delete(db.workoutTemplateItems).go();
+    await db.delete(db.workoutTemplates).go();
+    await db.delete(db.programWeeks).go();
+    await db.delete(db.programs).go();
+
     for (final p in (data['programs'] as List).cast<Map<String, dynamic>>()) {
       await db
           .into(db.programs)
@@ -210,7 +233,6 @@ class ContentSeedService {
             ),
           );
     }
-    await db.delete(db.workoutTemplateItems).go();
     for (final i
         in (data['workoutTemplateItems'] as List)
             .cast<Map<String, dynamic>>()) {

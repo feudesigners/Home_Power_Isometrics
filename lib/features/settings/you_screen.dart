@@ -155,45 +155,10 @@ class YouScreen extends ConsumerWidget {
                   ListTile(
                     title: const Text('Reminders'),
                     subtitle: const Text(
-                      'Optional local notifications. Preview and permission handled safely.',
+                      'Choose days and time for optional device-local notifications.',
                     ),
                     trailing: const Icon(Icons.chevron_right),
-                    onTap: () async {
-                      final scheduler = ref.read(reminderSchedulerProvider);
-                      final ok = await scheduler.ensurePermission();
-                      if (!context.mounted) return;
-                      if (!ok) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text(
-                              'Notification permission denied. Reminders stay off.',
-                            ),
-                          ),
-                        );
-                        return;
-                      }
-                      await scheduler.showTest(
-                        title: 'IsometriX',
-                        body: 'Your 8-minute strength session is ready.',
-                      );
-                      await scheduler.scheduleWeekly(
-                        id: 100,
-                        weekdays: const [1, 3, 5],
-                        hour: 9,
-                        minute: 0,
-                        title: 'IsometriX',
-                        body: 'One short session completes this week\'s goal.',
-                      );
-                      if (context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text(
-                              'Reminder preview sent · Mon/Wed/Fri 09:00',
-                            ),
-                          ),
-                        );
-                      }
-                    },
+                    onTap: () => _configureReminders(context, ref),
                   ),
                   const Divider(),
                   ListTile(
@@ -307,7 +272,9 @@ class YouScreen extends ConsumerWidget {
                         await ref
                             .read(repositoriesProvider)
                             .deleteAllUserData();
+                        await ref.read(reminderSchedulerProvider).cancelAll();
                         ref.invalidate(profileProvider);
+                        ref.invalidate(preferencesProvider);
                         if (context.mounted) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
@@ -324,16 +291,26 @@ class YouScreen extends ConsumerWidget {
                       'IsometriX MVP · Offline-first · No analytics SDK · No ads',
                     ),
                   ),
-                  const ListTile(
-                    title: Text('Privacy'),
-                    subtitle: Text(
-                      'All user data stays on this device unless you export it. See PRIVACY.md.',
+                  ListTile(
+                    title: const Text('Privacy'),
+                    subtitle: const Text(
+                      'Read the complete offline-first privacy summary.',
+                    ),
+                    onTap: () => _showInfo(
+                      context,
+                      'Privacy',
+                      'IsometriX requires no account and stores your profile, preferences, reminders, workout history, feedback, XP, and progress in SQLite on this device. The app includes no analytics, advertising, or tracking SDK. Reminder notifications are scheduled locally. Data leaves the device only when you explicitly export or share it. Reset deletes local user history and progress; Android cloud backup is disabled.',
                     ),
                   ),
-                  const ListTile(
-                    title: Text('Licences'),
-                    subtitle: Text(
-                      'Fonts: OFL (Bebas Neue, DM Sans, JetBrains Mono). See assets/fonts/FONT_LICENSES.txt',
+                  ListTile(
+                    title: const Text('Licences'),
+                    subtitle: const Text(
+                      'View bundled font licence information.',
+                    ),
+                    onTap: () => _showInfo(
+                      context,
+                      'Open Font Licences',
+                      'Bebas Neue, DM Sans, and JetBrains Mono are bundled under the SIL Open Font License 1.1. Copyright notices and licence text are included in assets/fonts/FONT_LICENSES.txt. Flutter and package licences are available through the platform licence registry.',
                     ),
                   ),
                 ],
@@ -344,4 +321,152 @@ class YouScreen extends ConsumerWidget {
       ),
     );
   }
+}
+
+Future<void> _configureReminders(
+  BuildContext context,
+  WidgetRef ref,
+) async {
+  final repositories = ref.read(repositoriesProvider);
+  final current = await repositories.reminderSchedule();
+  if (!context.mounted) return;
+  var enabled = current.enabled;
+  final weekdays = current.weekdaysCsv
+      .split(',')
+      .map(int.tryParse)
+      .whereType<int>()
+      .toSet();
+  var time = TimeOfDay(hour: current.hour, minute: current.minute);
+
+  final shouldSave = await showDialog<bool>(
+    context: context,
+    builder: (dialogContext) => StatefulBuilder(
+      builder: (context, setState) => AlertDialog(
+        title: const Text('Training reminders'),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SwitchListTile(
+                contentPadding: EdgeInsets.zero,
+                title: const Text('Enable reminders'),
+                value: enabled,
+                onChanged: (value) => setState(() => enabled = value),
+              ),
+              Wrap(
+                spacing: 6,
+                children: [
+                  for (final entry in const {
+                    1: 'Mon',
+                    2: 'Tue',
+                    3: 'Wed',
+                    4: 'Thu',
+                    5: 'Fri',
+                    6: 'Sat',
+                    7: 'Sun',
+                  }.entries)
+                    FilterChip(
+                      label: Text(entry.value),
+                      selected: weekdays.contains(entry.key),
+                      onSelected: enabled
+                          ? (selected) => setState(() {
+                              if (selected) {
+                                weekdays.add(entry.key);
+                              } else {
+                                weekdays.remove(entry.key);
+                              }
+                            })
+                          : null,
+                    ),
+                ],
+              ),
+              ListTile(
+                contentPadding: EdgeInsets.zero,
+                title: const Text('Time'),
+                subtitle: Text(time.format(context)),
+                trailing: const Icon(Icons.schedule),
+                enabled: enabled,
+                onTap: () async {
+                  final selected = await showTimePicker(
+                    context: dialogContext,
+                    initialTime: time,
+                  );
+                  if (selected != null) setState(() => time = selected);
+                },
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, false),
+            child: const Text('Cancel'),
+          ),
+          FilledButton(
+            onPressed: enabled && weekdays.isEmpty
+                ? null
+                : () => Navigator.pop(dialogContext, true),
+            child: const Text('Save'),
+          ),
+        ],
+      ),
+    ),
+  );
+  if (shouldSave != true || !context.mounted) return;
+
+  final scheduler = ref.read(reminderSchedulerProvider);
+  final selectedDays = weekdays.toList()..sort();
+  if (enabled) {
+    final allowed = await scheduler.ensurePermission();
+    if (!allowed) {
+      enabled = false;
+    } else {
+      await scheduler.scheduleWeekly(
+        id: 100,
+        weekdays: selectedDays,
+        hour: time.hour,
+        minute: time.minute,
+        title: 'IsometriX',
+        body: 'Your short strength session is ready.',
+      );
+    }
+  }
+  if (!enabled) await scheduler.cancelAll();
+  await repositories.saveReminderSchedule(
+    enabled: enabled,
+    weekdays: selectedDays.isEmpty ? const [1, 3, 5] : selectedDays,
+    hour: time.hour,
+    minute: time.minute,
+  );
+  if (context.mounted) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          enabled
+              ? 'Reminder schedule saved in your device timezone.'
+              : 'Reminders are off.',
+        ),
+      ),
+    );
+  }
+}
+
+Future<void> _showInfo(
+  BuildContext context,
+  String title,
+  String body,
+) {
+  return showDialog<void>(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: Text(title),
+      content: SingleChildScrollView(child: Text(body)),
+      actions: [
+        FilledButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('Close'),
+        ),
+      ],
+    ),
+  );
 }

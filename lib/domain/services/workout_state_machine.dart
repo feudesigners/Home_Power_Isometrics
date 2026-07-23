@@ -52,7 +52,8 @@ class WorkoutStateMachine {
 
   Duration remaining(DateTime? at) {
     final now = at ?? _clock.now();
-    if (phase == WorkoutPhase.paused) {
+    if (phase == WorkoutPhase.paused ||
+        phase == WorkoutPhase.interrupted) {
       return remainingWhenPaused;
     }
     if (deadlineAt == null) return Duration.zero;
@@ -63,11 +64,17 @@ class WorkoutStateMachine {
   double progressFraction(DateTime? at) {
     final item = currentItem;
     if (item == null) return 0;
-    final total = _durationForPhase(phase, item);
+    final effectivePhase =
+        phase == WorkoutPhase.paused || phase == WorkoutPhase.interrupted
+        ? (_phaseBeforePause ?? phase)
+        : phase;
+    final total = _durationForPhase(effectivePhase, item);
     if (total.inMilliseconds <= 0) return 1;
     final rem = remaining(at);
     final done = total - rem;
-    return (done.inMilliseconds / total.inMilliseconds).clamp(0.0, 1.0);
+    return (done.inMilliseconds / total.inMilliseconds)
+        .clamp(0.0, 1.0)
+        .toDouble();
   }
 
   void start() {
@@ -131,7 +138,7 @@ class WorkoutStateMachine {
 
   WorkoutTickResult _onHoldFinished(WorkoutPlanItem item) {
     final finishedSide = currentSide;
-    if (item.unilateralMode == UnilateralMode.leftRight &&
+    if (item.unilateralMode != UnilateralMode.none &&
         currentSide == HoldSide.left) {
       currentSide = HoldSide.right;
       _enterPhase(WorkoutPhase.switchingSide, item.sideSwitchDuration);
@@ -145,8 +152,6 @@ class WorkoutStateMachine {
     }
 
     if (currentSet < item.sets) {
-      currentSet += 1;
-      currentSide = _initialSide(item);
       _enterPhase(WorkoutPhase.resting, item.restDuration);
       return WorkoutTickResult(
         phase: phase,
@@ -176,6 +181,18 @@ class WorkoutStateMachine {
   }
 
   WorkoutTickResult _moveToNextItem() {
+    final item = currentItem;
+    if (item != null && currentSet < item.sets) {
+      currentSet += 1;
+      currentSide = _initialSide(item);
+      _enterPhase(WorkoutPhase.preparing, item.setupDuration);
+      return WorkoutTickResult(
+        phase: phase,
+        remaining: remaining(_clock.now()),
+        phaseCompleted: WorkoutPhase.resting,
+      );
+    }
+
     if (currentItemIndex + 1 >= items.length) {
       return _completeOnce();
     }
@@ -234,7 +251,10 @@ class WorkoutStateMachine {
 
   /// Resume after explicit user confirmation (required after backgrounding).
   void resume() {
-    if (phase != WorkoutPhase.paused) return;
+    if (phase != WorkoutPhase.paused &&
+        phase != WorkoutPhase.interrupted) {
+      return;
+    }
     final restore = _phaseBeforePause ?? WorkoutPhase.holding;
     if (pauseStartedAt != null) {
       pausedAccumulated += _clock.now().difference(pauseStartedAt!);
@@ -245,18 +265,28 @@ class WorkoutStateMachine {
     deadlineAt = phaseStartedAt!.add(remainingWhenPaused);
   }
 
-  void skipCurrent() {
+  void replaceCurrentItem(WorkoutPlanItem replacement) {
+    if (currentItem == null) return;
+    final mutable = items.toList();
+    mutable[currentItemIndex] = replacement;
+    items = List.unmodifiable(mutable);
+    currentSide = _initialSide(replacement);
+    _enterPhase(WorkoutPhase.preparing, replacement.setupDuration);
+  }
+
+  bool skipCurrent() {
     final item = currentItem;
-    if (item == null) return;
+    if (item == null) return false;
     if (currentItemIndex + 1 >= items.length) {
       _completeOnce();
-      return;
+      return true;
     }
     currentItemIndex += 1;
     currentSet = 1;
     final next = items[currentItemIndex];
     currentSide = _initialSide(next);
     _enterPhase(WorkoutPhase.preparing, next.setupDuration);
+    return false;
   }
 
   void stop() {
@@ -283,6 +313,7 @@ class WorkoutStateMachine {
     required DateTime? deadlineAt,
     required Duration remainingWhenPaused,
     required Duration pausedAccumulated,
+    required DateTime? pauseStartedAt,
     required int currentItemIndex,
     required int currentSet,
     required HoldSide currentSide,
@@ -294,6 +325,7 @@ class WorkoutStateMachine {
     this.deadlineAt = deadlineAt;
     this.remainingWhenPaused = remainingWhenPaused;
     this.pausedAccumulated = pausedAccumulated;
+    this.pauseStartedAt = pauseStartedAt;
     this.currentItemIndex = currentItemIndex;
     this.currentSet = currentSet;
     this.currentSide = currentSide;
@@ -309,15 +341,6 @@ class WorkoutStateMachine {
         this.deadlineAt = _clock.now();
       }
     }
-  }
-
-  void useEasierDuration(Duration easierHold) {
-    if (phase != WorkoutPhase.holding) return;
-    final rem = remaining(_clock.now());
-    final next = easierHold < rem ? easierHold : rem;
-    remainingWhenPaused = next;
-    phaseStartedAt = _clock.now();
-    deadlineAt = phaseStartedAt!.add(next);
   }
 
   void _enterPhase(WorkoutPhase next, Duration duration) {
@@ -368,7 +391,11 @@ class WorkoutPlanItem {
     this.breathingCue = '',
     this.kind = WorkoutItemKind.hold,
     this.staticAssetPath,
+    this.animatedAssetPath,
     this.mediaAccessibilityLabel,
+    this.animatedMediaAccessibilityLabel,
+    this.easierVariantId,
+    this.harderVariantId,
   });
 
   final String variantId;
@@ -384,12 +411,38 @@ class WorkoutPlanItem {
   final String breathingCue;
   final WorkoutItemKind kind;
   final String? staticAssetPath;
+  final String? animatedAssetPath;
   final String? mediaAccessibilityLabel;
+  final String? animatedMediaAccessibilityLabel;
+  final String? easierVariantId;
+  final String? harderVariantId;
 
   bool get isHold => kind == WorkoutItemKind.hold;
+  int get sideCount =>
+      unilateralMode == UnilateralMode.none ? 1 : 2;
 }
 
 enum WorkoutItemKind { hold, warmup, cooldown }
+
+int plannedWorkoutDurationMs(List<WorkoutPlanItem> items) {
+  var total = 0;
+  for (var index = 0; index < items.length; index++) {
+    final item = items[index];
+    if (!item.isHold) {
+      total += item.holdDuration.inMilliseconds;
+      continue;
+    }
+    final perSet =
+        item.setupDuration.inMilliseconds +
+        item.holdDuration.inMilliseconds * item.sideCount +
+        (item.sideCount > 1 ? item.sideSwitchDuration.inMilliseconds : 0);
+    total += perSet * item.sets;
+    final restCount =
+        (item.sets - 1) + (index < items.length - 1 ? 1 : 0);
+    total += item.restDuration.inMilliseconds * restCount;
+  }
+  return total;
+}
 
 class WorkoutTickResult {
   const WorkoutTickResult({
