@@ -49,7 +49,20 @@ flutter build appbundle --release   # uses debug signing locally — production 
 
 ## Verification status
 
-Source implementation is complete for the MVP scope. Final test, Android build, emulator/manual accessibility, lifecycle, notification, and import/reset checks are deferred and must be rerun before release. Production exercise review, anatomical media/audio, and Play signing remain external gates.
+Verified on this machine and a physical Samsung SM-S711B (Android 16, API 36):
+
+| Gate | Result |
+|------|--------|
+| `flutter analyze` | No issues |
+| `flutter test` | 24 passed |
+| `flutter test integration_test -d RZCX928DF6Y` | Passed on device |
+| `flutter build apk --debug` | Built `build/app/outputs/flutter-apk/app-debug.apk` |
+| Install + launch on device | Installed for user 0; `MainActivity` started |
+| `flutter build appbundle --release` | Uses debug signing locally; production keystore remains an external gate |
+
+Emulator was not used (none installed). Secure Folder / secondary Android users can hide the package from default `am start` unless `--user 0` is used.
+
+Production exercise review, final anatomical media/audio, and Play App Signing remain external gates.
 
 ## Assets
 

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../app/bootstrap/providers.dart';
 import '../../core/widgets/grid_background.dart';
@@ -78,7 +77,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     }
     if (step >= 8) {
       await _persist(complete: true);
-      if (mounted) context.go('/today');
+      ref.invalidate(profileProvider);
+      // GoRouter redirect sends completed profiles to /today.
       return;
     }
     setState(() => step += 1);

@@ -15,17 +15,55 @@ import '../../features/workouts/workout_completion_screen.dart';
 import '../../features/progress/session_detail_screen.dart';
 import '../../features/challenges/challenges_screen.dart';
 import '../../core/widgets/grid_background.dart';
+import '../theme/isometrix_theme.dart';
 
 final _rootKey = GlobalKey<NavigatorState>();
 
 final goRouterProvider = Provider<GoRouter>((ref) {
+  final refresh = _RouterRefresh(ref);
+  ref.onDispose(refresh.dispose);
+
   return GoRouter(
     navigatorKey: _rootKey,
     initialLocation: '/splash',
+    refreshListenable: refresh,
+    redirect: (context, state) {
+      final boot = ref.read(bootstrapProvider);
+      final profileAsync = ref.read(profileProvider);
+      final loc = state.matchedLocation;
+      final onSplash = loc == '/splash';
+      final onOnboarding = loc == '/onboarding';
+
+      if (boot.isLoading) {
+        return onSplash ? null : '/splash';
+      }
+      if (boot.hasError) {
+        return onSplash ? null : '/splash';
+      }
+
+      final profile = profileAsync.valueOrNull;
+      if (profile == null) {
+        // Keep non-splash routes during profile reload to avoid flicker.
+        if (profileAsync.isLoading && !onSplash) return null;
+        if (profileAsync.hasError) {
+          return onSplash ? null : '/splash';
+        }
+        return onSplash ? null : '/splash';
+      }
+
+      if (!profile.onboardingComplete) {
+        return onOnboarding ? null : '/onboarding';
+      }
+
+      if (onSplash || onOnboarding) {
+        return '/today';
+      }
+      return null;
+    },
     routes: [
       GoRoute(
         path: '/splash',
-        builder: (context, state) => const _SplashGate(),
+        builder: (context, state) => const _SplashScreen(),
       ),
       GoRoute(
         path: '/onboarding',
@@ -101,46 +139,80 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/challenges',
-        parentNavigatorKey: _rootKey,
         builder: (context, state) => const ChallengesScreen(),
       ),
     ],
   );
 });
 
-class _SplashGate extends ConsumerWidget {
-  const _SplashGate();
+class _RouterRefresh extends ChangeNotifier {
+  _RouterRefresh(Ref ref) {
+    ref.listen(bootstrapProvider, (_, _) => notifyListeners());
+    ref.listen(profileProvider, (_, _) => notifyListeners());
+  }
+}
+
+class _SplashScreen extends ConsumerWidget {
+  const _SplashScreen();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final boot = ref.watch(bootstrapProvider);
-    return boot.when(
-      loading: () =>
-          const Scaffold(body: Center(child: CircularProgressIndicator())),
-      error: (e, _) => Scaffold(body: Center(child: Text('Startup error: $e'))),
-      data: (_) {
-        return FutureBuilder(
-          future: ref.read(repositoriesProvider).profile(),
-          builder: (context, snap) {
-            if (!snap.hasData) {
-              return const Scaffold(
-                body: Center(child: CircularProgressIndicator()),
-              );
-            }
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              if (!context.mounted) return;
-              if (snap.data!.onboardingComplete) {
-                context.go('/today');
-              } else {
-                context.go('/onboarding');
-              }
-            });
-            return const Scaffold(
-              body: Center(child: CircularProgressIndicator()),
-            );
-          },
-        );
-      },
+    final profile = ref.watch(profileProvider);
+
+    final error = boot.asError?.error ?? profile.asError?.error;
+
+    return GridBackground(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: SafeArea(
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'IsometriX',
+                    style: Theme.of(context).textTheme.displayLarge?.copyWith(
+                      color: IsometrixColors.mint,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Static Strength. Dynamic Results.',
+                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurface.withValues(
+                        alpha: 0.55,
+                      ),
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 32),
+                  if (error != null) ...[
+                    Text(
+                      'Startup error: $error',
+                      style: Theme.of(context).textTheme.bodyMedium,
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 16),
+                    FilledButton(
+                      onPressed: () {
+                        ref.invalidate(bootstrapProvider);
+                        ref.invalidate(profileProvider);
+                      },
+                      child: const Text('Retry'),
+                    ),
+                  ] else
+                    const CircularProgressIndicator(
+                      color: IsometrixColors.mint,
+                    ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
